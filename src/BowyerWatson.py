@@ -13,7 +13,7 @@ class BowyerWatson:
         self._triangulation.add(self._original_triangle)
     def run(self):
         self.triangulate()
-        self.remove_og()
+        self.remove_original()
         return self._triangulation
     
     def triangulate(self):
@@ -46,9 +46,9 @@ class BowyerWatson:
 
     def remove_original(self):
         point_with_original = set()
-        for edge in self._original_triangle._edges:
+        for point in self._original_triangle._points:
             for triangle in self._triangulation:
-                if edge in triangle._edges:
+                if point in triangle._points:
                     point_with_original.add(triangle)
         for triangle in point_with_original:
             self._triangulation.remove(triangle)
