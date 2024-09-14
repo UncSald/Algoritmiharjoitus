@@ -46,8 +46,6 @@ class Triangle:
         self.radius = self.count_radius()
     
     def edge_length(self,edge):
-        print(((max(edge[0][0],edge[1][0])-min(edge[0][0],edge[1][0]))**2\
-                + (max(edge[0][1],edge[1][1])-min(edge[0][1],edge[1][1]))**2))
         return sqrt((max(edge[0][0],edge[1][0])-min(edge[0][0],edge[1][0]))**2\
                 + (max(edge[0][1],edge[1][1])-min(edge[0][1],edge[1][1]))**2)
 
