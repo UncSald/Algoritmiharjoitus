@@ -16,7 +16,7 @@ class Triangle:
         self._edges = [a_edge,
                         b_edge,
                         c_edge]
-        self._poins = [a_edge[0],
+        self._points = [a_edge[0],
                        a_edge[1],
                        b_edge[1]]
     
