@@ -68,13 +68,12 @@ class Triangle:
     def draw(self, screen, color):
         for edge in self._edges:
             pygame.draw.aaline(screen, color, edge[0], edge[1])
-        pygame.draw.circle(screen, color, self.circumcenter, self.radius, 1)
 
     def check_point(self, point):
         xLocation = abs(max(self.circumcenter[0],point[0])-min(self.circumcenter[0],point[0]))**2
         yLocation = abs(max(self.circumcenter[1],point[1])-min(self.circumcenter[1],point[1]))**2
         d = sqrt(xLocation + yLocation)
-        return d<self.r
+        return d<self.radius
 
 
 
@@ -82,5 +81,3 @@ class Triangle:
 class Box:
     def __init__(self):
         pass
-
-
