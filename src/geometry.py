@@ -42,6 +42,8 @@ class Triangle:
                             (self._c_point[1]*sin(2*self.c_angle)))/\
                             ((sin(2*self.a_angle))+sin(2*self.b_angle)+sin(2*self.c_angle))
                             )
+
+        self.radius = self.count_radius()
     
     def edge_length(self,edge):
         print(((max(edge[0][0],edge[1][0])-min(edge[0][0],edge[1][0]))**2\
@@ -49,9 +51,27 @@ class Triangle:
         return sqrt((max(edge[0][0],edge[1][0])-min(edge[0][0],edge[1][0]))**2\
                 + (max(edge[0][1],edge[1][1])-min(edge[0][1],edge[1][1]))**2)
 
+    
     def triangle_angle(self,a,b,c):
         return (acos((a**2+b**2-c**2)/(2*a*b)))
     
+    def count_radius(self):
+        if self.a_edge_len == self.b_edge_len or\
+            self.a_edge_len == self.c_edge_len or\
+            self.b_edge_len == self.c_edge_len:
+            return max(self.a_edge_len, self.b_edge_len, self.c_edge_len)/2
+        return  (self.a_edge_len*self.b_edge_len*self.c_edge_len)/\
+                sqrt((self.a_edge_len+self.b_edge_len+self.c_edge_len)*\
+                (self.b_edge_len+self.c_edge_len-self.a_edge_len)*\
+                (self.c_edge_len+self.a_edge_len-self.b_edge_len)*\
+                (self.a_edge_len+self.b_edge_len-self.c_edge_len)
+                )
+    
+    def draw(self, screen, color):
+        for edge in self._edges:
+            pygame.draw.aaline(screen, color, edge[0], edge[1])
+        pygame.draw.circle(screen, color, self.circumcenter, self.radius, 1)
+
 
 
 
