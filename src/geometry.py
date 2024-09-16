@@ -70,10 +70,6 @@ class Triangle:
                 (self.c_edge_len+self.a_edge_len-self.b_edge_len)*\
                 (self.a_edge_len+self.b_edge_len-self.c_edge_len)
                 )
-    
-    def draw(self, screen, color):
-        for edge in self._edges:
-            pygame.draw.aaline(screen, color, edge[0], edge[1])
 
     def check_point(self, point):
         xLocation = abs(max(self.circumcenter[0],point[0])-\
@@ -82,6 +78,10 @@ class Triangle:
                         min(self.circumcenter[1],point[1]))**2
         d = sqrt(xLocation + yLocation)
         return d<self.radius
+
+    def draw(self, screen, color):
+        for edge in self._edges:
+            pygame.draw.aaline(screen, color, edge[0], edge[1])
 
 
 
@@ -98,7 +98,42 @@ class Rectangle:
                        [x0,(x0[0],x0[1]+height)],
                        [(x0[0]+width,x0[1]),(x0[0]+width,x0[1]+height)],
                        [(x0[0],x0[1]+height),(x0[0]+width,x0[1]+height)]]
+    def collision(self, other):
+        leftClip = other.left <= self.left <= other.right
+        rightClip = other.left <= self.right <= other.right
+        upClip = other.up <= self.up <= other.down
+        downClip = other.up <= self.down <= other.down
+
+        lleftClip = self.left <= other.left <= self.right
+        lrightClip = self.left <= other.right <= self.right
+        lupClip = self.up <= other.up <= self.down
+        ldownClip = self.up <= other.down <= self.down
+
+        if upClip and downClip and lrightClip and lleftClip:
+            return True
+        if lupClip and ldownClip and rightClip and leftClip:
+            return True
+        if leftClip and upClip:
+            return True
+        if leftClip and downClip:
+            return True
+        if rightClip and upClip:
+            return True
+        if rightClip and downClip:
+            return True
+        if lleftClip and lupClip:
+            return True
+        if lleftClip and ldownClip:
+            return True
+        if lrightClip and lupClip:
+            return True
+        if lrightClip and ldownClip:
+            return True
+        return False
     
+    def __repr__(self) -> str:
+        return f"{self.up}, {self.down}, {self.left}, {self.down}"
+
     def draw(self, screen, color):
         for edge in self.edges:
             pygame.draw.aaline(screen, color, edge[0], edge[1])
