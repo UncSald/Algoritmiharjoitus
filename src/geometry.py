@@ -92,6 +92,7 @@ class Rectangle:
         self.down = x0[1]+height
         self.left = x0[0]
         self.right = x0[0]+width
+        self.zero = x0
         self.width = width
         self.height = height
         self.center = (self.right-(self.right-self.left)/2,\
@@ -139,4 +140,4 @@ class Rectangle:
 
     def draw(self, screen, color):
         for edge in self.edges:
-            pygame.draw.aaline(screen, color, edge[0], edge[1])
+            pygame.draw.rect(screen, color, [self.zero[0],self.zero[1],self.width,self.height])
