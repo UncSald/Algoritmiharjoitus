@@ -34,4 +34,3 @@ def generate_rooms(how_many, width, height):
             point_set.add(new_rect.center)
 
     return (rect_set, point_set)
-
