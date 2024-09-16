@@ -27,9 +27,15 @@ class Triangle:
         self.b_edge_len = self.edge_length(self._b_edge)
         self.c_edge_len = self.edge_length(self._c_edge)
 
-        self.a_angle = self.triangle_angle(self.a_edge_len, self.b_edge_len, self.c_edge_len)
-        self.b_angle = self.triangle_angle(self.a_edge_len, self.c_edge_len, self.b_edge_len)
-        self.c_angle = self.triangle_angle(self.b_edge_len, self.c_edge_len, self.a_edge_len)
+        self.a_angle = self.triangle_angle(self.a_edge_len,
+                                           self.b_edge_len,
+                                           self.c_edge_len)
+        self.b_angle = self.triangle_angle(self.a_edge_len,
+                                           self.c_edge_len,
+                                           self.b_edge_len)
+        self.c_angle = self.triangle_angle(self.b_edge_len,
+                                           self.c_edge_len,
+                                           self.a_edge_len)
 
         # CALCULATE THE CIRCUMCENTER AND RADIUS OF THE CIRCLE
 
@@ -70,14 +76,29 @@ class Triangle:
             pygame.draw.aaline(screen, color, edge[0], edge[1])
 
     def check_point(self, point):
-        xLocation = abs(max(self.circumcenter[0],point[0])-min(self.circumcenter[0],point[0]))**2
-        yLocation = abs(max(self.circumcenter[1],point[1])-min(self.circumcenter[1],point[1]))**2
+        xLocation = abs(max(self.circumcenter[0],point[0])-\
+                        min(self.circumcenter[0],point[0]))**2
+        yLocation = abs(max(self.circumcenter[1],point[1])-\
+                        min(self.circumcenter[1],point[1]))**2
         d = sqrt(xLocation + yLocation)
         return d<self.radius
 
 
 
 
-class Box:
-    def __init__(self):
-        pass
+class Rectangle:
+    def __init__(self, x0, width, height):
+        self.up = x0[1]
+        self.down = x0[1]+height
+        self.left = x0[0]
+        self.right = x0[0]+width
+        self.center = (self.right-(self.right-self.left)/2,\
+                        self.down-(self.down-self.up)/2)
+        self.edges = [[x0,(x0[0]+width,x0[1])],
+                       [x0,(x0[0],x0[1]+height)],
+                       [(x0[0]+width,x0[1]),(x0[0]+width,x0[1]+height)],
+                       [(x0[0],x0[1]+height),(x0[0]+width,x0[1]+height)]]
+    
+    def draw(self, screen, color):
+        for edge in self.edges:
+            pygame.draw.aaline(screen, color, edge[0], edge[1])
