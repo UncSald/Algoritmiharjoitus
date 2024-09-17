@@ -7,11 +7,14 @@ class BowyerWatson:
     def __init__(self, points, width, height):
         self._points = points
         self._triangulation = set()
+        self._all_edges = set()
         self._original_triangle = Triangle(((-width,height),(width/2,-height)),((-width,height),(2*width,height)),((width/2,-height),(2*width,height)))
         self._triangulation.add(self._original_triangle)
+
     def run(self):
         self.triangulate()
         self.remove_original()
+        self.define_edges()
         return self._triangulation
     
     def triangulate(self):
@@ -50,3 +53,8 @@ class BowyerWatson:
                     point_with_original.add(triangle)
         for triangle in point_with_original:
             self._triangulation.remove(triangle)
+
+    def define_edges(self):
+        for triangle in self._triangulation:
+            for edge in triangle._edges:
+                self._all_edges.add(edge)
