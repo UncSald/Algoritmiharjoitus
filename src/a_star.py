@@ -1,4 +1,38 @@
 import queue
+from listMatrix import point_to_coord
+
+
+
+def build_path(matrix, edges):
+    for edge in edges:
+        start, end = edge
+        sx,sy = point_to_coord(start)
+        start = (sy,sx)
+        ex,ey = point_to_coord(end)
+        end = (ey,ex)
+        graph = weighted_graph(matrix)
+        path = shortest_path(a_star(graph, start, end)[0], start, end)
+        for point in path:
+            row,col = point
+            if matrix[row][col] == 0:
+                matrix[row][col] = 5
+    return matrix
+
+
+
+
+
+def shortest_path(came_from, start, goal):
+    path = []
+    location = goal
+    if goal not in came_from:
+        return
+    while location != start:
+        path.append(location)
+        location = came_from[location]
+    path.append(start)
+    return path
+
 
 
 
@@ -26,7 +60,6 @@ def a_star(matrix, start_point, end_point):
                 came_from[next[0]] = location
     
     return came_from, cost_so_far
-
 
 
 
@@ -81,6 +114,7 @@ def weighted_graph(matrix):
             new_edge(node,(node[0]-1,node[1]),map)
             new_edge(node,(node[0]+1,node[1]),map)
     return map
+
 
 
 
