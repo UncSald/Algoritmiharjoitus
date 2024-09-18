@@ -34,3 +34,18 @@ def generate_rooms(how_many, width, height):
             point_set.add(new_rect.center)
 
     return (rect_set, point_set)
+
+
+
+
+def start_end(points :set):
+    i = 0
+    start = (0,0)
+    end = (0,0)
+    for point in points:
+        if i == 1:
+            start = point
+        if i == len(points)-2:
+            end  = point
+        i += 1
+    return start, end
