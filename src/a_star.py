@@ -1,3 +1,45 @@
+import queue
+
+
+
+
+def a_star(matrix, start_point, end_point):
+    passed = queue.PriorityQueue(0)
+    passed.put((start_point, 0))
+    came_from = {}
+    cost_so_far = {}
+    came_from[start_point] = None
+    cost_so_far[start_point] = 0
+
+    while not passed.empty():
+        location = passed.get()[0]
+
+        if location == end_point:
+            break
+
+        for next in matrix[location]:
+            cost = cost_so_far[location] + 1
+            if next[0] not in cost_so_far or cost < cost_so_far[next[0]]:
+                cost_so_far[next[0]] = cost
+                priority = cost + heuristics(next[0], end_point)
+                passed.put((next[0], priority))
+                came_from[next[0]] = location
+    
+    return came_from, cost_so_far
+
+
+
+
+
+def heuristics(a, b):
+    x1, y1 = a
+    x2, y2 = b
+    return abs(x1-x2) + abs(y1-y2)
+
+
+
+
+
 def weighted_graph(matrix):
     nodes = []
     for row in range(len(matrix)):
@@ -39,7 +81,6 @@ def weighted_graph(matrix):
             new_edge(node,(node[0]-1,node[1]),map)
             new_edge(node,(node[0]+1,node[1]),map)
     return map
-
 
 
 
