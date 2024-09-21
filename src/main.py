@@ -11,13 +11,16 @@ from a_star import build_path
 
 
 def main():
-    WIDTH = 1500
-    HEIGHT = 1000
+    WIDTH = 5000
+    HEIGHT = 4000
+    tile_size = 32
+    WORLD = pygame.Surface((WIDTH,HEIGHT))
+    WORLD.fill('black')
     screen = pygame.display.set_mode((WIDTH,HEIGHT))
 
 
 
-    rooms_gened = generate_rooms(20,WIDTH, HEIGHT)
+    rooms_gened = generate_rooms(100,WIDTH, HEIGHT, tile_size)
     rooms = rooms_gened[0]
     centers = rooms_gened[1]
 
@@ -40,6 +43,7 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+
         y=0
         for row in final_map:
             x=0
@@ -56,7 +60,10 @@ def main():
                     pygame.draw.rect(screen,'white',[x*32,y*32,32,32])
                 x+=1
             y+=1
-        pygame.display.update()
+
+        pygame.display.flip()
+
+
 
 
 if __name__ == "__main__":

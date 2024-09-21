@@ -7,23 +7,23 @@ from geometry import Rectangle
 # ON. RETURNS A SET OF RECTANGLES AND A SET OF THEIR 
 # CENTER POINTS.
 
-def generate_rooms(how_many, width, height):
+def generate_rooms(how_many, width, height, tile_size):
     rect_set = set()
     point_set = set()
 
     while len(rect_set) <= how_many:
-        x_point = randint(1, ((width-(width%32))//32))*32
-        y_point = randint(1, ((height-(height%32))//32))*32
-        max_width = int((width-x_point)//32)
-        max_height = int((height-y_point)//32)
+        x_point = randint(1, ((width-(width%tile_size))//tile_size))*tile_size
+        y_point = randint(1, ((height-(height%tile_size))//tile_size))*tile_size
+        max_width = int((width-x_point)//tile_size)
+        max_height = int((height-y_point)//tile_size)
         if max_width < 3 or max_height < 4:
             continue
         if max_width > 7:
             max_width = 7
         if max_height > 7:
             max_height = 7
-        rect_width = int(randint(2, max_width)*32)
-        rect_height = int(randint(3, max_height)*32)
+        rect_width = int(randint(2, max_width)*tile_size)
+        rect_height = int(randint(3, max_height)*tile_size)
         new_rect = Rectangle((x_point,y_point), rect_width, rect_height)
         collision = False
         for rect in rect_set:
