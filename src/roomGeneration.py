@@ -7,11 +7,11 @@ from geometry import Rectangle
 # ON. RETURNS A SET OF RECTANGLES AND A SET OF THEIR 
 # CENTER POINTS.
 
-def generate_rooms(how_many, width, height, tile_size):
+def generate_rooms(count :int, width :int, height :int, tile_size :int):
     rect_set = set()
     point_set = set()
 
-    while len(rect_set) <= how_many:
+    while len(rect_set) <= count:
         x_point = randint(1, ((width-(width%tile_size))//tile_size))*tile_size
         y_point = randint(1, ((height-(height%tile_size))//tile_size))*tile_size
         max_width = int((width-x_point)//tile_size)
@@ -37,7 +37,7 @@ def generate_rooms(how_many, width, height, tile_size):
 
 
 
-
+# FUNCTION TO DEFINE A START POINT AND END POINT IN THE MAP
 def start_end(points :set):
     i = 0
     start = (0,0)
