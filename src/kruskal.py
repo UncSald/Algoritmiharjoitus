@@ -1,3 +1,8 @@
+# FUNCTION FINDS AND CREATES A MINIMUM SPANNING TREE
+# THIS WAY THERE WILL BE NO LOOPS IN THE EDGES BETWEEN
+# ROOMS
+
+
 def kruskal(edge_list :set, start_point):
     edges = []
     new_edges = []
