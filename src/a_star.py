@@ -2,16 +2,17 @@ import queue
 from listMatrix import point_to_coord
 
 
-
-def build_path(matrix, edges):
+# FUNCTION BRINGS TOGETHER ALL OF THE NEEDED STEPS
+# TO CREATE PATHS TO THE MATRIX
+def build_path(matrix, edges, tile_size:int):
     for edge in edges:
         start, end = edge
-        sx,sy = point_to_coord(start)
+        sx,sy = point_to_coord(start,tile_size)
         start = (sy,sx)
-        ex,ey = point_to_coord(end)
+        ex,ey = point_to_coord(end,tile_size)
         end = (ey,ex)
         graph = weighted_graph(matrix)
-        path = shortest_path(a_star(graph, start, end)[0], start, end)
+        path = shortest_path(a_star(graph, start, end), start, end)
         for point in path:
             row,col = point
             if matrix[row][col] == 0:
@@ -19,30 +20,31 @@ def build_path(matrix, edges):
     return matrix
 
 
-
-
-
-def shortest_path(came_from, start, goal):
+# FUNCTION TAKES AS INPUT THE EDGES TAKEN BY
+# A* TO FIND THE SHORTEST PATH AND OUTPUTS A 
+# LIST OF THE POINTS
+def shortest_path(previous, start, goal):
     path = []
     location = goal
-    if goal not in came_from:
+    if goal not in previous:
         return
     while location != start:
         path.append(location)
-        location = came_from[location]
+        location = previous[location]
     path.append(start)
     return path
 
 
 
-
-
+# A* FUNCTION WHICH TAKES IN A MATRIX, A STARTING POINT
+# AND AN ENDPOINT, AND FINDS THE SHORTEST PATH BETWEEN
+# THE POINTS. OUTPUTS TWO DICTS
 def a_star(matrix, start_point, end_point):
     passed = queue.PriorityQueue(0)
     passed.put((start_point, 0))
-    came_from = {}
+    previous = {}
     cost_so_far = {}
-    came_from[start_point] = None
+    previous[start_point] = None
     cost_so_far[start_point] = 0
 
     while not passed.empty():
@@ -57,13 +59,13 @@ def a_star(matrix, start_point, end_point):
                 cost_so_far[next[0]] = cost
                 priority = cost + heuristics(next[0], end_point)
                 passed.put((next[0], priority))
-                came_from[next[0]] = location
+                previous[next[0]] = location
     
-    return came_from, cost_so_far
+    return previous
 
 
 
-
+# HEURISTIC TO DETERMINE CURRENT POINT DISTANCE TO GOAL
 def heuristics(a, b):
     x1, y1 = a
     x2, y2 = b
@@ -71,7 +73,8 @@ def heuristics(a, b):
 
 
 
-
+# A FUNCTION WHICH CREATES A WEIGHTED GRAPH
+# BASED ON A MATRIX
 
 def weighted_graph(matrix):
     nodes = []
@@ -118,6 +121,6 @@ def weighted_graph(matrix):
 
 
 
-
+# CREATES A NEW EDGE WITH 1 WHEIGHT TO THE MAP
 def new_edge(node_a, node_b, map):
     map[node_a].append((node_b, 1))
