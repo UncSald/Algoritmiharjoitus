@@ -6,19 +6,17 @@ from math import sqrt, acos, sin
 
 
 class Triangle:
-    def __init__(self, a_edge, b_edge, c_edge):
-        self._a_edge = a_edge
-        self._b_edge = b_edge
-        self._c_edge = c_edge
-        self._a_point = a_edge[0] 
-        self._b_point = a_edge[1]
-        self._c_point = b_edge[1]
-        self._edges = [a_edge,
-                        b_edge,
-                        c_edge]
-        self._points = [a_edge[0],
-                       a_edge[1],
-                       b_edge[1]]
+    def __init__(self, a, b, c):
+        self._a_edge = (a,b)
+        self._b_edge = (a,c)
+        self._c_edge = (b,c)
+        self._a_point = a
+        self._b_point = b
+        self._c_point = c
+        self._edges = [self._a_edge,
+                        self._b_edge,
+                        self._c_edge]
+        self._points = [a,b,c]
     
         # TO CALCULATE THE CIRCUMCIRCLE OF THE TRIANGLE WE NEED THE
         # LENGHTS OF THE TRIANGLES SIDES AND THE SIZES OF EACH ANGLE
@@ -52,37 +50,42 @@ class Triangle:
         self.radius = self.count_radius()
     
     def edge_length(self,edge):
-        return sqrt((max(edge[0][0],edge[1][0])-min(edge[0][0],edge[1][0]))**2\
-                + (max(edge[0][1],edge[1][1])-min(edge[0][1],edge[1][1]))**2)
+        return sqrt(abs(edge[0][0]-edge[1][0])**2\
+                + (abs(edge[0][1]-edge[1][1]))**2)
 
     
     def triangle_angle(self,a,b,c):
-        return (acos((a**2+b**2-c**2)/(2*a*b)))
+        try:
+            statement = (a**2+b**2-c**2)/(2*a*b)
+            if statement > 1:
+                statement = 1
+            elif statement < -1:
+                statement = -1
+            return acos(statement)
+        except ZeroDivisionError: print(self._points)
     
     def count_radius(self):
-        if self.a_edge_len == self.b_edge_len or\
-            self.a_edge_len == self.c_edge_len or\
-            self.b_edge_len == self.c_edge_len:
-            return max(self.a_edge_len, self.b_edge_len, self.c_edge_len)/2
         return  (self.a_edge_len*self.b_edge_len*self.c_edge_len)/\
-                sqrt((self.a_edge_len+self.b_edge_len+self.c_edge_len)*\
+                sqrt(max((self.a_edge_len+self.b_edge_len+self.c_edge_len)*\
                 (self.b_edge_len+self.c_edge_len-self.a_edge_len)*\
                 (self.c_edge_len+self.a_edge_len-self.b_edge_len)*\
-                (self.a_edge_len+self.b_edge_len-self.c_edge_len)
+                (self.a_edge_len+self.b_edge_len-self.c_edge_len),1)
                 )
-
+    def triangle_area(self, point1, point2, point3):
+        return abs((point1[0]*(point2[1]-point3[1])+point2[0]*(point3[1]-point1[1])+point3[0]*(point1[1]-point2[1]))/2)
     def check_point(self, point):
         xLocation = abs(max(self.circumcenter[0],point[0])-\
                         min(self.circumcenter[0],point[0]))**2
         yLocation = abs(max(self.circumcenter[1],point[1])-\
                         min(self.circumcenter[1],point[1]))**2
         d = sqrt(xLocation + yLocation)
-        return d<self.radius
+        return d<=self.radius
+
 
     def draw(self, screen, color):
         for edge in self._edges:
             pygame.draw.aaline(screen, color, edge[0], edge[1])
-
+        pygame.draw.circle(screen,'blue', self.circumcenter, self.radius, 1)
 
 
 
