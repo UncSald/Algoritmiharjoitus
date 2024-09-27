@@ -14,8 +14,8 @@ def generate_rooms(count :int, width :int, height :int, tile_size :int):
     while len(rect_set) <= count:
         x_point = randint(1, ((width-(width%tile_size))//tile_size))*tile_size
         y_point = randint(1, ((height-(height%tile_size))//tile_size))*tile_size
-        max_width = int((width-x_point)//tile_size)
-        max_height = int((height-y_point)//tile_size)
+        max_width = int((width-x_point)//tile_size)-1
+        max_height = int((height-y_point)//tile_size)-1
         if max_width < 3 or max_height < 4:
             continue
         if max_width > 7:
