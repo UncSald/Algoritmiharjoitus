@@ -1,4 +1,4 @@
-import queue
+from queue import PriorityQueue
 from listMatrix import point_to_coord
 
 
@@ -16,18 +16,18 @@ def build_path(matrix, edges, tile_size:int):
         for point in path:
             row,col = point
             if matrix[row][col] == 0:
-                matrix[row][col] = 5
+                matrix[row][col] = 2
     return matrix
 
 
 # FUNCTION TAKES AS INPUT THE EDGES TAKEN BY
-# A* TO FIND THE SHORTEST PATH AND OUTPUTS A 
+# A* TO FIND THE SHORTEST PATH AND OUTPUTS A
 # LIST OF THE POINTS
 def shortest_path(previous, start, goal):
     path = []
     location = goal
     if goal not in previous:
-        return
+        return []
     while location != start:
         path.append(location)
         location = previous[location]
@@ -40,7 +40,7 @@ def shortest_path(previous, start, goal):
 # AND AN ENDPOINT, AND FINDS THE SHORTEST PATH BETWEEN
 # THE POINTS. OUTPUTS TWO DICTS
 def a_star(matrix, start_point, end_point):
-    passed = queue.PriorityQueue(0)
+    passed = PriorityQueue(0)
     passed.put((start_point, 0))
     previous = {}
     cost_so_far = {}
@@ -60,7 +60,7 @@ def a_star(matrix, start_point, end_point):
                 priority = cost + heuristics(next[0], end_point)
                 passed.put((next[0], priority))
                 previous[next[0]] = location
-    
+
     return previous
 
 
@@ -113,7 +113,7 @@ def weighted_graph(matrix):
             new_edge(node, (node[0]+1,len(matrix[0])-1),map)
         else:
             new_edge(node,(node[0],node[1]-1),map)
-            new_edge(node,(node[0],node[1]+1),map)  
+            new_edge(node,(node[0],node[1]+1),map)
             new_edge(node,(node[0]-1,node[1]),map)
             new_edge(node,(node[0]+1,node[1]),map)
     return map
