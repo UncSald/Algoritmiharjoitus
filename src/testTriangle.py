@@ -25,8 +25,6 @@ def test_bowyer_watson(amount):
     algortithm1.run()
     if len(algortithm1._triangulation) > (2*amount)+(amount/10):
         over_double = True
-    print(f"points on list: {len(points)}")
-    print(f"triangles drawn: {len(algortithm1._triangulation)}")
 
     return over_double
 
