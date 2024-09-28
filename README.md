@@ -12,4 +12,4 @@ Testaaminen onnistuu näin:
 
 3. Aja komento ```poetry shell``` jonka jälkeen aja komento ```python3 src/main.py```, liikkuminen tapahtuu WASD -näppäimillä.
 
-4. Voit myös ajaa komennon ```python3 src/testTriangle.py```. Tämä antaa tulokset käyttämäni Bowyer-Watson algoritmin oiminnasta erilaisilla syötteillä. Testi on pitkä, koska algoritmin toimintanopeus on O(n²).
+4. Voit myös ajaa komennon ```python3 src/tests.py```. Tämä antaa tulokset käyttämäni Bowyer-Watson algoritmin oiminnasta erilaisilla syötteillä. Testi on pitkä, koska algoritmin toimintanopeus on O(n²).
