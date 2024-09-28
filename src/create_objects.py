@@ -2,8 +2,9 @@ from sprites import Floor, Wall, Door
 
 
 
-
-def create_objects(matrix, floor, walls, tile_size):
+# FUNCTION CREATES OBJECTS AND ADDS THEM TO CORRECT GROUPS
+# SO THEY WILL BE DRAWN CORRECTLY
+def create_objects(matrix :list, floor, walls, tile_size :int):
     for row in range(len(matrix)):
         for column in range(len(matrix[0])):
 
