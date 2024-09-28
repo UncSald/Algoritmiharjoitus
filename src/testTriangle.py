@@ -19,27 +19,12 @@ def test_bowyer_watson(amount):
     points = set()
     over_double = False
     for i in range(amount):
-        point = (randint(0,width1),randint(0,height1))
+        point = (randint(0,width1-1),randint(0,height1-1))
         points.add(point)
     algortithm1 = BowyerWatson(points,width1,height1)
     algortithm1.run()
     if len(algortithm1._triangulation) > (2*amount)+(amount/10):
         over_double = True
-        pygame.init()
-        clock = pygame.time.Clock()
-        surface = pygame.display.set_mode((width1,height1))
-        surface.fill('black')
-        tick = 0
-        while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-            tick += 1
-            for triangle in algortithm1._triangulation:
-                triangle.draw(surface,'red')
-            pygame.display.flip()
-            clock.tick(3)
     print(f"points on list: {len(points)}")
     print(f"triangles drawn: {len(algortithm1._triangulation)}")
 
@@ -57,11 +42,16 @@ def test_a_star():
 def test_build_path():
     pass
 
+
 if __name__ == "__main__":
-    count = 0
-    amount = 60
-    for i in range(1000):
-        print(i)
-        if test_bowyer_watson(amount):
-            count += 1
-    print(f"failure rate : {count/50*100}%")
+    print("Tester for Bowyer-Watson -algorithm, this may take a couple of minutes.")
+    for i in range(10):
+        count = 0
+        amount = [10,30,50,80,100,200,400,500,700,1000]
+        times = 1000
+        if amount[i] >= 400:
+            times = 100
+        for j in range(times):
+            if test_bowyer_watson(amount[i]):
+                count += 1
+        print(f"Failure rate with {amount[i]} points, and {times} runs: {count/times*100}%")
