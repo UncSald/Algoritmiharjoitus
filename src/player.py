@@ -11,6 +11,8 @@ class Player(pygame.sprite.Sprite):
         self.x_velocity = width/8
         self.y_velocity = height/8
         self.walls = walls
+        self.changes_x = 0
+        self.changes_y = 0
 
     def collision(self, group :pygame.sprite.Group):
         for sprite in group.sprites():    
@@ -25,4 +27,16 @@ class Player(pygame.sprite.Sprite):
                     self.changes_x -= self.x_velocity
 
     def update(self):
-        pass
+        self.changes_x = 0
+        self.changes_y = 0
+        self.collision(self.walls)
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_a]:
+            self.changes_x -= self.x_velocity
+        elif keys[pygame.K_d]:
+            self.changes_x += self.x_velocity
+        elif keys[pygame.K_w]:
+            self.changes_y -= self.y_velocity
+        elif keys[pygame.K_s]:
+            self.changes_y += self.y_velocity
+        self.rect.topleft=(self.x,self.y)
