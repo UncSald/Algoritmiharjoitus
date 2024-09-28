@@ -16,7 +16,7 @@ def list_to_matrix(rooms :list, room_centers :list, width :int,\
     for room in rooms:
         for point in rect_to_coord(room, tile_size):
             x,y = point
-            matrix[y][x] = 2
+            matrix[y][x] = 1
     for point in room_centers:
         x, y = point_to_coord(point, tile_size)
         if point == start:
@@ -25,12 +25,25 @@ def list_to_matrix(rooms :list, room_centers :list, width :int,\
             matrix[y][x] = 4
         else:
             matrix[y][x] = 1
+    y = 0
+    for row in matrix:
+        x = 0
+        for column in row:
+            if y == 0 or x == 0 or x == len(row)-1 or y == len(matrix)-1:
+                matrix[y][x] = 10
+            x+=1
+        y+=1
     return matrix
 
+# GIVES OUT COORDINATES FOR A POINT IN A MATRIX
+# WITH SET TILESIZE
 def point_to_coord(point: tuple[int,int], tile_size:int):
     x = int((point[0]-point[0]%tile_size)//tile_size)-1
     y = int((point[1]-point[1]%tile_size)//tile_size)-1
     return (x,y)
+
+# GIVES OUT COORDINATES FOR A RECTANGLE IN A MATRIX
+# WITH SET TILESIZE
 
 def rect_to_coord(rect :Rectangle, tile_size :int):
     coords = []
