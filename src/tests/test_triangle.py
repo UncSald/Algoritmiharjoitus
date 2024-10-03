@@ -9,6 +9,7 @@ class TestTriangle(unittest.TestCase):
         expected = [((100,100), (101,101)), ((100,100), (100,101)), ((101,101), (100,101))]
         self.assertEqual(expected, result)
     
+    # CIRCUMCENTERS CHECKED AT https://byjus.com/circumcenter-calculator/
     def test_triangle_circumcenter1(self):
         triangle = Triangle((100,100), (101,101), (100,101))
         result = triangle.circumcenter
@@ -21,7 +22,8 @@ class TestTriangle(unittest.TestCase):
         result = (round(x,3),round(y,3))
         expected = (254.395, 206.998)
         self.assertEqual(expected, result)
-    
+
+    # EDGE LENGHTS CHECKED AT https://www.calculatorsoup.com/calculators/geometry-plane/distance-two-points.php
     def test_triangle_edges_len1(self):
         triangle = Triangle((100,100), (101,101), (100,101))
         result_a = round(triangle.a_edge_len, 5)
@@ -46,7 +48,30 @@ class TestTriangle(unittest.TestCase):
         self.assertEqual(expected_b, result_b)
         self.assertEqual(expected_c, result_c)
 
+    # TRIANGLE ANGLES CHECKED AT https://www.calculator.net/triangle-calculator.html
+    def test_triangle_angles1(self):
+        triangle = Triangle((100,100), (101,101), (100,101))
+        result_a = round(triangle.a_angle,4)
+        result_b = round(triangle.b_angle,4)
+        result_c = round(triangle.c_angle,4)
+        expected_a = 0.7854
+        expected_b = 0.7854
+        expected_c = 1.5708
+        self.assertEqual(expected_a, result_a)
+        self.assertEqual(expected_b, result_b)
+        self.assertEqual(expected_c, result_c)
 
+    def test_triangle_angles1(self):
+        triangle = Triangle((500,120), (11,300), (123,432))
+        result_a = round(triangle.a_angle,4)
+        result_b = round(triangle.b_angle,4)
+        result_c = round(triangle.c_angle,4)
+        expected_a = 0.3386
+        expected_b = 1.2199
+        expected_c = 1.5831
+        self.assertEqual(expected_a, result_a)
+        self.assertEqual(expected_b, result_b)
+        self.assertEqual(expected_c, result_c)
 
 if __name__ == "__main__":
     unittest.main()
