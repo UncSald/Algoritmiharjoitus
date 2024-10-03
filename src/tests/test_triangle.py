@@ -73,5 +73,26 @@ class TestTriangle(unittest.TestCase):
         self.assertEqual(expected_b, result_b)
         self.assertEqual(expected_c, result_c)
 
+    # RADIUS CHECKED AT https://www.omnicalculator.com/math/circumscribed-circle
+    def test_circumcircle_radius1(self):
+        triangle = Triangle((100,100), (101,101), (100,101))
+        result = round(triangle.radius,4)
+        expected = 0.7071
+        self.assertEqual(expected, result)
+
+    def test_circumcircle_radius2(self):
+        triangle = Triangle((500,120), (11,300), (123,432))
+        result = round(triangle.radius,2)
+        expected = 260.56
+        self.assertEqual(expected, result)
+
+
+    def test_check_point1(self):
+        pass
+
+    def test_check_point2(self):
+        pass
+
+
 if __name__ == "__main__":
     unittest.main()
