@@ -71,8 +71,6 @@ class Triangle:
                 (self.c_edge_len+self.a_edge_len-self.b_edge_len)*\
                 (self.a_edge_len+self.b_edge_len-self.c_edge_len),1)
                 )
-    def triangle_area(self, point1, point2, point3):
-        return abs((point1[0]*(point2[1]-point3[1])+point2[0]*(point3[1]-point1[1])+point3[0]*(point1[1]-point2[1]))/2)
     def check_point(self, point):
         xLocation = abs(max(self.circumcenter[0],point[0])-\
                         min(self.circumcenter[0],point[0]))**2
