@@ -77,7 +77,7 @@ class Triangle:
         yLocation = abs(max(self.circumcenter[1],point[1])-\
                         min(self.circumcenter[1],point[1]))**2
         d = sqrt(xLocation + yLocation)
-        return d<=self.radius
+        return round(d,4)<=round(self.radius,4)
 
 
     def draw(self, screen, color):
