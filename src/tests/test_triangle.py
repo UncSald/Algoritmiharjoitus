@@ -88,10 +88,33 @@ class TestTriangle(unittest.TestCase):
 
 
     def test_check_point1(self):
-        pass
+        triangle = Triangle((100,100), (101,101), (100,101))
+        point = (100.5,100)
+        result = triangle.check_point(point)
+        expected = True
+        self.assertEqual(expected, result)
 
     def test_check_point2(self):
-        pass
+        triangle = Triangle((100,100), (101,101), (100,101))
+        point = (200.5,100)
+        result = triangle.check_point(point)
+        expected = False
+        self.assertEqual(expected, result)
+
+    def test_check_point3(self):
+        triangle = Triangle((500,120), (11,300), (123,432))
+        point = (100.5,300)
+        result = triangle.check_point(point)
+        expected = True
+        self.assertEqual(expected, result)
+
+    def test_check_point4(self):
+        triangle = Triangle((500,120), (11,300), (123,432))
+        point = (500.0001,119.9999)
+        result = triangle.check_point(point)
+        expected = False
+        self.assertEqual(expected, result)
+    
 
 
 if __name__ == "__main__":
