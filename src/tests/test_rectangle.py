@@ -28,16 +28,39 @@ class TestRectangle(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_rectangle_collisions1(self):
-        pass
+        rect1 = Rectangle((100,100), 100, 100)
+        rect2 = Rectangle((201,201), 14, 210)
+        result = rect1.collision(rect2)
+        expected = False
+        self.assertEqual(expected,result)
 
     def test_rectangle_collisions2(self):
-        pass
+        rect1 = Rectangle((100,100), 100, 100)
+        rect2 = Rectangle((200,200), 100, 100)
+        result = rect1.collision(rect2)
+        expected = True
+        self.assertEqual(expected, result)
 
     def test_rectangle_collisions3(self):
-        pass
+        rect1 = Rectangle((100,100), 100, 100)
+        rect2 = Rectangle((120,120), 10, 10)
+        result = rect1.collision(rect2)
+        expected = True
+        self.assertEqual(expected, result)
 
     def test_rectangle_collisions4(self):
-        pass
+        rect1 = Rectangle((100,100), 100, 100)
+        rect2 = Rectangle((90,110), 120, 80)
+        result = rect1.collision(rect2)
+        expected = True
+        self.assertEqual(expected, result)
+    
+    def test_rectangle_collisions4(self):
+        rect1 = Rectangle((100,100), 100, 100)
+        rect2 = Rectangle((110,90), 80, 120)
+        result = rect1.collision(rect2)
+        expected = True
+        self.assertEqual(expected, result)
 
 if __name__ == "__main__":
     unittest.main()
