@@ -16,10 +16,16 @@ class TestRectangle(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_rectangle_center1(self):
-        pass
+        rect = Rectangle((100,100), 100, 100)
+        result = rect.center
+        expected = (150,150)
+        self.assertEqual(expected, result)
 
     def test_rectangle_center2(self):
-        pass
+        rect = Rectangle((567,420), 14, 210)
+        result = rect.center
+        expected = (574,525)
+        self.assertEqual(expected, result)
 
     def test_rectangle_collisions1(self):
         pass
