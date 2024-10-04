@@ -88,7 +88,7 @@ class Triangle:
 
 
 class Rectangle:
-    def __init__(self, x0, width, height):
+    def __init__(self, x0 :tuple[int,int], width :int, height :int):
         self.up = x0[1]
         self.down = x0[1]+height
         self.left = x0[0]
