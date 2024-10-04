@@ -4,10 +4,16 @@ from geometry import Rectangle
 class TestRectangle(unittest.TestCase):
 
     def test_rectangle_creation1(self):
-        pass
+        rect = Rectangle((100,100), 100, 100)
+        result = (rect.up, rect.down, rect.left, rect.right)
+        expected = (100, 200, 100, 200)
+        self.assertEqual(expected, result)
 
     def test_rectangle_creation2(self):
-        pass
+        rect = Rectangle((567,420), 14, 210)
+        result = (rect.up, rect.down, rect.left, rect.right)
+        expected = (420, 630, 567, 581)
+        self.assertEqual(expected, result)
 
     def test_rectangle_center1(self):
         pass
@@ -26,3 +32,6 @@ class TestRectangle(unittest.TestCase):
 
     def test_rectangle_collisions4(self):
         pass
+
+if __name__ == "__main__":
+    unittest.main()
