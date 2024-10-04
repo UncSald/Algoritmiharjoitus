@@ -96,8 +96,8 @@ class Rectangle:
         self.zero = x0
         self.width = width
         self.height = height
-        self.center = (self.right-(self.right-self.left)/2,\
-                        self.down-(self.down-self.up)/2)
+        self.center = (self.left+width/2,\
+                        self.up+height/2)
         self.edges = [[x0,(x0[0]+width,x0[1])],
                        [x0,(x0[0],x0[1]+height)],
                        [(x0[0]+width,x0[1]),(x0[0]+width,x0[1]+height)],
