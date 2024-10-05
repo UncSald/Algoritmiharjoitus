@@ -28,14 +28,6 @@
         Rectangle luokan testit keskittyvät pääsääntöisesti luokasta luotavien  
         suorakulmioiden päällekkäisyyksien tarkastamiseen.
         Testeissä käyään läpi erilaiset tilanteet, joissa suorakulmiot ovat päällekkäin.  
-        Tälläisiä tilanteita ovat osittainen päällekkäisyys,  
-
-            ![osittainen päällekkäisyys](src/assets/osittainen.png)
-        
+        Tälläisiä tilanteita ovat osittainen päällekkäisyys,
         Kokonainen päällekkäisyys,  
-        
-            ![kokonainen päällekkäisyys](src/assets/taysi.png)
-        
         Ja toisen suorakulmion läpäiseminen.
-        
-            ![läpäiseminen](src/assets/lapaisy1.png)
