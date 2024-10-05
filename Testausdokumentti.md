@@ -31,9 +31,7 @@
     2. Rectangle luokka
         Rectangle luokan testit keskittyvät pääsääntöisesti luokasta luotavien  
         suorakulmioiden päällekkäisyyksien tarkastamiseen.
-        Testeissä käyään läpi erilaiset tilanteet,
-        joissa suorakulmiot ovat päällekkäin.  
-        Tälläisiä tilanteita ovat osittainen päällekkäisyys,  
-        Kokonainen päällekkäisyys, 
+        Testeissä käyään läpi erilaiset tilanteet, joissa suorakulmiot ovat päällekkäin.  
+        Tälläisiä tilanteita ovat osittainen päällekkäisyys,
+        Kokonainen päällekkäisyys,  
         Ja toisen suorakulmion läpäiseminen.
-
