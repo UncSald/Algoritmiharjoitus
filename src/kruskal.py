@@ -3,7 +3,7 @@
 # ROOMS
 
 
-def kruskal(edge_list :set, start_point):
+def kruskal(edge_list :set, start_point :tuple[int,int]):
     edges = []
     new_edges = []
     point_list = set()

@@ -3,13 +3,12 @@ from geometry import Triangle
 
 
 # MAIN ALGORITHM FOR THE PROJECT
-
 class BowyerWatson:
     # DEFINE POINTS, SET CONTAINING FINAL TRIANGULATION
     # AND EDGES USED IN TRIANGULATION
     # ALSO ADD SUPER TRIANGLE, WHICH IS ALWAYS BIG ENOUGH TO
     # CONTAIN THE WHOLE SCREEN WE DRAW ON
-    def __init__(self, points, width, height):
+    def __init__(self, points :set, width :int, height :int):
         self._points = points
         self._triangulation = set()
         self._all_edges = set()
@@ -73,4 +72,3 @@ class BowyerWatson:
         for triangle in self._triangulation:
             for edge in triangle._edges:
                 self._all_edges.add(edge)
-                
