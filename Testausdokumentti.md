@@ -35,3 +35,21 @@
         Tälläisiä tilanteita ovat osittainen päällekkäisyys,
         Kokonainen päällekkäisyys,  
         Ja toisen suorakulmion läpäiseminen.
+
+    3. Kruskalin algoritmi
+        Kruskaln algoritmin tehtävä on luoda minimum spanning tree
+        sille syötetystä listasta pisteiden välisiä reunoja.
+        Testauksessa tarkastellaan, sisältyvätkö kaikki verkossa
+        olevien reunojen pisteet varmasti lopulliseen minimum spanning treehin.
+        Testaus tarkastaa myös, että reunoja on lopullisessa
+        mst:ssä oikea määrä, eli alkuperäisten pisteiden määrä - 1.
+    
+    4. Bowyer-Watson -algoritmi
+        Bowyer-watson algoritmin testaus on hiukan hankalampaa...
+        Algoritmi palauttaa listan kolmioinnista, joten ainoa
+        tapa testata algoritmin toimivuutta on varmistaa, että
+        luotujen kolmioiden määrä on oikea.
+        Suurella määrällä pisteitä kolmioiden lopullisessa määrässä tapahtuu vaihtelua,
+        joten testit tarkastavat, että kolmioita on
+        suunnilleen oikea määrä.
+        Esim. 1000 pisteestä algoritmi muodostaa n. 1965 kolmiota +-10 kolmiota.
