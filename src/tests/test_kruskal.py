@@ -1,7 +1,7 @@
 import unittest
 from kruskal import kruskal
 
-class test_kruskal(unittest.TestCase):
+class TestKruskal(unittest.TestCase):
 
     # TESTS CHECK IF THE KRUSKAL ALGORITHM RETURNS THE CORRECT AMOUNT OF
     # EDGES AFTER EING GIVEN A LIST OF EDGES
