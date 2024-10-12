@@ -124,11 +124,15 @@ def weighted_graph(matrix):
 # CREATES A NEW EDGE WITH 1 WHEIGHT TO THE MAP
 def new_edge(node_a, node_b, map, matrix):
 
-    if matrix[node_a[0]-1][node_a[1]-1]==1 or matrix[node_b[0]-1][node_b[1]-1]==1:
-        map[node_a].append((node_b, 2))
-    elif matrix[node_a[0]-1][node_a[1]-1]==9 or matrix[node_b[0]-1][node_b[1]-1]==9:
-        map[node_a].append((node_b, 3))
-    elif matrix[node_a[0]-1][node_a[1]-1]==2 and matrix[node_b[0]-1][node_b[1]-1]==2:
-        map[node_a].append((node_b, 0))
-    else:    
+    if matrix[node_a[0]][node_a[1]]==2 or matrix[node_b[0]][node_b[1]]==2:
         map[node_a].append((node_b, 1))
+    elif matrix[node_a[0]][node_a[1]]==1 and matrix[node_b[0]][node_b[1]]==1:
+        map[node_a].append((node_b, 4))
+    elif matrix[node_a[0]][node_a[1]]==9 and matrix[node_b[0]][node_b[1]]==9:
+        map[node_a].append((node_b, 6))
+    elif matrix[node_a[0]][node_a[1]]==9 or matrix[node_b[0]][node_b[1]]==9:
+        map[node_a].append((node_b, 5))
+    elif matrix[node_a[0]][node_a[1]]==1 or matrix[node_b[0]][node_b[1]]==1:
+        map[node_a].append((node_b, 3))
+    else:    
+        map[node_a].append((node_b, 2))
