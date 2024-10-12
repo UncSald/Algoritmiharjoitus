@@ -30,7 +30,7 @@ def list_to_matrix(rooms :list, room_centers :list, width :int,\
         x = 0
         for column in row:
             if y == 0 or x == 0 or x == len(row)-1 or y == len(matrix)-1:
-                matrix[y][x] = 10
+                matrix[y][x] = 9
             x+=1
         y+=1
     return matrix
