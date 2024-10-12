@@ -7,10 +7,22 @@ class TestAStar(unittest.TestCase):
                   [9,9]]
         result = weighted_graph(matrix)
         expected = {
-                    (0,0):[((0,1),4),((1,0),4)],
-                    (0,1):[((0,0),4),((1,1),4)],
-                    (1,0):[((0,0),4),((1,1),4)],
-                    (1,1):[((0,1),4),((1,0),4)]
+                    (0,0):[((0,1),6),((1,0),6)],
+                    (0,1):[((0,0),6),((1,1),6)],
+                    (1,0):[((0,0),6),((1,1),6)],
+                    (1,1):[((0,1),6),((1,0),6)]
+                    }
+        self.assertEqual(expected,result)
+
+    def test_weighted_graph2(self):
+        matrix = [[9,0],
+                  [1,2]]
+        result = weighted_graph(matrix)
+        expected = {
+                    (0,0):[((0,1),5),((1,0),5)],
+                    (0,1):[((0,0),5),((1,1),1)],
+                    (1,0):[((0,0),5),((1,1),1)],
+                    (1,1):[((0,1),1),((1,0),1)]
                     }
         self.assertEqual(expected,result)
 
