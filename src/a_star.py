@@ -1,5 +1,5 @@
 from queue import PriorityQueue
-from listMatrix import point_to_coord
+from src.listMatrix import point_to_coord
 
 
 # FUNCTION BRINGS TOGETHER ALL OF THE NEEDED STEPS
@@ -59,7 +59,6 @@ def a_star(graph, start_point, end_point):
                 priority = cost + heuristics(next[0], end_point)
                 passed.put((next[0], priority))
                 previous[next[0]] = location
-
     return previous
 
 
@@ -124,15 +123,15 @@ def weighted_graph(matrix):
 # CREATES A NEW EDGE WITH 1 WHEIGHT TO THE MAP
 def new_edge(node_a, node_b, map, matrix):
 
-    if matrix[node_a[0]][node_a[1]]==2 or matrix[node_b[0]][node_b[1]]==2:
+    if matrix[node_b[0]][node_b[1]]==2:
         map[node_a].append((node_b, 1))
     elif matrix[node_a[0]][node_a[1]]==1 and matrix[node_b[0]][node_b[1]]==1:
         map[node_a].append((node_b, 4))
     elif matrix[node_a[0]][node_a[1]]==9 and matrix[node_b[0]][node_b[1]]==9:
         map[node_a].append((node_b, 6))
-    elif matrix[node_a[0]][node_a[1]]==9 or matrix[node_b[0]][node_b[1]]==9:
+    elif matrix[node_b[0]][node_b[1]]==9:
         map[node_a].append((node_b, 5))
-    elif matrix[node_a[0]][node_a[1]]==1 or matrix[node_b[0]][node_b[1]]==1:
+    elif matrix[node_b[0]][node_b[1]]==1:
         map[node_a].append((node_b, 3))
     else:    
         map[node_a].append((node_b, 2))
