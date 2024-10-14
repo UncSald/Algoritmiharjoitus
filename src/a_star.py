@@ -15,7 +15,8 @@ def build_path(matrix, edges, tile_size:int):
         path = shortest_path(a_star(graph, start, end), start, end)
         for point in path:
             row,col = point
-            matrix[row][col] = 2
+            if matrix[row][col] != 3 and matrix[row][col] != 4:
+                matrix[row][col] = 2
     return matrix
 
 
