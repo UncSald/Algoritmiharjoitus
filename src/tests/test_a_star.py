@@ -1,7 +1,8 @@
 import unittest
-from a_star import a_star, weighted_graph
+from a_star import a_star, weighted_graph, shortest_path
 
 class TestAStar(unittest.TestCase):
+    
     def test_weighted_graph1(self):
         matrix = [[9,9],
                   [9,9]]
@@ -47,6 +48,23 @@ class TestAStar(unittest.TestCase):
                     (2,2):(2,1),
                     (1,2):(2,2),
                     (0,2):(1,2)}
+        self.assertEqual(expected,result)
+
+    def test_shortest_path1(self):
+        graph = weighted_graph([[9,0],
+                                [1,2]])
+        result = shortest_path(a_star(graph,(0,0),(1,1)),(0,0),(1,1))
+        expected = [(1,1),(0,1),(0,0)]
+        self.assertEqual(expected,result)
+
+    def test_shortest_path2(self):
+        graph = weighted_graph([[9,2,4,0,0],
+                                [9,2,0,0,0],
+                                [9,2,2,2,2],
+                                [9,2,9,9,2],
+                                [1,3,2,2,2]])
+        result = shortest_path(a_star(graph,(4,1),(0,2)),(4,1),(0,2))
+        expected = [(0,2),(0,1),(1,1),(2,1),(3,1),(4,1)]
         self.assertEqual(expected,result)
 
 if __name__ == "__main__":
