@@ -26,13 +26,28 @@ class TestAStar(unittest.TestCase):
                     }
         self.assertEqual(expected,result)
 
-    def test_a_star_path(self):
+    def test_a_star_path1(self):
         graph = weighted_graph([[9,0],
                                 [1,2]])
         result = a_star(graph,(0,0),(1,1))
-        expected = {(0,0):None, (0,1):(0,0), (1,0):(0,0), (1,1):(0,1)}
+        expected = {(0,0):None,
+                    (0,1):(0,0),
+                    (1,0):(0,0),
+                    (1,1):(0,1)}
         self.assertEqual(expected,result)
 
+    def test_a_star_path2(self):
+        graph = weighted_graph([[9,0,4],
+                                [9,0,2],
+                                [1,3,2]])
+        result = a_star(graph,(2,1),(0,2))
+        expected = {(2,1):None,
+                    (2,0):(2,1),
+                    (1,1):(2,1),
+                    (2,2):(2,1),
+                    (1,2):(2,2),
+                    (0,2):(1,2)}
+        self.assertEqual(expected,result)
 
 if __name__ == "__main__":
     unittest.main()
