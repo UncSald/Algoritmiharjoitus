@@ -5,8 +5,7 @@ class Wall(pygame.sprite.Sprite):
     def __init__(self, width :int, height :int,\
                  render_point :tuple[int,int]):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface([width,height])
-        self.image.fill('white')
+        self.image = pygame.image.load('src/assets/wall.png')
         self.rect = self.image.get_rect(topleft=render_point)
         self.x, self.y = render_point
 
@@ -20,10 +19,11 @@ class Wall(pygame.sprite.Sprite):
 
 class Floor(pygame.sprite.Sprite):
     def __init__(self, width :int, height :int,\
-                 render_point :tuple[int,int]):
+                 render_point :tuple[int,int], value):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface([width,height])
-        self.image.fill('brown')
+
+        self.image = pygame.image.load('src/assets/floor_2.png')
+
         self.rect = self.image.get_rect()
         self.x, self.y = render_point
     
@@ -37,10 +37,12 @@ class Floor(pygame.sprite.Sprite):
 
 class Door(pygame.sprite.Sprite):
     def __init__(self, width :int, height :int,\
-                 render_point :tuple[int,int]):
+                 render_point :tuple[int,int], value):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface([width,height])
-        self.image.fill('black')
+        if value == 3:
+            self.image = pygame.image.load('src/assets/prev_door.png')
+        if value == 4:
+            self.image = pygame.image.load('src/assets/next_door.png')
         self.rect = self.image.get_rect(topleft=render_point)
         self.x, self.y = render_point
 
