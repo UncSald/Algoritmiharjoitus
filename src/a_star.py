@@ -41,14 +41,14 @@ def shortest_path(previous, start, goal):
 # THE POINTS. OUTPUTS TWO DICTS
 def a_star(graph, start_point, end_point):
     passed = PriorityQueue(0)
-    passed.put((start_point, 0))
+    passed.put((0,start_point))
     previous = {}
     cost_so_far = {}
     previous[start_point] = None
     cost_so_far[start_point] = 0
 
     while not passed.empty():
-        location = passed.get()[0]
+        location = passed.get()[1]
 
         if location == end_point:
             break
@@ -58,7 +58,7 @@ def a_star(graph, start_point, end_point):
             if next[0] not in cost_so_far or cost < cost_so_far[next[0]]:
                 cost_so_far[next[0]] = cost
                 priority = cost + heuristics(next[0], end_point)
-                passed.put((next[0], priority))
+                passed.put((priority,next[0]))
                 previous[next[0]] = location
     return previous
 
