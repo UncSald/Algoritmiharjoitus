@@ -18,9 +18,57 @@ class TestListMatrix(unittest.TestCase):
                     (0,4),(1,4),(2,4),(3,4),(4,4)]
         self.assertEqual(expected,result)
     def test_point_to_coord1(self):
-        pass
+        point = (0,0)
+        result = point_to_coord(point,1)
+        expected = (0,0)
+        self.assertEqual(expected, result)
+    
+    def test_point_to_coord2(self):
+        point = (64,128)
+        result = point_to_coord(point,32)
+        expected = (2,4)
+        self.assertEqual(expected, result)
+
+    def test_point_to_coord3(self):
+        point = (63,127)
+        result = point_to_coord(point,32)
+        expected = (1,3)
+        self.assertEqual(expected, result)
+
     def test_rect_list_to_matrix1(self):
-        pass
+        rect1 = Rectangle((1,1),3,3)
+        rect_list = [rect1]
+        rect_centers = [rect1.center]
+        result = list_to_matrix(rect_list,rect_centers,5,5,(1,1),(2,2),1)
+        expected = [
+            [9,9,9,9,9],
+            [9,3,1,1,9],
+            [9,1,4,1,9],
+            [9,1,1,1,9],
+            [9,9,9,9,9]
+        ]
+        self.assertEqual(expected,result)
+
+    def test_rect_list_to_matrix2(self):
+        rect1 = Rectangle((1,1),2,2)
+        rect2 = Rectangle((4,1),2,2)
+        rect3 = Rectangle((1,4),3,3)
+        rect_list = [rect1,rect2,rect3]
+        rect_centers = [rect1.center,rect2.center,rect3.center]
+        result = list_to_matrix(rect_list,rect_centers,10,10,(1,1),(2,5),1)
+        expected = [
+            [9,9,9,9,9,9,9,9,9,9],
+            [9,3,1,0,1,1,0,0,0,9],
+            [9,1,1,0,1,1,0,0,0,9],
+            [9,0,0,0,0,0,0,0,0,9],
+            [9,1,1,1,0,0,0,0,0,9],
+            [9,1,4,1,0,0,0,0,0,9],
+            [9,1,1,1,0,0,0,0,0,9],
+            [9,0,0,0,0,0,0,0,0,9],
+            [9,0,0,0,0,0,0,0,0,9],
+            [9,9,9,9,9,9,9,9,9,9]
+            ]
+        self.assertEqual(expected,result)
 
 if __name__ == "__main__":
     unittest.main()
