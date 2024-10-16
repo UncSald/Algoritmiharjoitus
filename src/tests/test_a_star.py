@@ -1,5 +1,5 @@
 import unittest
-from a_star import a_star, weighted_graph, shortest_path
+from a_star import a_star, weighted_graph, shortest_path, build_path
 
 class TestAStar(unittest.TestCase):
     
@@ -61,11 +61,61 @@ class TestAStar(unittest.TestCase):
         graph = weighted_graph([[9,2,4,0,0],
                                 [9,2,0,0,0],
                                 [9,2,2,2,2],
-                                [9,2,9,9,2],
+                                [9,9,9,9,2],
                                 [1,3,2,2,2]])
         result = shortest_path(a_star(graph,(4,1),(0,2)),(4,1),(0,2))
         expected = [(0,2),(0,1),(1,1),(2,1),(3,1),(4,1)]
         self.assertEqual(expected,result)
+    
+    def test_build_path1(self):
+        matrix = [
+            [9,2,4,0,0],
+            [9,2,0,0,0],
+            [9,2,2,2,2],
+            [9,9,9,9,2],
+            [1,3,2,2,2]
+            ]
+        result = build_path(matrix, [((1,4),(2,0))], 1)
+        expected = [
+            [9,2,4,0,0],
+            [9,2,0,0,0],
+            [9,2,2,2,2],
+            [9,2,9,9,2],
+            [1,3,2,2,2]
+            ]
+        self.assertEqual(expected,result)
+    def test_build_path2(self):
+        matrix = [[9,9,4,1,0],
+                  [9,9,0,0,0],
+                  [9,9,9,9,2],
+                  [9,9,9,9,2],
+                  [1,3,2,2,2]]
+        result = build_path(matrix, [((1,4),(2,0))], 1)
+        expected = [
+            [9,9,4,1,0],
+            [9,9,2,2,2],
+            [9,9,9,9,2],
+            [9,9,9,9,2],
+            [1,3,2,2,2]
+            ]
+        self.assertEqual(expected,result)
 
+    def test_build_path3(self):
+        matrix = [
+            [9,0,4,1,9,2],
+            [9,0,9,1,9,2],
+            [9,0,9,1,9,2],
+            [9,0,9,1,9,2],
+            [9,0,9,1,9,2],
+            [9,0,3,0,2,2]]
+        result = build_path(matrix, [((1,5),(2,0))], 1)
+        expected = [
+            [9,2,4,1,9,2],
+            [9,2,9,1,9,2],
+            [9,2,9,1,9,2],
+            [9,2,9,1,9,2],
+            [9,2,9,1,9,2],
+            [9,2,3,0,2,2]]
+        self.assertEqual(expected,result)
 if __name__ == "__main__":
     unittest.main()
