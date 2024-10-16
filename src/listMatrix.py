@@ -1,4 +1,4 @@
-from geometry import Rectangle
+from src.geometry import Rectangle
 
 # LIST TO MATRIX TAKES A LIST OF RECTANGLES AND A LIST OF THEIR CENTERS
 # AS PARAMETERS
@@ -38,8 +38,8 @@ def list_to_matrix(rooms :list, room_centers :list, width :int,\
 # GIVES OUT COORDINATES FOR A POINT IN A MATRIX
 # WITH SET TILESIZE
 def point_to_coord(point: tuple[int,int], tile_size:int):
-    x = int((point[0]-point[0]%tile_size)//tile_size)-1
-    y = int((point[1]-point[1]%tile_size)//tile_size)-1
+    x = int((point[0]-point[0]%tile_size)//tile_size)
+    y = int((point[1]-point[1]%tile_size)//tile_size)
     return (x,y)
 
 # GIVES OUT COORDINATES FOR A RECTANGLE IN A MATRIX
