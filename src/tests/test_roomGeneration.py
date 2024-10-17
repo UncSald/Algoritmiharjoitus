@@ -14,6 +14,10 @@ class TestRoomGeneration(unittest.TestCase):
             assert True
         except ValueError:
             assert False
+    def test_room_generation1(self):
+        result = len(generate_rooms(20,100,100,2)[0])
+        expected = 20
+        self.assertEqual(expected,result)
 
 if __name__ == "__main__":
     unittest.main()
