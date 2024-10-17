@@ -13,14 +13,14 @@ def generate_rooms(count :int, width :int, height :int, tile_size :int):
 
 
     if count < 10:
-        if (49*count)/((width/tile_size)*(height/tile_size)) > 0.50:
+        if (49*count)/((width/tile_size)*(height/tile_size)) > 0.70:
             raise ValueError("tilesize too high for this width and height.\
                               Try increasing screen size or tilesize.")
     elif (49*count*0.25)/((width/tile_size)*(height/tile_size)) > 0.20:
         raise ValueError("tilesize too high for this width and height.\
                           Try increasing screen size or tilesize.")
 
-    while len(rect_set) <= count:
+    while len(rect_set) < count:
         x_point = randint(1, ((width-(width%tile_size))//tile_size))*tile_size
         y_point = randint(1, ((height-(height%tile_size))//tile_size))*tile_size
         max_width = int((width-x_point)//tile_size)-1
