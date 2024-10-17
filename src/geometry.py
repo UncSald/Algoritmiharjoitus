@@ -140,5 +140,4 @@ class Rectangle:
         return f"{self.up}, {self.down}, {self.left}, {self.down}"
 
     def draw(self, screen, color):
-        for edge in self.edges:
-            pygame.draw.rect(screen, color, [self.zero[0],self.zero[1],self.width,self.height])
+        pygame.draw.rect(screen, color, [self.zero[0],self.zero[1],self.width,self.height])
