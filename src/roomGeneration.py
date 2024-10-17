@@ -41,11 +41,7 @@ def generate_rooms(count :int, width :int, height :int, tile_size :int):
         if not collision:
             rect_set.add(new_rect)
             point_set.add(new_rect.center)
-    avrg = 0
-    for rect in rect_set:
-        avrg += (rect.width/tile_size)*(rect.height/tile_size)
-    avrg = avrg/len(rect_set)
-    return (avrg,rect_set, point_set)
+    return (rect_set, point_set)
 
 
 
