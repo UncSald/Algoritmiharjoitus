@@ -19,5 +19,10 @@ class TestRoomGeneration(unittest.TestCase):
         expected = 20
         self.assertEqual(expected,result)
 
+    def test_room_generation2(self):
+        result = len(generate_rooms(3,500,500,32)[0])
+        expected = 3
+        self.assertEqual(expected,result)
+
 if __name__ == "__main__":
     unittest.main()
