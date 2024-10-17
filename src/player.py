@@ -30,8 +30,9 @@ class Player(pygame.sprite.Sprite):
                     self.changes_x += self.x_velocity
                 if self.rect.right >= sprite.rect.left and self.rect.right < sprite.rect.right:
                     self.changes_x -= self.x_velocity
-        if pygame.sprite.collide_rect(self,self.goal):
-            self.clear = True
+        for door in self.goal:
+            if pygame.sprite.collide_rect(self,door):
+                self.clear = True
         
 
     def update(self):
