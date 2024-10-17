@@ -1,4 +1,4 @@
-from geometry import Triangle
+from src.geometry import Triangle
 
 
 
@@ -28,7 +28,6 @@ class BowyerWatson:
     # ONE BY ONE
     def triangulate(self):
         for point in self._points:
-            
             unusable_triangles = set()
             for triangle in self._triangulation:
                 if triangle.check_point(point):
