@@ -5,19 +5,20 @@ from src.listMatrix import point_to_coord
 # FUNCTION BRINGS TOGETHER ALL OF THE NEEDED STEPS
 # TO CREATE PATHS TO THE MATRIX
 def build_path(matrix, edges, tile_size:int):
+    new_matrix = matrix.copy()
     for edge in edges:
         start, end = edge
         sx,sy = point_to_coord(start,tile_size)
         start = (sy,sx)
         ex,ey = point_to_coord(end,tile_size)
         end = (ey,ex)
-        graph = weighted_graph(matrix)
+        graph = weighted_graph(new_matrix)
         path = shortest_path(a_star(graph, start, end), start, end)
         for point in path:
             row,col = point
-            if matrix[row][col] != 3 and matrix[row][col] != 4:
-                matrix[row][col] = 2
-    return matrix
+            if new_matrix[row][col] != 3 and new_matrix[row][col] != 4:
+                new_matrix[row][col] = 2
+    return new_matrix
 
 
 # FUNCTION TAKES AS INPUT THE EDGES TAKEN BY
