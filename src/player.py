@@ -2,7 +2,7 @@ import pygame
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, width :int, height :int,\
-                 render_point :tuple[int,int], walls :pygame.sprite.Group):
+                 render_point :tuple[int,int], walls :pygame.sprite.Group, goal :pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load('src/assets/dude.png')
         self.image_up = pygame.image.load('src/assets/dude.png')
@@ -16,6 +16,8 @@ class Player(pygame.sprite.Sprite):
         self.walls = walls
         self.changes_x = 0
         self.changes_y = 0
+        self.goal = goal
+        self.clear = False
 
     def collision(self, group :pygame.sprite.Group):
         for sprite in group.sprites():    
@@ -28,6 +30,9 @@ class Player(pygame.sprite.Sprite):
                     self.changes_x += self.x_velocity
                 if self.rect.right >= sprite.rect.left and self.rect.right < sprite.rect.right:
                     self.changes_x -= self.x_velocity
+        if pygame.sprite.collide_rect(self,self.goal):
+            self.clear = True
+        
 
     def update(self):
         self.changes_x = 0
