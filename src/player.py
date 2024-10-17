@@ -32,6 +32,8 @@ class Player(pygame.sprite.Sprite):
                     self.changes_x -= self.x_velocity
         for door in self.goal:
             if pygame.sprite.collide_rect(self,door):
+                self.changes_x = 0
+                self.changes_y = 0
                 self.clear = True
         
 
