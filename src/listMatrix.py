@@ -17,14 +17,10 @@ def list_to_matrix(rooms :list, room_centers :list, width :int,\
         for point in rect_to_coord(room, tile_size):
             x,y = point
             matrix[y][x] = 1
-    for point in room_centers:
-        x, y = point_to_coord(point, tile_size)
-        if point == start:
-            matrix[y][x] = 3
-        elif point == end:
-            matrix[y][x] = 4
-        else:
-            matrix[y][x] = 1
+    sx,sy = point_to_coord(start,tile_size)
+    matrix[sy][sx] = 3
+    ex, ey = point_to_coord(end,tile_size)
+    matrix[ey][ex] = 4
     y = 0
     for row in matrix:
         x = 0
