@@ -14,11 +14,9 @@ def generate_rooms(count :int, width :int, height :int, tile_size :int):
 
     if count < 10:
         if (49*count)/((width/tile_size)*(height/tile_size)) > 0.70:
-            raise ValueError("tilesize too high for this width and height.\
-                              Try increasing screen size or tilesize.")
+            raise ValueError("tilesize too high for this width and height.")
     elif (49*count*0.25)/((width/tile_size)*(height/tile_size)) > 0.20:
-        raise ValueError("tilesize too high for this width and height.\
-                          Try increasing screen size or tilesize.")
+        raise ValueError("tilesize too high for this width and height.")
 
     while len(rect_set) < count:
         x_point = randint(1, ((width-(width%tile_size))//tile_size))*tile_size
@@ -46,14 +44,10 @@ def generate_rooms(count :int, width :int, height :int, tile_size :int):
 
 
 # FUNCTION TO DEFINE A START POINT AND END POINT IN THE MAP
-def start_end(points :set):
-    i = 0
-    start = (0,0)
-    end = (0,0)
-    for point in points:
-        if i == 1:
-            start = point
-        if i == len(points)-2:
-            end  = point
-        i += 1
-    return start, end
+def start_end(points :set, edges):
+    temp_points = points.copy()
+    start = temp_points.pop()
+    for edge in edges:
+        if start not in edge:
+            end=edge[0]
+            return start, end
