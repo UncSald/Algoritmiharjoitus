@@ -72,7 +72,7 @@ class Game:
                     screen.blit(sprite.image,(sprite.x, sprite.y))
                     # UPDATE PLAYER
                 if self.player1.clear is not True:
-                    self.player1.update()
+                    self.player_upate()
                 else:
                     self.yes_no = True
                 
@@ -144,3 +144,64 @@ class Game:
         create_objects(MAP, self.tile_size, self.floor, self.walls, self.doors)
         print(f"create objects done")
         self.yes_no = False
+
+    def player_collision(self):
+        for sprite in self.walls:    
+            if pygame.sprite.collide_rect(self.player1, sprite):
+                if self.player1.rect.bottom >= sprite.rect.top and\
+                      self.player1.rect.bottom < sprite.rect.bottom:
+                    self.player1.changes_y -= self.player1.y_velocity
+                if self.player1.rect.top <= sprite.rect.bottom and\
+                      self.player1.rect.top > sprite.rect.top:
+                    self.player1.changes_y += self.player1.y_velocity
+                if self.player1.rect.left <= sprite.rect.right and\
+                      self.player1.rect.left > sprite.rect.left:
+                    self.player1.changes_x += self.player1.x_velocity
+                if self.player1.rect.right >= sprite.rect.left and\
+                      self.player1.rect.right < sprite.rect.right:
+                    self.player1.changes_x -= self.player1.x_velocity
+
+        for door in self.doors:
+            if pygame.sprite.collide_rect(self.player1,door):
+                self.player1.changes_x = 0
+                self.player1.changes_y = 0
+                self.player1.clear = True
+    
+    def player_upate(self):
+            self.player1.changes_x = 0
+            self.player1.changes_y = 0
+            # self.collision(self.walls)
+            self.player_collision()
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_a] and keys[pygame.K_w]:
+                self.player1.changes_x -= self.player1.x_velocity/2
+                self.player1.changes_y -= self.player1.y_velocity/2
+                self.player1.image = self.player1.image_left
+            
+            elif keys[pygame.K_a] and keys[pygame.K_s]:
+                self.player1.changes_x -= self.player1.x_velocity/2
+                self.player1.changes_y += self.player1.y_velocity/2
+                self.player1.image = self.player1.image_left
+            elif keys[pygame.K_d] and keys[pygame.K_w]:
+                self.player1.changes_x += self.player1.x_velocity/2
+                self.player1.changes_y -= self.player1.y_velocity/2
+                self.player1.image = self.player1.image_right
+
+            elif keys[pygame.K_d] and keys[pygame.K_s]:
+                self.player1.changes_x += self.player1.x_velocity/2
+                self.player1.changes_y += self.player1.y_velocity/2
+                self.player1.image = self.player1.image_right
+
+            elif keys[pygame.K_a]:
+                self.player1.changes_x -= self.player1.x_velocity
+                self.player1.image = self.player1.image_left
+            elif keys[pygame.K_d]:
+                self.player1.changes_x += self.player1.x_velocity
+                self.player1.image = self.player1.image_right
+            elif keys[pygame.K_w]:
+                self.player1.changes_y -= self.player1.y_velocity
+                self.player1.image = self.player1.image_up
+            elif keys[pygame.K_s]:
+                self.player1.changes_y += self.player1.y_velocity
+                self.player1.image = self.player1.image_down
+            self.player1.rect.topleft=(self.player1.x,self.player1.y)
