@@ -8,6 +8,7 @@ class TestListMatrix(unittest.TestCase):
         result = rect_to_coord(rect, 1)
         expected = [(0,0),(1,0),
                     (0,1),(1,1)]
+        self.assertEqual(expected,result)
     def test_rect_to_coord2(self):
         rect = Rectangle((0,0), 5, 5)
         result = rect_to_coord(rect, 1)
@@ -38,8 +39,7 @@ class TestListMatrix(unittest.TestCase):
     def test_rect_list_to_matrix1(self):
         rect1 = Rectangle((1,1),3,3)
         rect_list = [rect1]
-        rect_centers = [rect1.center]
-        result = list_to_matrix(rect_list,rect_centers,5,5,(1,1),(2,2),1)
+        result = list_to_matrix(rect_list,5,5,(1,1),(2,2),1)
         expected = [
             [9,9,9,9,9],
             [9,3,1,1,9],
@@ -54,8 +54,7 @@ class TestListMatrix(unittest.TestCase):
         rect2 = Rectangle((4,1),2,2)
         rect3 = Rectangle((1,4),3,3)
         rect_list = [rect1,rect2,rect3]
-        rect_centers = [rect1.center,rect2.center,rect3.center]
-        result = list_to_matrix(rect_list,rect_centers,10,10,(1,1),(2,5),1)
+        result = list_to_matrix(rect_list,10,10,(1,1),(2,5),1)
         expected = [
             [9,9,9,9,9,9,9,9,9,9],
             [9,3,1,0,1,1,0,0,0,9],

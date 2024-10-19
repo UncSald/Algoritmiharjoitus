@@ -20,3 +20,6 @@
     O(n²) ei algoritmissa toteudu, koska kaikkia pisteitä ei käydä loopin sisällä uudestaan,
     vaan vain osa niistä.
 
+## Puutteet ja parannusehdotukset
+    Työn toimivuutta saisi parannettua lisäämällä erilaisia virheenhallintaa parantavia elementtejä.
+    On myös mahdollista, että on kohtia koodissa, joiden nykyinen toteutus ei ole täysin optimaalinen.
