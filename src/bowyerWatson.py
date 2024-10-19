@@ -1,14 +1,18 @@
 from src.geometry import Triangle
 
 
-
-# MAIN ALGORITHM FOR THE PROJECT
 class BowyerWatson:
-    # DEFINE POINTS, SET CONTAINING FINAL TRIANGULATION
-    # AND EDGES USED IN TRIANGULATION
-    # ALSO ADD SUPER TRIANGLE, WHICH IS ALWAYS BIG ENOUGH TO
-    # CONTAIN THE WHOLE SCREEN WE DRAW ON
+    """Main algorithm for the project.
+    The bowyer-watson algorithm generates a delaunay triangulation between a set of points.
+    """
     def __init__(self, points :set, width :int, height :int):
+        """Class constructor which creates a new BowyerWatson -object.
+
+        Args:
+            points (set): Set containing points which will be added to triangulation.
+            width (int): Width of the area containing all points.
+            height (int): Height of the area containing all points.
+        """
         self._points = points
         self._triangulation = set()
         self._all_edges = set()
@@ -18,15 +22,19 @@ class BowyerWatson:
 
     # RUN METHOD TO MAKE SURE EVERYTHING HAPPENS IN THE RIGHT ORDER
     def run(self):
+        """Runs the algorithm on the set of points.
+
+        Returns:
+            set: Complete triangulation.
+        """
         self.triangulate()
         self.remove_original()
         self.define_edges()
         return self._triangulation
 
-    # TRIANGULATE METHOD CREATES A CORRECT DELAUNAY TRIANGULATION
-    # FOR THE SET OF POINTS BY ADDING A POINT TO THE TRIANGULATION
-    # ONE BY ONE
     def triangulate(self):
+        """Creates a correct delaunay triangulation by adding each point to the set one by one.
+        """
         for point in self._points:
             unusable_triangles = set()
             for triangle in self._triangulation:
@@ -53,9 +61,9 @@ class BowyerWatson:
                     self._triangulation.add(new_triangle)
 
 
-    # REMOVES ALL TRIANGLES CONTAINING POINTS WHICH
-    # BELONG TO THE SUPER TRIANGLE
     def remove_original(self):
+        """Removes all triangles containing a point of the super triangle from the final triangulation.
+        """
         point_with_original = set()
         for point in self._original_triangle._points:
             for triangle in self._triangulation:
@@ -66,8 +74,9 @@ class BowyerWatson:
 
 
 
-    # SIMPLE METHOD TO SAVE ALL THE EDGES IN THE TRIANGULATION
     def define_edges(self):
+        """Creates a set of all edges of the generated triangles.
+        """
         for triangle in self._triangulation:
             for edge in triangle._edges:
                 self._all_edges.add(edge)
