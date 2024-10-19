@@ -15,9 +15,8 @@ def main():
             # FEEL FREE TO CHANGE THESE AND SEE HOW THE MAP GENERATES
             WIDTH = 1500
             HEIGHT = 1000
-            tile_size = 32
 
-            new_game = src.game.Game(WIDTH,HEIGHT,tile_size)
+            new_game = src.game.Game(WIDTH,HEIGHT)
 
             new_game.run()
         else:
