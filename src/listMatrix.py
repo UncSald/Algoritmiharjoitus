@@ -5,8 +5,8 @@ from src.geometry import Rectangle
 # IT THEN RETURNS THE ROOMS AND THEIR CENTERS PLACED IN A MATRIX
 
 
-def list_to_matrix(rooms :list, width :int,\
-                   height :int, start :tuple[int,int], end:tuple[int,int], tile_size :int):
+def list_to_matrix(rooms :list, width :int,height :int,\
+                    start :tuple[int,int], end:tuple[int,int], tile_size :int):
     """Creates a matrix from a given list of rooms, a start point, and the end point.
 
     Args:
