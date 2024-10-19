@@ -3,7 +3,7 @@ import pygame
 import pygame.gfxdraw
 from src.bowyerWatson import BowyerWatson
 from src.roomGeneration import generate_rooms, start_end
-from src.listMatrix import list_to_matrix,point_to_coord
+from src.listMatrix import list_to_matrix
 from src.kruskal import kruskal
 from src.a_star import build_path
 from src.player import Player
@@ -11,59 +11,59 @@ from src.create_objects import create_objects
 from src.sprites import Item
 
 class Game:
-    def __init__(self,widht,height,tile):
-        # INIT PYGAME
+    """Class for holding data for a dungeon exploring game.
+    """
+
+    def __init__(self,width,height):
+        """Class constructor for Game.
+
+        Args:
+            width (_type_): Game screen width, used for screen size.
+            height (_type_): Game screen height, used for screen size
+        """
+
         pygame.init()
         self.running = True
-        self.widht = widht
+        self.widht = width
         self.height = height
-        self.tile_size = tile
-        self.font = pygame.font.SysFont('Arial', 20)
-        self.items = ['key']
-        self.key = pygame.image.load('src/assets/key.png')
+        self.tile_size = 32
+        
+        self.items = {}
+        self.items['key'] = pygame.image.load('src/assets/key.png')
 
         self.has_key = False
         self.collect_item = False
         self.door_cooldown = False
+        self.action = False
+
         self.final_level = 2
         self.level_num = 0
+    
+    def run(self):
+        """Run method is used to start the game.
+        Many pygame objects are defined in the run function.
+        Calls handler functions and handles some game events
+        itself.
+        """
 
-        # DEFINE GROUPS FOR WALLS, FLOOR, DOOR, AND PLAYER
+        screen = pygame.display.set_mode((self.widht/2,self.height/2))
+        background = pygame.Surface((self.widht,self.height))
+        background.fill((20,49,30))
+        menu = pygame.surface.Surface((self.widht/2-200,self.height/2-200))
+        menu.fill((200,255,255,0))
+        font = pygame.font.SysFont('Arial', 25, bold=True)
+        clock = pygame.time.Clock()
         self.walls = pygame.sprite.Group()
         self.floor = pygame.sprite.Group()
         self.doors = pygame.sprite.Group()
         self.player_group = pygame.sprite.Group()
         self.item_group = pygame.sprite.Group()
-
-
-
-
-    def run(self):
-
-        # ADD BACKGROUND COLOR, FEEL FREE TO CHANGE IT
-        BG = pygame.Surface((self.widht,self.height))
-        BG.fill((20,49,30))
-
-        # DEFINE SCREEN SIZE AND self.height
-        # SCREEN SIZE CAN BE CHANGED BUT SHOULD YOU CHANGE IT
-        # REMEMBER TO CHANGE THE PLAYER POSITION, AND
-        # CHANGES_X/Y ACCORDINGLY
-        screen = pygame.display.set_mode((self.widht/2,self.height/2))
-        menu = pygame.surface.Surface((self.widht/2-200,self.height/2-200))
-        menu.fill((200,255,255,0))
-        font = pygame.font.SysFont('Arial', 30, bold=True)
         
-        # CREATE LEVEL
         self.create_level()
-        self.level_num += 1
-        self.action = False
 
-        # DEFINE CLOCK FOR SMOOTH SAILING
-        clock = pygame.time.Clock()
         cooldown = 5
         count_to_exit = 6
 
-        # MAIN LOOP
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -71,17 +71,17 @@ class Game:
                     pygame.quit()
                     sys.exit()
 
-            # DEFINE KEYS
             keys = pygame.key.get_pressed()
             
-            # DRAW ALL SPRITES IN GROUPS
             if self.action is not True:
                 if self.door_cooldown is True:
                     cooldown -= 1/60
                     if cooldown <= 0:
                         self.door_cooldown = False
                         cooldown = 5
-                screen.blit(BG, (0,0))
+
+                screen.blit(background, (0,0))
+                
                 for sprite in self.walls.sprites():
                     screen.blit(sprite.image,(sprite.x,sprite.y))
                     sprite.update(self.player1)
@@ -96,9 +96,9 @@ class Game:
                     item.update(self.player1)
                 for sprite in self.player_group.sprites():
                     screen.blit(sprite.image,(sprite.x, sprite.y))
-                    # UPDATE PLAYER
+
                 if self.player1.clear is not True:
-                    self.player_upate()
+                    self.player_update()
                 else:
                     self.action = True
                 
@@ -130,7 +130,6 @@ class Game:
                     
                     if keys[pygame.K_SPACE]:
                         self.has_key = False
-                        self.level_num += 1
                         self.create_level()
 
             elif self.door_cooldown is False:
@@ -146,8 +145,8 @@ class Game:
                     self.player1.clear = False
                     self.action = False
 
-            
             screen.blit(font.render(f'B{self.level_num}f', True, (250, 0, 100)),(10,10))
+
             clock.tick(60)
             pygame.display.flip()
 
@@ -155,59 +154,54 @@ class Game:
 
 
     def create_level(self):
+        """Creates a level using multiple modules, such as:
+        the bowyer-watson algorithm, roomGeneration, listMatrix,
+        kruskal -algorithm, A* -algorithm, and create_objects.
+        All these functions together form a randomly generated dungeon
+        with some dead ends and a random start and end point.
+        """
 
-        # CLEAR SPRITE GROUPS
         self.walls.empty()
         self.floor.empty()
         self.player_group.empty()
         self.doors.empty()
         self.item_group.empty()
 
-        # GENERATE ROOMS AND TAKE THEIR COORDINATES AND CENTER POINTS
         rooms_gened = generate_rooms(20 ,self.widht, self.height, self.tile_size)
         rooms, centers = rooms_gened
-        print(f"rooms done")
 
-        # INIT AND RUN BOWYER-WATSON -ALGORITHM
-        # AS INPUT GIVE IT THE ROOM CENTERS, AND SCREEN SIZE
         rp_alg = BowyerWatson(centers, self.widht, self.height)
         rp_alg.run()
-        print(f"rp_alg done")
 
-        # DEFINE STARTPOINT AND ENDPOINT
         start_point, end_point, self.key_location = start_end(centers, rp_alg._all_edges)
 
-        # DEFINE PLAYER AND START POINT FOR CORRECT MAP POSITION
-        self.player1 = Player(self.tile_size/2,self.tile_size/2,(self.widht/4,self.height/4), self.walls, self.doors)
+        self.player1 = Player(self.tile_size/2,self.tile_size/2,\
+                              (self.widht/4,self.height/4), self.walls, self.doors)
         self.player1.add(self.player_group)
 
-        self.player1.changes_x = start_point[0]-self.widht/4
-        self.player1.changes_y = start_point[1]-self.height/4
-
-        # CREATE MAP CONTAINING ROOMS, START, AND GOAL
         temporary_map = list_to_matrix(rooms,centers,self.widht, self.height,\
                             start_point, end_point, self.tile_size)
-        print(f"map done, {len(temporary_map[0])}x{len(temporary_map)} tiles")
 
-        # CREATE MINIMUM SPANNING TREE FROM EDGES IN TRIANGULATION
         mst = kruskal(rp_alg._all_edges, start_point)
-        print(f"kruskal done")
 
-        # CREATE FINAL MAP FROM TEMPORARY ONE
-        # THIS TIME IT CONTAINS PATHS BETWEEN ROOMS CREATED
-        # BY A_STAR
         MAP = build_path(temporary_map,mst,self.tile_size)
-        print(f"final map done")
 
         create_objects(MAP, self.tile_size, self.floor, self.walls, self.doors)
         self.create_items()
-        print(f"create objects done")
-        self.action = False
 
+        self.player1.changes_x = start_point[0]-self.widht/4
+        self.player1.changes_y = start_point[1]-self.height/4
+        
+        self.action = False
+        self.level_num += 1
 
 
 
     def player_collision(self):
+        """Handler for player collisions.
+        Player collisions act as triggers in the game in certain situations.
+        """
+
         for sprite in self.walls:    
             if pygame.sprite.collide_rect(self.player1, sprite):
                 if self.player1.rect.bottom >= sprite.rect.top and\
@@ -236,46 +230,52 @@ class Game:
 
 
 
-    def player_upate(self):
-            self.player1.changes_x = 0
-            self.player1.changes_y = 0
-            # self.collision(self.walls)
-            self.player_collision()
-            keys = pygame.key.get_pressed()
-            if keys[pygame.K_a] and keys[pygame.K_w]:
-                self.player1.changes_x -= self.player1.x_velocity/1.6
-                self.player1.changes_y -= self.player1.y_velocity/1.6
-                self.player1.image = self.player1.image_left
-            elif keys[pygame.K_a] and keys[pygame.K_s]:
-                self.player1.changes_x -= self.player1.x_velocity/1.6
-                self.player1.changes_y += self.player1.y_velocity/1.6
-                self.player1.image = self.player1.image_left
-            elif keys[pygame.K_d] and keys[pygame.K_w]:
-                self.player1.changes_x += self.player1.x_velocity/1.6
-                self.player1.changes_y -= self.player1.y_velocity/1.6
-                self.player1.image = self.player1.image_right
-            elif keys[pygame.K_d] and keys[pygame.K_s]:
-                self.player1.changes_x += self.player1.x_velocity/1.6
-                self.player1.changes_y += self.player1.y_velocity/1.6
-                self.player1.image = self.player1.image_right
-            elif keys[pygame.K_a]:
-                self.player1.changes_x -= self.player1.x_velocity
-                self.player1.image = self.player1.image_left
-            elif keys[pygame.K_d]:
-                self.player1.changes_x += self.player1.x_velocity
-                self.player1.image = self.player1.image_right
-            elif keys[pygame.K_w]:
-                self.player1.changes_y -= self.player1.y_velocity
-                self.player1.image = self.player1.image_up
-            elif keys[pygame.K_s]:
-                self.player1.changes_y += self.player1.y_velocity
-                self.player1.image = self.player1.image_down
-            self.player1.rect.topleft=(self.player1.x,self.player1.y)
+    def player_update(self):
+        """Player update function.
+        Handles map movement to create illusion of player moving.
+        """
+
+        self.player1.changes_x = 0
+        self.player1.changes_y = 0
+        self.player_collision()
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_a] and keys[pygame.K_w]:
+            self.player1.changes_x -= self.player1.x_velocity/1.6
+            self.player1.changes_y -= self.player1.y_velocity/1.6
+            self.player1.image = self.player1.image_left
+        elif keys[pygame.K_a] and keys[pygame.K_s]:
+            self.player1.changes_x -= self.player1.x_velocity/1.6
+            self.player1.changes_y += self.player1.y_velocity/1.6
+            self.player1.image = self.player1.image_left
+        elif keys[pygame.K_d] and keys[pygame.K_w]:
+            self.player1.changes_x += self.player1.x_velocity/1.6
+            self.player1.changes_y -= self.player1.y_velocity/1.6
+            self.player1.image = self.player1.image_right
+        elif keys[pygame.K_d] and keys[pygame.K_s]:
+            self.player1.changes_x += self.player1.x_velocity/1.6
+            self.player1.changes_y += self.player1.y_velocity/1.6
+            self.player1.image = self.player1.image_right
+        elif keys[pygame.K_a]:
+            self.player1.changes_x -= self.player1.x_velocity
+            self.player1.image = self.player1.image_left
+        elif keys[pygame.K_d]:
+            self.player1.changes_x += self.player1.x_velocity
+            self.player1.image = self.player1.image_right
+        elif keys[pygame.K_w]:
+            self.player1.changes_y -= self.player1.y_velocity
+            self.player1.image = self.player1.image_up
+        elif keys[pygame.K_s]:
+            self.player1.changes_y += self.player1.y_velocity
+            self.player1.image = self.player1.image_down
+
 
 
 
     def create_items(self):
-        for item in self.items:
+        """Creates items from given item dictionary.
+        """
+
+        for item in self.items.keys():
             if item == 'key':
-                key = Item((self.key_location),self.key, 'key')
+                key = Item((self.key_location),self.items['key'], 'key')
                 self.item_group.add(key)
