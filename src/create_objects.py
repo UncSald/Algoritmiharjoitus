@@ -2,9 +2,17 @@ from src.sprites import Floor, Wall, Door
 
 
 
-# FUNCTION CREATES OBJECTS AND ADDS THEM TO CORRECT GROUPS
-# SO THEY WILL BE DRAWN CORRECTLY
-def create_objects(matrix :list, tile_size :int, floor, walls, doors):
+def create_objects(matrix :list[list[int]], tile_size :int, floor, walls, doors):
+    """Creates objects according to their location in the matrix.
+    Objects are then addded to sprite gtoups.
+
+    Args:
+        matrix (list[list[int]]): Matrix holding value for each sprite type.
+        tile_size (int): Size of tiles in the matrix
+        floor (pygame.sprite.Group): Group where floor sprites will be added.
+        walls (pygame.sprite.Group): Group where wall sprites will be added.
+        doors (pygame.sprite.Group): Group where door sprites will be added.
+    """
     for row in range(len(matrix)):
         for column in range(len(matrix[0])):
 
