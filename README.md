@@ -15,6 +15,6 @@ Testaaminen onnistuu näin:
 4. Tämän jälkeen aja komento ```python main.py```.
 Valitse terminaalissa tahdotko pelata peliä, vai ajaa demon triangulaatiosta ja sen toteutumisesta.
 
-5. Pelissä liikkuminen tapahtuu WASD -näppäimillä. Yritä löytää avain ja edetä seuraavalle tasolle.
+    - Pelissä liikkuminen tapahtuu WASD -näppäimillä. Yritä löytää avain ja edetä seuraavalle tasolle.
 
 6. Voit myös ajaa komennon ```poetry run tests```. Joka ajaa projektiin luodut testit.
