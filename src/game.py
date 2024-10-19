@@ -8,6 +8,7 @@ from src.kruskal import kruskal
 from src.a_star import build_path
 from src.player import Player
 from src.create_objects import create_objects
+from src.sprites import Item
 
 class Game:
     def __init__(self,widht,height,tile):
@@ -18,11 +19,12 @@ class Game:
         self.height = height
         self.tile_size = tile
         self.font = pygame.font.SysFont('Arial', 25)
+        self.items = ['key']
         self.key = pygame.image.load('src/assets/key.png')
         self.key_rect = self.key.get_rect()
         self.has_key = False
         self.door_cooldown = False
-        self.final_level = 2
+        self.final_level = 1
         self.level_num = 0
 
         # DEFINE GROUPS FOR WALLS, FLOOR, DOOR, AND PLAYER
@@ -30,6 +32,10 @@ class Game:
         self.floor = pygame.sprite.Group()
         self.doors = pygame.sprite.Group()
         self.player_group = pygame.sprite.Group()
+        self.item_group = pygame.sprite.Group()
+
+
+
 
     def run(self):
 
@@ -54,6 +60,8 @@ class Game:
         # DEFINE CLOCK FOR SMOOTH SAILING
         clock = pygame.time.Clock()
         cooldown = 5
+        count_to_exit = 6
+
         # MAIN LOOP
         while True:
             for event in pygame.event.get():
@@ -80,7 +88,10 @@ class Game:
                     sprite.update(self.player1)
                 for sprite in self.doors.sprites():
                     screen.blit(sprite.image,(sprite.x, sprite.y))
-                    sprite.update(self.player1)                
+                    sprite.update(self.player1)
+                for item in self.item_group.sprites():
+                    screen.blit(item.image,(item.x,item.y))
+                    item.update(self.player1)
                 for sprite in self.player_group.sprites():
                     screen.blit(sprite.image,(sprite.x, sprite.y))
                     # UPDATE PLAYER
@@ -93,7 +104,13 @@ class Game:
             elif self.has_key is True and self.door_cooldown is False:
                 if self.level_num == self.final_level:
                     screen.blit(menu,(100,100))
-                    screen.blit(font.render('YOU WIN !', True, (255, 0, 255)),(300,300))
+                    screen.blit(font.render('YOU WIN !', True, (255, 0, 255)),(300,200))
+                    screen.blit(font.render(f'exit in {int(count_to_exit)}', True, (255, 0, 255)),(310,300))
+                    count_to_exit -= 1/60
+                    if count_to_exit <= 1:
+                        pygame.quit()
+                        sys.exit()
+
                 else:
                     screen.blit(menu,(100,100))
                     screen.blit(font.render('Press space to open door', True, (190, 0, 0)),(200,200))
@@ -122,12 +139,17 @@ class Game:
             clock.tick(60)
             pygame.display.flip()
 
+
+
+
     def create_level(self):
 
+        # CLEAR SPRITE GROUPS
         self.walls.empty()
         self.floor.empty()
         self.player_group.empty()
         self.doors.empty()
+        self.item_group.empty()
 
         # GENERATE ROOMS AND TAKE THEIR COORDINATES AND CENTER POINTS
         rooms_gened = generate_rooms(20 ,self.widht, self.height, self.tile_size)
@@ -141,7 +163,7 @@ class Game:
         print(f"rp_alg done")
 
         # DEFINE STARTPOINT AND ENDPOINT
-        start_point, self.end_point = start_end(centers, rp_alg._all_edges)
+        start_point, end_point, self.key_location = start_end(centers, rp_alg._all_edges)
         print(point_to_coord(start_point,self.tile_size))
         print(point_to_coord((start_point[0]-self.widht/4,start_point[1]-self.height/4),self.tile_size))
 
@@ -154,7 +176,7 @@ class Game:
 
         # CREATE MAP CONTAINING ROOMS, START, AND GOAL
         temporary_map = list_to_matrix(rooms,centers,self.widht, self.height,\
-                            start_point, self.end_point, self.tile_size)
+                            start_point, end_point, self.tile_size)
         print(f"map done, {len(temporary_map[0])}x{len(temporary_map)} tiles")
 
         # CREATE MINIMUM SPANNING TREE FROM EDGES IN TRIANGULATION
@@ -168,8 +190,12 @@ class Game:
         print(f"final map done")
 
         create_objects(MAP, self.tile_size, self.floor, self.walls, self.doors)
+        self.create_items()
         print(f"create objects done")
         self.yes_no = False
+
+
+
 
     def player_collision(self):
         for sprite in self.walls:    
@@ -191,6 +217,9 @@ class Game:
             if pygame.sprite.collide_rect(self.player1,door) and self.door_cooldown is False:
                 self.player1.clear = True
     
+
+
+
     def player_upate(self):
             self.player1.changes_x = 0
             self.player1.changes_y = 0
@@ -226,3 +255,12 @@ class Game:
                 self.player1.changes_y += self.player1.y_velocity
                 self.player1.image = self.player1.image_down
             self.player1.rect.topleft=(self.player1.x,self.player1.y)
+
+
+
+    def create_items(self):
+        for item in self.items:
+            if item == 'key':
+                print(self.key_location[0],self.key_location[1])
+                key = Item((self.key_location),self.key)
+                self.item_group.add(key)
