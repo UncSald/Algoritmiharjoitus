@@ -19,7 +19,9 @@ class Game:
         self.tile_size = tile
         self.font = pygame.font.SysFont('Arial', 25)
         self.key = pygame.image.load('src/assets/key.png')
+        self.key_rect = self.key.get_rect()
         self.has_key = False
+        self.door_cooldown = False
         self.final_level = 2
         self.level_num = 0
 
@@ -51,7 +53,7 @@ class Game:
 
         # DEFINE CLOCK FOR SMOOTH SAILING
         clock = pygame.time.Clock()
-
+        cooldown = 5
         # MAIN LOOP
         while True:
             for event in pygame.event.get():
@@ -64,6 +66,11 @@ class Game:
             
             # DRAW ALL SPRITES IN GROUPS
             if self.yes_no is not True:
+                if self.door_cooldown is True:
+                    cooldown -= 1/60
+                    if cooldown <= 0:
+                        self.door_cooldown = False
+                        cooldown = 5
                 screen.blit(BG, (0,0))
                 for sprite in self.walls.sprites():
                     screen.blit(sprite.image,(sprite.x,sprite.y))
@@ -83,7 +90,7 @@ class Game:
                     self.yes_no = True
                 
             
-            elif self.has_key is True:
+            elif self.has_key is True and self.door_cooldown is False:
                 if self.level_num == self.final_level:
                     screen.blit(menu,(100,100))
                     screen.blit(font.render('YOU WIN !', True, (255, 0, 255)),(300,300))
@@ -96,13 +103,20 @@ class Game:
                         self.player1.changes_y = 0
                         self.level_num += 1
                         self.create_level()
-            else:
+
+            elif self.door_cooldown is False:
                 screen.blit(menu,(100,100))
                 screen.blit(font.render('Seems to require a key...', True, (190, 0, 0)),(200,200))
                 screen.blit(font.render('Press space to continue', True, (190, 0, 0)),(200,250))
                 if keys[pygame.K_SPACE]:
                     self.player1.clear = False
                     self.yes_no = False
+                    self.door_cooldown = True
+            else:
+                if keys[pygame.K_SPACE]:
+                    self.player1.clear = False
+                    self.yes_no = False
+
             
             screen.blit(font.render(f'B{self.level_num}f', True, (250, 0, 100)),(10,10))
             clock.tick(60)
@@ -174,9 +188,7 @@ class Game:
                     self.player1.changes_x -= self.player1.x_velocity
 
         for door in self.doors:
-            if pygame.sprite.collide_rect(self.player1,door):
-                self.player1.changes_x = 0
-                self.player1.changes_y = 0
+            if pygame.sprite.collide_rect(self.player1,door) and self.door_cooldown is False:
                 self.player1.clear = True
     
     def player_upate(self):
