@@ -2,9 +2,20 @@ from queue import PriorityQueue
 from src.listMatrix import point_to_coord
 
 
-# FUNCTION BRINGS TOGETHER ALL OF THE NEEDED STEPS
-# TO CREATE PATHS TO THE MATRIX
-def build_path(matrix, edges, tile_size:int):
+def build_path(matrix :list[list[int]], edges:set, tile_size:int):
+    """Function brings together all needed functions to form
+    paths between all points in the point list,
+    and inserting information of paths to a matrix
+
+    Args:
+        matrix (list[list[int]]): Original matrix used.
+        edges (set): List of tuples containing two points.
+        Paths are formed between the two points
+        tile_size (int): Size of tiles in the matrix.
+
+    Returns:
+        list[list[int]]: A new matix with all paths formed.
+    """
     new_matrix = matrix.copy()
     for edge in edges:
         start, end = edge
@@ -21,10 +32,19 @@ def build_path(matrix, edges, tile_size:int):
     return new_matrix
 
 
-# FUNCTION TAKES AS INPUT THE EDGES TAKEN BY
-# A* TO FIND THE SHORTEST PATH AND OUTPUTS A
-# LIST OF THE POINTS
+
+
 def shortest_path(previous, start, goal):
+    """Creates a list containing each point belonging to the shortest path from start to goal.
+
+    Args:
+        previous (dict): A dict with points as a key and value.
+        start (tuple[int,int]): Starting point.
+        goal (tuple[int,int]): Goal point.
+
+    Returns:
+        list: List containing each point in the shortest path between two points.
+    """
     path = []
     location = goal
     if goal not in previous:
@@ -37,10 +57,20 @@ def shortest_path(previous, start, goal):
 
 
 
-# A* FUNCTION WHICH TAKES IN A MATRIX, A STARTING POINT
-# AND AN ENDPOINT, AND FINDS THE SHORTEST PATH BETWEEN
-# THE POINTS. OUTPUTS TWO DICTS
-def a_star(graph, start_point, end_point):
+
+def a_star(graph:dict, start_point:tuple[int,int], end_point:tuple[int,int]):
+    """A* pathfinding algorithm used in a weighted graph or a weighted and directed graph.
+    Generates a path between two points.
+
+    Args:
+        graph (dict): Weighted graph in which both starting and end point are.
+        start_point (tuple[int,int]): Starting point of A*.
+        end_point (tuple[int,int]): The goal point of A*.
+
+    Returns:
+        dict: Path between the two points.
+        A dict with nodes as keys and their previous node as item.
+    """
     passed = PriorityQueue(0)
     passed.put((0,start_point))
     previous = {}
@@ -65,18 +95,35 @@ def a_star(graph, start_point, end_point):
 
 
 
-# HEURISTIC TO DETERMINE CURRENT POINT DISTANCE TO GOAL
-def heuristics(a, b):
+
+def heuristics(a:tuple[int,int], b:tuple[int,int]):
+    """Heuristic to see how close point a is to point b.
+
+    Args:
+        a (tuple[int,int]): Current location of pathfinding algorithm.
+        b (tuple[int,int]): Goal of the pathfinding algorithm.
+
+    Returns:
+        int: The current distance between the two points.
+    """
     x1, y1 = a
     x2, y2 = b
     return abs(x1-x2) + abs(y1-y2)
 
 
 
-# A FUNCTION WHICH CREATES A WEIGHTED GRAPH
-# BASED ON A MATRIX
 
-def weighted_graph(matrix):
+def weighted_graph(matrix:list[list[int]]):
+    """Function creates a weighted graph.
+    Weights of edges depend on the nodes values in the matrix.
+
+    Args:
+        matrix (list[list[int]]): Matrix holding node values.
+
+    Returns:
+        dict: A weighted and directed graph,
+        which pahtfinding algorithms can use to find fastest path.
+    """
     nodes = []
     for row in range(len(matrix)):
         for column in range(len(matrix[row])):
@@ -122,8 +169,17 @@ def weighted_graph(matrix):
 
 
 
-# CREATES A NEW EDGE WITH 1 WHEIGHT TO THE MAP
-def new_edge(node_a, node_b, map, matrix):
+def new_edge(node_a:tuple[int,int], node_b:tuple[int,int], map:dict, matrix):
+    """Function used by weighted_graph to
+    generate correct weights to the graph.
+
+    Args:
+        node_a (tuple[int,int]): Starting node from which we move to end node.
+        node_b (tuple[int,int]): End node which defines the weight
+        together with starting node.
+        map (dict): Weighted graph where node weights are added.
+        matrix (list[list[int]]): Matrix holding information about node values.
+    """
 
     if matrix[node_b[0]][node_b[1]]==2:
         map[node_a].append((node_b, 1))
