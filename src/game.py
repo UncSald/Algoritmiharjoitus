@@ -18,13 +18,14 @@ class Game:
         self.widht = widht
         self.height = height
         self.tile_size = tile
-        self.font = pygame.font.SysFont('Arial', 25)
+        self.font = pygame.font.SysFont('Arial', 20)
         self.items = ['key']
         self.key = pygame.image.load('src/assets/key.png')
-        self.key_rect = self.key.get_rect()
+
         self.has_key = False
+        self.collect_item = False
         self.door_cooldown = False
-        self.final_level = 1
+        self.final_level = 2
         self.level_num = 0
 
         # DEFINE GROUPS FOR WALLS, FLOOR, DOOR, AND PLAYER
@@ -55,7 +56,7 @@ class Game:
         # CREATE LEVEL
         self.create_level()
         self.level_num += 1
-        self.yes_no = False
+        self.action = False
 
         # DEFINE CLOCK FOR SMOOTH SAILING
         clock = pygame.time.Clock()
@@ -73,7 +74,7 @@ class Game:
             keys = pygame.key.get_pressed()
             
             # DRAW ALL SPRITES IN GROUPS
-            if self.yes_no is not True:
+            if self.action is not True:
                 if self.door_cooldown is True:
                     cooldown -= 1/60
                     if cooldown <= 0:
@@ -98,8 +99,18 @@ class Game:
                 if self.player1.clear is not True:
                     self.player_upate()
                 else:
-                    self.yes_no = True
+                    self.action = True
                 
+            elif self.action is True and self.collect_item is True:
+                    screen.blit(menu,(100,100))
+                    screen.blit(font.render('Press space to collect item', True, (255, 0, 255)),(200,250))
+                    screen.blit(font.render(f'You have found a {self.collectable_item.name}', True, (255, 0, 255)),(200,200))
+                    if keys[pygame.K_SPACE]:
+                        if self.collectable_item.name == 'key':
+                            self.item_group.remove(self.collectable_item)
+                            self.has_key = True
+                        self.action=False
+                        self.collect_item = False
             
             elif self.has_key is True and self.door_cooldown is False:
                 if self.level_num == self.final_level:
@@ -116,23 +127,22 @@ class Game:
                     screen.blit(font.render('Press space to open door', True, (190, 0, 0)),(200,200))
                     
                     if keys[pygame.K_SPACE]:
-                        self.player1.changes_x = 0
-                        self.player1.changes_y = 0
+                        self.has_key = False
                         self.level_num += 1
                         self.create_level()
 
             elif self.door_cooldown is False:
                 screen.blit(menu,(100,100))
-                screen.blit(font.render('Seems to require a key...', True, (190, 0, 0)),(200,200))
+                screen.blit(font.render('The door seems to require a key...', True, (190, 0, 0)),(180,200))
                 screen.blit(font.render('Press space to continue', True, (190, 0, 0)),(200,250))
                 if keys[pygame.K_SPACE]:
                     self.player1.clear = False
-                    self.yes_no = False
+                    self.action = False
                     self.door_cooldown = True
             else:
                 if keys[pygame.K_SPACE]:
                     self.player1.clear = False
-                    self.yes_no = False
+                    self.action = False
 
             
             screen.blit(font.render(f'B{self.level_num}f', True, (250, 0, 100)),(10,10))
@@ -164,8 +174,6 @@ class Game:
 
         # DEFINE STARTPOINT AND ENDPOINT
         start_point, end_point, self.key_location = start_end(centers, rp_alg._all_edges)
-        print(point_to_coord(start_point,self.tile_size))
-        print(point_to_coord((start_point[0]-self.widht/4,start_point[1]-self.height/4),self.tile_size))
 
         # DEFINE PLAYER AND START POINT FOR CORRECT MAP POSITION
         self.player1 = Player(self.tile_size/2,self.tile_size/2,(self.widht/4,self.height/4), self.walls, self.doors)
@@ -192,7 +200,7 @@ class Game:
         create_objects(MAP, self.tile_size, self.floor, self.walls, self.doors)
         self.create_items()
         print(f"create objects done")
-        self.yes_no = False
+        self.action = False
 
 
 
@@ -216,6 +224,12 @@ class Game:
         for door in self.doors:
             if pygame.sprite.collide_rect(self.player1,door) and self.door_cooldown is False:
                 self.player1.clear = True
+        
+        for item in self.item_group:
+            if pygame.sprite.collide_rect(self.player1,item):
+                self.collectable_item = item
+                self.collect_item = True
+                self.action = True
     
 
 
@@ -261,6 +275,5 @@ class Game:
     def create_items(self):
         for item in self.items:
             if item == 'key':
-                print(self.key_location[0],self.key_location[1])
-                key = Item((self.key_location),self.key)
+                key = Item((self.key_location),self.key, 'key')
                 self.item_group.add(key)
