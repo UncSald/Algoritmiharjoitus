@@ -1,4 +1,5 @@
 import src.game
+from src.demo import demo
 
 
 # DEFINE MAIN FUNCTION
@@ -7,7 +8,7 @@ def main():
         decision = str(input('Type "demo" to see demo, "game" to play the game, anything else exits: '))
         
         if decision == 'demo':
-            pass
+            demo()
 
         elif decision == 'game':
             # DEFINE WIDTH, HEIGHT, AND TILE SIZE.
