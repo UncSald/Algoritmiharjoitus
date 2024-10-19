@@ -67,6 +67,7 @@ class Game:
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    print("bye bye")
                     pygame.quit()
                     sys.exit()
 
@@ -119,6 +120,7 @@ class Game:
                     screen.blit(font.render(f'exit in {int(count_to_exit)}', True, (255, 0, 255)),(310,300))
                     count_to_exit -= 1/60
                     if count_to_exit <= 1:
+                        print("Congratulations!")
                         pygame.quit()
                         sys.exit()
 
