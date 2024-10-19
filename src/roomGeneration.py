@@ -48,6 +48,10 @@ def start_end(points :set, edges):
     temp_points = points.copy()
     start = temp_points.pop()
     for edge in edges:
-        end=edge[0]
-        if (start,end) not in edges and (end,start) not in edges:
-            return start, end
+        end = edge[0]
+        if (start,end) not in edges and (end,start) not in edges and start!=end:
+            for scnd_edge in edges:
+                key = scnd_edge[0]
+                if (start,key) not in edges and (key,start) not in edges and\
+                      (key,end) not in edges and (end,key) not in edges and key!=end and key!=start:
+                    return start, end, key
