@@ -5,8 +5,21 @@ from src.geometry import Rectangle
 # IT THEN RETURNS THE ROOMS AND THEIR CENTERS PLACED IN A MATRIX
 
 
-def list_to_matrix(rooms :list, room_centers :list, width :int,\
+def list_to_matrix(rooms :list, width :int,\
                    height :int, start :tuple[int,int], end:tuple[int,int], tile_size :int):
+    """Creates a matrix from a given list of rooms, a start point, and the end point.
+
+    Args:
+        rooms (list): A list of Rectangle class objects.
+        width (int): Width divided by tilesize of the draw area will be width of the matrix.
+        height (int): Height divided by tilesize of the draw area will be width of the matrix.
+        start (tuple[int,int]): Start point location.
+        end (tuple[int,int]): Goal int location.
+        tile_size (int): Size of a single value in the matrix.
+
+    Returns:
+        list[list[int]]: Created matrix is returned.
+    """
     matrix = []
     for i in range((height-height%tile_size)//tile_size):
         matrix.append([])
@@ -31,17 +44,36 @@ def list_to_matrix(rooms :list, room_centers :list, width :int,\
         y+=1
     return matrix
 
-# GIVES OUT COORDINATES FOR A POINT IN A MATRIX
-# WITH SET TILESIZE
+
+
+
 def point_to_coord(point: tuple[int,int], tile_size:int):
+    """Turns a point to coordinates in the matrix according to the matrix tile size.
+
+    Args:
+        point (tuple[int,int]): The point to be placed in the matrix.
+        tile_size (int): Size of a single value in the matrix.
+
+    Returns:
+        tuple[int,int]: Coordinates of the given point transformed to coordinates in the matrix.
+    """
     x = int((point[0]-point[0]%tile_size)//tile_size)
     y = int((point[1]-point[1]%tile_size)//tile_size)
     return (x,y)
 
-# GIVES OUT COORDINATES FOR A RECTANGLE IN A MATRIX
-# WITH SET TILESIZE
+
+
 
 def rect_to_coord(rect :Rectangle, tile_size :int):
+    """Creates a list of points contained in the area of a rectangle.
+
+    Args:
+        rect (Rectangle): Rectangle to be added to the matrix
+        tile_size (int): Size of a single value in the matrix.
+
+    Returns:
+        list[tuple[int,int]]: A list of all the points within the area of the rectangle.
+    """
     coords = []
     x, y = rect.edges[0][0]
     x = int(x//tile_size)
