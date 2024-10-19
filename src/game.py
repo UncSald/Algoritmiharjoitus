@@ -176,7 +176,7 @@ class Game:
         start_point, end_point, self.key_location = start_end(centers, rp_alg._all_edges)
 
         self.player1 = Player(self.tile_size/2,self.tile_size/2,\
-                              (self.widht/4,self.height/4), self.walls, self.doors)
+                              (self.widht/4,self.height/4))
         self.player1.add(self.player_group)
 
         temporary_map = list_to_matrix(rooms,centers,self.widht, self.height,\
