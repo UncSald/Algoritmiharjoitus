@@ -52,8 +52,9 @@ class Door(pygame.sprite.Sprite):
         self.rect.topleft=(self.x,self.y)
 
 class Item(pygame.sprite.Sprite):
-    def __init__(self,render_point :tuple[int,int], image):
+    def __init__(self,render_point :tuple[int,int], image, name):
         pygame.sprite.Sprite.__init__(self)
+        self.name = name
         self.image = image
         self.rect = self.image.get_rect(center=render_point)
         self.x, self.y = render_point
