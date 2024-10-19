@@ -53,3 +53,7 @@
         joten testit tarkastavat, että kolmioita on
         suunnilleen oikea määrä.
         Esim. 1000 pisteestä algoritmi muodostaa n. 1965 kolmiota +-10 kolmiota.
+    
+    5. A* -algoritmi
+        A* -algoritmin testaukseen kuuluu kaikkien tiedostossa olevien funktioiden testaus.  
+        Funktioita testataan erilaisilla matriiseilla, ja tarkastetaan,  että algoritmi valitsee lopulta oikeasti lyhimmän reitin suunnatussa verkossa.
