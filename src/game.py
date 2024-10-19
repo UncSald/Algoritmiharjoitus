@@ -18,10 +18,16 @@ class Game:
         self.height = height
         self.tile_size = tile
         self.font = pygame.font.SysFont('Arial', 25)
-        
-
-        self.final_level = 1
+        self.key = pygame.image.load('src/assets/key.png')
+        self.has_key = False
+        self.final_level = 2
         self.level_num = 0
+
+        # DEFINE GROUPS FOR WALLS, FLOOR, DOOR, AND PLAYER
+        self.walls = pygame.sprite.Group()
+        self.floor = pygame.sprite.Group()
+        self.doors = pygame.sprite.Group()
+        self.player_group = pygame.sprite.Group()
 
     def run(self):
 
@@ -59,16 +65,16 @@ class Game:
             # DRAW ALL SPRITES IN GROUPS
             if self.yes_no is not True:
                 screen.blit(BG, (0,0))
-                for sprite in self.walls:
+                for sprite in self.walls.sprites():
                     screen.blit(sprite.image,(sprite.x,sprite.y))
                     sprite.update(self.player1)
-                for sprite in self.floor:
+                for sprite in self.floor.sprites():
                     screen.blit(sprite.image,(sprite.x, sprite.y))
                     sprite.update(self.player1)
-                for sprite in self.doors:
+                for sprite in self.doors.sprites():
                     screen.blit(sprite.image,(sprite.x, sprite.y))
                     sprite.update(self.player1)                
-                for sprite in self.player_group:
+                for sprite in self.player_group.sprites():
                     screen.blit(sprite.image,(sprite.x, sprite.y))
                     # UPDATE PLAYER
                 if self.player1.clear is not True:
@@ -77,25 +83,37 @@ class Game:
                     self.yes_no = True
                 
             
-            else:
+            elif self.has_key is True:
                 if self.level_num == self.final_level:
                     screen.blit(menu,(100,100))
-                    screen.blit(font.render('YOU WIN !', True, (255, 0, 255)),(200,200))
+                    screen.blit(font.render('YOU WIN !', True, (255, 0, 255)),(300,300))
                 else:
                     screen.blit(menu,(100,100))
-                    screen.blit(font.render('Press space to continue', True, (190, 0, 0)),(200,200))
+                    screen.blit(font.render('Press space to open door', True, (190, 0, 0)),(200,200))
                     
                     if keys[pygame.K_SPACE]:
                         self.player1.changes_x = 0
                         self.player1.changes_y = 0
                         self.level_num += 1
                         self.create_level()
+            else:
+                screen.blit(menu,(100,100))
+                screen.blit(font.render('Seems to require a key...', True, (190, 0, 0)),(200,200))
+                screen.blit(font.render('Press space to continue', True, (190, 0, 0)),(200,250))
+                if keys[pygame.K_SPACE]:
+                    self.player1.clear = False
+                    self.yes_no = False
             
             screen.blit(font.render(f'B{self.level_num}f', True, (250, 0, 100)),(10,10))
             clock.tick(60)
             pygame.display.flip()
 
     def create_level(self):
+
+        self.walls.empty()
+        self.floor.empty()
+        self.player_group.empty()
+        self.doors.empty()
 
         # GENERATE ROOMS AND TAKE THEIR COORDINATES AND CENTER POINTS
         rooms_gened = generate_rooms(20 ,self.widht, self.height, self.tile_size)
@@ -112,12 +130,6 @@ class Game:
         start_point, self.end_point = start_end(centers, rp_alg._all_edges)
         print(point_to_coord(start_point,self.tile_size))
         print(point_to_coord((start_point[0]-self.widht/4,start_point[1]-self.height/4),self.tile_size))
-
-        # DEFINE GROUPS FOR WALLS, FLOOR, DOOR, AND PLAYER
-        self.walls = pygame.sprite.Group()
-        self.floor = pygame.sprite.Group()
-        self.doors = pygame.sprite.Group()
-        self.player_group = pygame.sprite.Group()
 
         # DEFINE PLAYER AND START POINT FOR CORRECT MAP POSITION
         self.player1 = Player(self.tile_size/2,self.tile_size/2,(self.widht/4,self.height/4), self.walls, self.doors)
@@ -174,24 +186,21 @@ class Game:
             self.player_collision()
             keys = pygame.key.get_pressed()
             if keys[pygame.K_a] and keys[pygame.K_w]:
-                self.player1.changes_x -= self.player1.x_velocity/2
-                self.player1.changes_y -= self.player1.y_velocity/2
+                self.player1.changes_x -= self.player1.x_velocity/1.6
+                self.player1.changes_y -= self.player1.y_velocity/1.6
                 self.player1.image = self.player1.image_left
-            
             elif keys[pygame.K_a] and keys[pygame.K_s]:
-                self.player1.changes_x -= self.player1.x_velocity/2
-                self.player1.changes_y += self.player1.y_velocity/2
+                self.player1.changes_x -= self.player1.x_velocity/1.6
+                self.player1.changes_y += self.player1.y_velocity/1.6
                 self.player1.image = self.player1.image_left
             elif keys[pygame.K_d] and keys[pygame.K_w]:
-                self.player1.changes_x += self.player1.x_velocity/2
-                self.player1.changes_y -= self.player1.y_velocity/2
+                self.player1.changes_x += self.player1.x_velocity/1.6
+                self.player1.changes_y -= self.player1.y_velocity/1.6
                 self.player1.image = self.player1.image_right
-
             elif keys[pygame.K_d] and keys[pygame.K_s]:
-                self.player1.changes_x += self.player1.x_velocity/2
-                self.player1.changes_y += self.player1.y_velocity/2
+                self.player1.changes_x += self.player1.x_velocity/1.6
+                self.player1.changes_y += self.player1.y_velocity/1.6
                 self.player1.image = self.player1.image_right
-
             elif keys[pygame.K_a]:
                 self.player1.changes_x -= self.player1.x_velocity
                 self.player1.image = self.player1.image_left
