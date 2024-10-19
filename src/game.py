@@ -179,7 +179,7 @@ class Game:
                               (self.widht/4,self.height/4))
         self.player1.add(self.player_group)
 
-        temporary_map = list_to_matrix(rooms,centers,self.widht, self.height,\
+        temporary_map = list_to_matrix(rooms,self.widht, self.height,\
                             start_point, end_point, self.tile_size)
 
         mst = kruskal(rp_alg._all_edges, start_point)
