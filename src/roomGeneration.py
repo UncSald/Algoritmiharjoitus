@@ -1,13 +1,25 @@
 from random import randint
 from src.geometry import Rectangle
 
-# FUNCTION WHICH GENERATES RECTANGLES WHEN GIVEN
-# THE MAX AMOUNT OF RECTANGLES CREATED AND THE SIZE
-# OF THE SIZE OF THE AREA WHERE RECTANGLES WILL BE DRAWN
-# ON. RETURNS A SET OF RECTANGLES AND A SET OF THEIR 
-# CENTER POINTS.
+
+
 
 def generate_rooms(count :int, width :int, height :int, tile_size :int):
+    """_summary_
+
+    Args:
+        count (int): Number of rooms to be generated.
+        width (int): Width of the draw area.
+        height (int): Height of the draw area.
+        tile_size (int): Size of a single tile in the matrix where rooms will be inserted.
+
+    Raises:
+        ValueError: Error in the situation a tile size, area size, and count don't match. Mismatch can create an eternal loop.
+        ValueError: Error in the situation a tile size, area size, and count don't match. Mismatch can create an eternal loop.
+
+    Returns:
+        tuple[set,set]: Two sets, the first contains rectangles, and the second contains the center points of each rectangle.
+    """
     rect_set = set()
     point_set = set()
 
@@ -44,7 +56,16 @@ def generate_rooms(count :int, width :int, height :int, tile_size :int):
 
 
 # FUNCTION TO DEFINE A START POINT AND END POINT IN THE MAP
-def start_end(points :set, edges):
+def start_end(points :set, edges:set):
+    """Define three random points from a list of edges. These points cannot have a direct connection with eachother.
+
+    Args:
+        points (set): A set of points.
+        edges (set): A set of edges created from these points.
+
+    Returns:
+        tuple[int,int,int]: Three different points.
+    """
     temp_points = points.copy()
     start = temp_points.pop()
     for edge in edges:
