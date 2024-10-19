@@ -80,10 +80,11 @@ class Triangle:
         return round(d,4)<=round(self.radius,4)
 
 
-    def draw(self, screen, color):
+    def draw(self, screen, color, val):
         for edge in self._edges:
             pygame.draw.aaline(screen, color, edge[0], edge[1])
-        pygame.draw.circle(screen,'blue', self.circumcenter, self.radius, 1)
+            if val == 1:
+                pygame.draw.circle(screen,'yellow', self.circumcenter, self.radius, 1)
 
 
 
