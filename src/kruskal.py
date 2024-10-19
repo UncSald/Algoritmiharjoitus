@@ -1,9 +1,13 @@
-# FUNCTION FINDS AND CREATES A MINIMUM SPANNING TREE
-# THIS WAY THERE WILL BE NO LOOPS IN THE EDGES BETWEEN
-# ROOMS
-
-
 def kruskal(edge_list :set, start_point :tuple[int,int]):
+    """Kruskal algorithm creates a minimum spanning tree.
+
+    Args:
+        edge_list (set): A list of edges between two points.
+        start_point (tuple[int,int]): A point from which the path starts.
+
+    Returns:
+        list: Returns new edges without loops between them.
+    """
     edges = []
     new_edges = []
     point_list = set()
@@ -36,6 +40,15 @@ def kruskal(edge_list :set, start_point :tuple[int,int]):
     return new_edges
 
 def find(link, x):
+    """Find a point in the dictionary
+
+    Args:
+        link (dict): Dictionary containing points already linked to the mst.
+        x (tuple[int,int]): Point to be found in the dict.
+
+    Returns:
+        tuple[int,int]: Returns the point which is connected to the original point.
+    """
     while link[x]:
         x = link[x]
     return x
