@@ -57,3 +57,15 @@
     5. A* -algoritmi
         A* -algoritmin testaukseen kuuluu kaikkien tiedostossa olevien funktioiden testaus.  
         Funktioita testataan erilaisilla matriiseilla, ja tarkastetaan,  että algoritmi valitsee lopulta oikeasti lyhimmän reitin suunnatussa verkossa.
+    
+    6. listMatrix.py tiedoston funktiot
+        listMatrix tiedoston testaus tarkastaa, että pisteet muuttuvat oikein matriisin koordinaateiksi  
+        ja Rectangle luokan objektit oikan kokoisiksi neliöiksi matriisiin.  
+        Tarkastetaan myös, että listat muuntuvat oikeanlaisiksi matriiseiksi.
+    
+    7. roomGeneration.py tiedoston funktiot
+        generate_rooms funktion menee helposti jumiin vääräällä syötteellä,  
+        joten siihen on lisätty virheellisen syötteen tunnistus.  
+        Testit testaavat, että tämä tunnistus menee todella oikein  
+        ja huonot syötteet aiheuttavat virheen.  
+        Testit tarkastavat myös, että luotuja huoneita on oikea määrä.
