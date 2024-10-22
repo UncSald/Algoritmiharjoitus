@@ -277,5 +277,5 @@ class Game:
 
         for item in self.items.keys():
             if item == 'key':
-                key = Item((self.key_location),self.items['key'], 'key')
+                key = Item(self.tile_size,(self.key_location),self.items['key'], 'key')
                 self.item_group.add(key)
