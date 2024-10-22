@@ -18,6 +18,7 @@ class Wall(pygame.sprite.Sprite):
         """
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load('src/assets/wall.png')
+        self.image = pygame.transform.scale(self.image,(tile_size,tile_size))
         self.rect = self.image.get_rect(topleft=render_point)
         self.x, self.y = render_point
 
@@ -49,7 +50,8 @@ class Floor(pygame.sprite.Sprite):
         """
         pygame.sprite.Sprite.__init__(self)
 
-        self.image = pygame.image.load('src/assets/floor_2.png')
+        self.image = pygame.image.load('src/assets/floor.png')
+        self.image = pygame.transform.scale(self.image,(tile_size,tile_size))
 
         self.rect = self.image.get_rect()
         self.x, self.y = render_point
@@ -86,6 +88,7 @@ class Door(pygame.sprite.Sprite):
             self.image = pygame.image.load('src/assets/prev_door.png')
         if value == 4:
             self.image = pygame.image.load('src/assets/next_door.png')
+        self.image = pygame.transform.scale(self.image,(tile_size,tile_size))
         self.rect = self.image.get_rect(topleft=render_point)
         self.x, self.y = render_point
 
@@ -108,7 +111,7 @@ class Item(pygame.sprite.Sprite):
     Args:
         pygame (sprite.Sprite): Super class
     """
-    def __init__(self,render_point :tuple[int,int], image, name):
+    def __init__(self,tile_size,render_point :tuple[int,int], image, name):
         """Class constructor for Item sprite.
 
         Args:
@@ -119,6 +122,7 @@ class Item(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.name = name
         self.image = image
+        self.image = pygame.transform.scale(self.image,(tile_size,tile_size))
         self.rect = self.image.get_rect(center=render_point)
         self.x, self.y = render_point
 
