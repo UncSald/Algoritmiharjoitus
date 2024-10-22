@@ -115,6 +115,7 @@ class Item(pygame.sprite.Sprite):
         """Class constructor for Item sprite.
 
         Args:
+            tile_size (int): Tile size of the game.
             render_point (tuple[int,int]): Point of origin for the sprite center.
             image (pygame.image): Image used for item creation.
             name (str): Name for the item.
