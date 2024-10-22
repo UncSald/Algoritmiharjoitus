@@ -1,9 +1,9 @@
 import sys
 import pygame
 import pygame.gfxdraw
-from src.bowyerWatson import BowyerWatson
-from src.roomGeneration import generate_rooms, start_end
-from src.listMatrix import list_to_matrix
+from src.bowyer_watson import BowyerWatson
+from src.room_generation import generate_rooms, start_end
+from src.list_matrix import list_to_matrix
 from src.kruskal import kruskal
 from src.a_star import build_path
 from src.player import Player
@@ -18,8 +18,8 @@ class Game:
         """Class constructor for Game.
 
         Args:
-            width (_type_): Game screen width, used for screen size.
-            height (_type_): Game screen height, used for screen size
+            width (int): Game screen width, used for screen size.
+            height (int): Game screen height, used for screen size
         """
 
         pygame.init()
