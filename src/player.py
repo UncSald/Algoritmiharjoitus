@@ -25,3 +25,5 @@ class Player(pygame.sprite.Sprite):
         self.changes_x = 0
         self.changes_y = 0
         self.clear = False
+        self.items = []
+        self.held_items = []
