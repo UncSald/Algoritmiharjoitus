@@ -56,6 +56,8 @@ class Game:
         self.final_level = 2
         self.level_num = 0
 
+        self.font = pygame.font.SysFont('Arial', 25, bold=True)
+
     def run(self):
         """Run method is used to start the game.
         Many pygame objects are defined in the run function.
@@ -63,7 +65,7 @@ class Game:
         itself.
         """
 
-        font = pygame.font.SysFont('Arial', 25, bold=True)
+
         clock = pygame.time.Clock()
 
         self.create_level()
@@ -92,62 +94,25 @@ class Game:
                 else:
                     self.action = True
 
-
-
-
             elif self.action is True and self.collect_item is True:
-                self.screen.blit(self.menu,(100,100))
-                self.screen.blit(font.render('Press space to collect item', True,\
-                                        (255, 0, 255)),(200,250))
-                self.screen.blit(font.render(f'You have found a {self.collectable_item.name}',\
-                                         True, (255, 0, 255)),(200,200))
-                if keys[pygame.K_SPACE]:
-                    if self.collectable_item.name == 'key':
-                        self.item_group.remove(self.collectable_item)
-                        self.has_key = True
-                    self.action=False
-                    self.collect_item = False
+                self.handle_menu('item',keys)
 
             elif self.has_key is True and self.door_cooldown is False:
                 if self.level_num == self.final_level:
-                    self.screen.blit(self.menu,(100,100))
-                    self.screen.blit(font.render('YOU WIN !', True,\
-                                            (255, 0, 255)),(300,200))
-                    self.screen.blit(font.render(f'exit in {int(count_to_exit)}',\
-                                            True, (255, 0, 255)),(310,300))
                     count_to_exit -= 1/60
-                    if count_to_exit <= 1:
-                        print("Congratulations!")
-                        pygame.quit()
-                        sys.exit()
+                    self.handle_menu('game clear',keys,count_to_exit)
 
                 else:
-                    self.screen.blit(self.menu,(100,100))
-                    self.screen.blit(font.render('Press space to open door',\
-                                            True, (190, 0, 0)),(200,200))
-
-                    if keys[pygame.K_SPACE]:
-                        self.has_key = False
-                        self.player1.clear = False
-                        self.action = False
-                        self.create_level()
+                    self.handle_menu('level clear', keys)
 
             elif self.door_cooldown is False:
-                self.screen.blit(self.menu,(100,100))
-                self.screen.blit(font.render('The door seems to require a key...',\
-                                        True, (190, 0, 0)),(180,200))
-                self.screen.blit(font.render('Press space to continue',\
-                                        True, (190, 0, 0)),(200,250))
-                if keys[pygame.K_SPACE]:
-                    self.player1.clear = False
-                    self.action = False
-                    self.door_cooldown = True
+                self.handle_menu('no keys',keys)
             else:
                 if keys[pygame.K_SPACE]:
                     self.player1.clear = False
                     self.action = False
 
-            self.screen.blit(font.render(f'B{self.level_num}f',\
+            self.screen.blit(self.font.render(f'B{self.level_num}f',\
                                     True, (250, 0, 100)),(10,10))
 
             clock.tick(60)
@@ -303,3 +268,49 @@ class Game:
             item.update(self.player1)
         for sprite in self.player_group.sprites():
             self.screen.blit(sprite.image,(sprite.x, sprite.y))
+
+    def handle_menu(self, situation, keys, cd = 0):
+        if situation == 'item':
+            self.screen.blit(self.menu,(100,100))
+            self.screen.blit(self.font.render('Press space to collect item', True,\
+                                    (255, 0, 255)),(200,250))
+            self.screen.blit(self.font.render(f'You have found a {self.collectable_item.name}',\
+                                     True, (255, 0, 255)),(200,200))
+            if keys[pygame.K_SPACE]:
+                if self.collectable_item.name == 'key':
+                    self.item_group.remove(self.collectable_item)
+                    self.has_key = True
+                self.action=False
+                self.collect_item = False
+
+        elif situation == 'no keys':
+            self.screen.blit(self.menu,(100,100))
+            self.screen.blit(self.font.render('The door seems to require a key...',\
+                                True, (190, 0, 0)),(180,200))
+            self.screen.blit(self.font.render('Press space to continue',\
+                                True, (190, 0, 0)),(200,250))
+            if keys[pygame.K_SPACE]:
+                self.player1.clear = False
+                self.action = False
+                self.door_cooldown = True
+
+        elif situation == 'level clear':
+            self.screen.blit(self.menu,(100,100))
+            self.screen.blit(self.font.render('Press space to open door',\
+                                True, (190, 0, 0)),(200,200))
+            if keys[pygame.K_SPACE]:
+                self.has_key = False
+                self.player1.clear = False
+                self.action = False
+                self.create_level()
+
+        elif situation == 'game clear':
+            self.screen.blit(self.menu,(100,100))
+            self.screen.blit(self.font.render('YOU WIN !', True,\
+                                (255, 0, 255)),(300,200))
+            self.screen.blit(self.font.render(f'exit in {int(cd)}',\
+                                True, (255, 0, 255)),(310,300))
+            if cd <= 1:
+                print("Congratulations!")
+                pygame.quit()
+                sys.exit()
