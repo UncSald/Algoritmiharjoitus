@@ -1,8 +1,6 @@
 from src.geometry import Rectangle
 
-# LIST TO MATRIX TAKES A LIST OF RECTANGLES AND A LIST OF THEIR CENTERS
-# AS PARAMETERS
-# IT THEN RETURNS THE ROOMS AND THEIR CENTERS PLACED IN A MATRIX
+
 
 
 def list_to_matrix(rooms :list, width :int,height :int,\
@@ -84,3 +82,51 @@ def rect_to_coord(rect :Rectangle, tile_size :int):
         for c in range(width):
             coords.append((x+c,y+r))
     return coords
+
+def closest_walls(matrix:list):
+    for y,col in enumerate(matrix):
+        for x,item in enumerate(col):
+            if item==0 or item==9:
+                if y==0 and x==0:
+                    if matrix[y+1][x]==2 or matrix[y][x+1]==2\
+                        or matrix[y+1][x]==1 or matrix[y][x+1]==1\
+                        or matrix[y+1][x+1]==1 or matrix[y+1][x+1]==2:
+                        matrix[y][x]=5
+                elif y==len(matrix)-1 and x==len(col)-1:
+                    if matrix[y-1][x]==2 or matrix[y][x-1]==2\
+                    or matrix[y-1][x]==1 or matrix[y][x-1]==1:
+                        matrix[y][x]=5
+                elif y==0 and x==len(col)-1:
+                    if matrix[y+1][x]==2 or matrix[y][x-1]==2\
+                    or matrix[y+1][x]==1 or matrix[y][x-1]==1:
+                        matrix[y][x]=5
+                elif x==0 and y==len(matrix)-1:
+                    if matrix[y-1][x]==2 or matrix[y][x+1]==2\
+                    or matrix[y-1][x]==1 or matrix[y][x+1]==1:
+                        matrix[y][x]=5
+                elif y==0:
+                    if matrix[y][x-1]==1 or matrix[y][x-1]==2\
+                        or matrix[y][x+1]==1 or matrix[y][x+1]==2\
+                        or matrix[y+1][x]==1 or matrix[y+1][x]==2: 
+                        matrix[y][x]=5
+                elif x==0:
+                    if matrix[y-1][x]==1 or matrix[y-1][x]==2\
+                        or matrix[y][x+1]==1 or matrix[y][x+1]==2\
+                        or matrix[y+1][x]==1 or matrix[y+1][x]==2: 
+                        matrix[y][x]=5
+                elif y==len(matrix)-1:
+                    if matrix[y-1][x]==1 or matrix[y-1][x]==2\
+                        or matrix[y][x-1]==1 or matrix[y][x-1]==2: 
+                        matrix[y][x]=5
+                elif x==len(col)-1:
+                    if matrix[y-1][x]==1 or matrix[y-1][x]==2\
+                        or matrix[y][x-1]==1 or matrix[y][x-1]==2\
+                        or matrix[y+1][x]==1 or matrix[y+1][x]==2: 
+                        matrix[y][x]=5
+                else:
+                    if matrix[y-1][x]==1 or matrix[y-1][x]==2\
+                        or matrix[y][x-1]==1 or matrix[y][x-1]==2\
+                        or matrix[y][x+1]==1 or matrix[y][x+1]==2\
+                        or matrix[y+1][x]==1 or matrix[y+1][x]==2: 
+                        matrix[y][x]=5
+    return matrix
