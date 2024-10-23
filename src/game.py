@@ -350,3 +350,6 @@ class Game:
                 print("Congratulations!")
                 pygame.quit()
                 sys.exit()
+
+    def possible_items(self, matrix, start, goal):
+        pass
