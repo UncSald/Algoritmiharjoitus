@@ -1,6 +1,8 @@
 from src.geometry import Triangle
 
 
+
+
 class BowyerWatson:
     """Main algorithm for the project.
     The bowyer-watson algorithm generates a delaunay triangulation between a set of points.
@@ -13,6 +15,10 @@ class BowyerWatson:
             width (int): Width of the area containing all points.
             height (int): Height of the area containing all points.
         """
+        if width<=0 or height<=0:
+            raise ValueError ("Draw area cannot be 0 or negative.")
+        self.width = width
+        self.height = height
         self._points = points
         self._triangulation = set()
         self._all_edges = set()
@@ -30,12 +36,16 @@ class BowyerWatson:
         self.triangulate()
         self.remove_original()
         self.define_edges()
-        return self._triangulation
+
 
     def triangulate(self):
         """Creates a correct delaunay triangulation by adding each point to the set one by one.
         """
         for point in self._points:
+            if self.width<point[0] or 0>point[0] or self.height<point[1] or 0>point[1]:
+                self._points.remove(point)
+                print(f"{point} is not inside the drawing area.")
+                continue
             unusable_triangles = set()
             for triangle in self._triangulation:
                 if triangle.check_point(point):
