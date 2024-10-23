@@ -10,14 +10,18 @@ class Wall(pygame.sprite.Sprite):
         pygame (sprite.Sprite): Super class
     """
     def __init__(self, tile_size:int,\
-                 render_point :tuple[int,int]):
+                 render_point :tuple[int,int],val):
         """Class constructor for Wall sprite.
 
         Args:
             tile_size (int): Tile size of the game.
         """
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load('src/assets/wall.png')
+        if val==5:
+            self.image = pygame.image.load('src/assets/wall.png')
+        else:
+            
+            self.image = pygame.image.load('src/assets/floor.png')
         self.image = pygame.transform.scale(self.image,(tile_size,tile_size))
         self.rect = self.image.get_rect(topleft=render_point)
         self.x, self.y = render_point
@@ -50,7 +54,7 @@ class Floor(pygame.sprite.Sprite):
         """
         pygame.sprite.Sprite.__init__(self)
 
-        self.image = pygame.image.load('src/assets/floor.png')
+        self.image = pygame.image.load('src/assets/floor_2.png')
         self.image = pygame.transform.scale(self.image,(tile_size,tile_size))
 
         self.rect = self.image.get_rect()
@@ -124,7 +128,7 @@ class Item(pygame.sprite.Sprite):
         self.name = name
         self.image = image
         self.image = pygame.transform.scale(self.image,(tile_size,tile_size))
-        self.rect = self.image.get_rect(center=render_point)
+        self.rect = self.image.get_rect(topleft=render_point)
         self.x, self.y = render_point
 
     def update(self, player):
