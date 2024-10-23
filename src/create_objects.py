@@ -2,6 +2,7 @@ from src.sprites import Floor, Wall, Door
 
 
 
+
 def create_objects(matrix :list[list[int]], tile_size :int, floor, walls, doors):
     """Creates objects according to their location in the matrix.
     Objects are then addded to sprite gtoups.
@@ -26,5 +27,5 @@ def create_objects(matrix :list[list[int]], tile_size :int, floor, walls, doors)
                 new_tile = Door(tile_size,(column*tile_size, row*tile_size),4)
                 new_tile.add(doors)
             else:
-                new_tile = Wall(tile_size,(column*tile_size, row*tile_size))
+                new_tile = Wall(tile_size,(column*tile_size, row*tile_size),matrix[row][column])
                 new_tile.add(walls)
