@@ -269,13 +269,29 @@ class Game:
         for sprite in self.player_group.sprites():
             self.screen.blit(sprite.image,(sprite.x, sprite.y))
 
-    def handle_menu(self, situation, keys, cd = 0):
+
+
+
+    def handle_menu(self, situation:str, keys:pygame.key.ScancodeWrapper, cd = 0):
+        """Creates an ingame menu for the situation at hand.
+
+        Args:
+            situation (str): Describes the situation for the menu.
+            keys (pygame.key.ScancodeWrapper): List of keys for player input.
+            cd (int, optional): Countdown for exiting game. Defaults to 0.
+        """
         if situation == 'item':
+            item_msg = self.font.render(f'You have found a {self.collectable_item.name}',\
+                                     True, (255, 0, 255))
+            item_msg_rect = item_msg.get_rect()
+            item_msg_rect.center = (self.widht/4,self.height/4)
+            item_continue = self.font.render('Press space to collect item', True,\
+                                    (255, 0, 255))
+            item_continue_rect = item_continue.get_rect()
+            item_continue_rect.center = (self.widht/4,self.height/4+100)
             self.screen.blit(self.menu,(100,100))
-            self.screen.blit(self.font.render('Press space to collect item', True,\
-                                    (255, 0, 255)),(200,250))
-            self.screen.blit(self.font.render(f'You have found a {self.collectable_item.name}',\
-                                     True, (255, 0, 255)),(200,200))
+            self.screen.blit(item_continue,item_continue_rect.topleft)
+            self.screen.blit(item_msg,item_msg_rect.topleft)
             if keys[pygame.K_SPACE]:
                 if self.collectable_item.name == 'key':
                     self.item_group.remove(self.collectable_item)
@@ -284,20 +300,29 @@ class Game:
                 self.collect_item = False
 
         elif situation == 'no keys':
+            need_key = self.font.render('The door seems to require a key...',\
+                                True, (190, 0, 0))
+            need_key_rect = need_key.get_rect()
+            need_key_rect.center = (self.widht/4,self.height/4)
+            continue_msg = self.font.render('Press space to continue',\
+                                True, (190, 0, 0))
+            continue_msg_rect = continue_msg.get_rect()
+            continue_msg_rect.center = (self.widht/4,self.height/4+100)
             self.screen.blit(self.menu,(100,100))
-            self.screen.blit(self.font.render('The door seems to require a key...',\
-                                True, (190, 0, 0)),(180,200))
-            self.screen.blit(self.font.render('Press space to continue',\
-                                True, (190, 0, 0)),(200,250))
+            self.screen.blit(need_key,need_key_rect.topleft)
+            self.screen.blit(continue_msg,continue_msg_rect.topleft)
             if keys[pygame.K_SPACE]:
                 self.player1.clear = False
                 self.action = False
                 self.door_cooldown = True
 
         elif situation == 'level clear':
+            level_clear = self.font.render('Press space to open door',\
+                                True, (190, 0, 0))
+            level_clear_rect = level_clear.get_rect()
+            level_clear_rect.center = (self.widht/4,self.height/4)
             self.screen.blit(self.menu,(100,100))
-            self.screen.blit(self.font.render('Press space to open door',\
-                                True, (190, 0, 0)),(200,200))
+            self.screen.blit(level_clear,level_clear_rect.topleft)
             if keys[pygame.K_SPACE]:
                 self.has_key = False
                 self.player1.clear = False
@@ -305,11 +330,17 @@ class Game:
                 self.create_level()
 
         elif situation == 'game clear':
+            win_msg = self.font.render('YOU WIN !', True,\
+                                (255, 0, 255))
+            win_msg_rect = win_msg.get_rect()
+            win_msg_rect.center = (self.widht/4,self.height/4)
+            cd_msg = self.font.render(f'exit in {int(cd)}',\
+                                True, (255, 0, 255))
+            cd_msg_rect = cd_msg.get_rect()
+            cd_msg_rect.center = (self.widht/4,self.height/4+100)
             self.screen.blit(self.menu,(100,100))
-            self.screen.blit(self.font.render('YOU WIN !', True,\
-                                (255, 0, 255)),(300,200))
-            self.screen.blit(self.font.render(f'exit in {int(cd)}',\
-                                True, (255, 0, 255)),(310,300))
+            self.screen.blit(win_msg,win_msg_rect.topleft)
+            self.screen.blit(cd_msg,cd_msg_rect.topleft)
             if cd <= 1:
                 print("Congratulations!")
                 pygame.quit()
