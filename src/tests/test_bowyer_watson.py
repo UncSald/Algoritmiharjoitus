@@ -7,18 +7,18 @@ class TestBowyerWatson(unittest.TestCase):
     def test_triangulation_size1(self):
         width, height = 500, 500
         expression = [(100,200), (300,400), (300,100)]
-        BW = BowyerWatson(expression, width, height)
-        BW.run()
-        result = len(BW._triangulation)
+        bw = BowyerWatson(expression, width, height)
+        bw.run()
+        result = len(bw._triangulation)
         expected = 1
         self.assertEqual(result, expected)
     
     def test_triangulation_size2(self):
         width, height = 500, 500
         expression = [(100,200), (300,400), (300,100), (250,300), (100,400)]
-        BW = BowyerWatson(expression, width, height)
-        BW.run()
-        result = len(BW._triangulation)
+        bw = BowyerWatson(expression, width, height)
+        bw.run()
+        result = len(bw._triangulation)
         expected = 4
         self.assertEqual(result, expected)
 
@@ -28,11 +28,23 @@ class TestBowyerWatson(unittest.TestCase):
         for i in range(1000):
             point = (randint(0,499),randint(0,499))
             expression.append(point)
-        BW = BowyerWatson(expression, width, height)
-        BW.run()
-        result = len(BW._triangulation)/100
+        bw = BowyerWatson(expression, width, height)
+        bw.run()
+        result = len(bw._triangulation)/100
         expected = 19.65
         self.assertAlmostEqual(result, expected, 0)
+    
+    def test_error1(self):
+        width, height = 500, 500
+        expression = [(-1,3)]
+        for i in range(100):
+            point = (randint(0,499),randint(0,499))
+            expression.append(point)
+        bw = BowyerWatson(expression, width, height)
+        bw.run()
+        result = len(bw._points)
+        expected = 100
+        self.assertEqual(result, expected, 0)
 
 
 if __name__ == "__main__":
