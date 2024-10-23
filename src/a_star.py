@@ -1,5 +1,7 @@
 from queue import PriorityQueue
-from src.listMatrix import point_to_coord
+from src.list_matrix import point_to_coord
+
+
 
 
 def build_path(matrix :list[list[int]], edges:set, tile_size:int):
@@ -125,9 +127,9 @@ def weighted_graph(matrix:list[list[int]]):
         which pahtfinding algorithms can use to find fastest path.
     """
     nodes = []
-    for row in range(len(matrix)):
-        for column in range(len(matrix[row])):
-            new_node = (row,column)
+    for row in enumerate(matrix):
+        for column in enumerate(matrix[row[0]]):
+            new_node = (row[0],column[0])
             nodes.append(new_node)
     map = {node : [] for node in nodes}
     for node in nodes:
@@ -191,5 +193,5 @@ def new_edge(node_a:tuple[int,int], node_b:tuple[int,int], map:dict, matrix):
         map[node_a].append((node_b, 5))
     elif matrix[node_b[0]][node_b[1]]==1:
         map[node_a].append((node_b, 3))
-    else:    
+    else:
         map[node_a].append((node_b, 2))
