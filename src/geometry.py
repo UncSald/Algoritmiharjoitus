@@ -23,7 +23,7 @@ class Triangle:
         self._a_point = a
         self._b_point = b
         self._c_point = c
-        self._edges = [self._a_edge,
+        self.edges = [self._a_edge,
                         self._b_edge,
                         self._c_edge]
         self._points = [a,b,c]
@@ -125,7 +125,7 @@ class Triangle:
             color (tuple[float,float,float]): Color for the triangle drawn.
             val (int): 0 - draw only triangle, 1 - draw triangle and circumcenter.
         """
-        for edge in self._edges:
+        for edge in self.edges:
             pygame.draw.aaline(screen, color, edge[0], edge[1])
             if val == 1:
                 pygame.draw.circle(screen,'yellow', self.circumcenter, self.radius, 1)
