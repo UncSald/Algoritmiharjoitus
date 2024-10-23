@@ -9,6 +9,7 @@ from src.a_star import build_path
 from src.player import Player
 from src.create_objects import create_objects
 from src.sprites import Item
+from src.game_settings import *
 
 
 
@@ -27,25 +28,23 @@ class Game:
 
         pygame.init()
         self.running = True
-        self.widht = width
-        self.height = height
-        self.tile_size = 32
 
-        self.screen = pygame.display.set_mode((self.widht/2,self.height/2))
-        self.background = pygame.Surface((self.widht,self.height))
+        self.screen = pygame.display.set_mode((WIDTH/2,HEIGHT/2))
+        self.background = pygame.Surface((WIDTH,HEIGHT))
         self.background.fill((20,49,30))
-        self.menu = pygame.surface.Surface((self.widht/2-200,self.height/2-200))
+        self.menu = pygame.surface.Surface((WIDTH/2-200,HEIGHT/2-200))
         self.menu.fill((200,255,255,0))
 
         self.items = {}
-        self.items['key'] = pygame.image.load('src/assets/key.png')
+        for key in ITEM:
+            self.items[f'{key}'] = pygame.image.load(f'src/assets/{key}.png')
         self.walls = pygame.sprite.Group()
         self.floor = pygame.sprite.Group()
         self.doors = pygame.sprite.Group()
         self.player_group = pygame.sprite.Group()
         self.item_group = pygame.sprite.Group()
-        self.player1 = Player(self.tile_size/2,self.tile_size/2,\
-                              (self.widht/4,self.height/4))
+        self.player1 = Player(TILE/2,TILE/2,\
+                              (WIDTH/4,HEIGHT/4))
         self.player1.add(self.player_group)
 
         self.has_key = False
@@ -134,26 +133,26 @@ class Game:
         self.doors.empty()
         self.item_group.empty()
 
-        rooms, centers = generate_rooms(20 ,self.widht, self.height, self.tile_size)
+        rooms, centers = generate_rooms(20 ,WIDTH, HEIGHT, TILE)
 
-        rp_alg = BowyerWatson(centers, self.widht, self.height)
+        rp_alg = BowyerWatson(centers, WIDTH, HEIGHT)
         rp_alg.run()
 
         start_point, end_point, self.key_location = start_end(centers, rp_alg._all_edges)
 
-        temporary_map = list_to_matrix(rooms,self.widht, self.height,\
-                            start_point, end_point, self.tile_size)
+        temporary_map = list_to_matrix(rooms,WIDTH, HEIGHT,\
+                            start_point, end_point, TILE)
 
         mst = kruskal(rp_alg._all_edges, start_point)
 
-        final_map = closest_walls(build_path(temporary_map,mst,self.tile_size))
+        final_map = closest_walls(build_path(temporary_map,mst,TILE))
 
-        create_objects(final_map, self.tile_size, self.floor, self.walls, self.doors)
+        create_objects(final_map, TILE, self.floor, self.walls, self.doors)
 
         self.create_items()
 
-        self.player1.changes_x = start_point[0]-self.widht/4
-        self.player1.changes_y = start_point[1]-self.height/4
+        self.player1.changes_x = start_point[0]-WIDTH/4
+        self.player1.changes_y = start_point[1]-HEIGHT/4
 
         self.level_num += 1
 
@@ -242,11 +241,17 @@ class Game:
 
         for item in self.items:
             if item == 'key':
-                key = Item(self.tile_size,\
-                           (self.key_location[0]-self.key_location[0]%self.tile_size,\
-                            self.key_location[1]-self.key_location[1]%self.tile_size),\
-                           self.items['key'], 'key')
+                key = Item(TILE,\
+                           (self.key_location[0]-self.key_location[0]%TILE,\
+                            self.key_location[1]-self.key_location[1]%TILE),\
+                           self.items[item], item)
                 self.item_group.add(key)
+            else:
+                item_name = Item(TILE,\
+                           (12*TILE,\
+                            12*TILE),\
+                           self.items[item], item)
+                self.item_group.add(item_name)
 
     def draw(self):
         """Method draws the sprites contained in each group
@@ -284,18 +289,18 @@ class Game:
             item_msg = self.font.render(f'You have found a {self.collectable_item.name}',\
                                      True, (255, 0, 255))
             item_msg_rect = item_msg.get_rect()
-            item_msg_rect.center = (self.widht/4,self.height/4)
+            item_msg_rect.center = (WIDTH/4,HEIGHT/4)
             item_continue = self.font.render('Press space to collect item', True,\
                                     (255, 0, 255))
             item_continue_rect = item_continue.get_rect()
-            item_continue_rect.center = (self.widht/4,self.height/4+100)
+            item_continue_rect.center = (WIDTH/4,HEIGHT/4+100)
             self.screen.blit(self.menu,(100,100))
             self.screen.blit(item_continue,item_continue_rect.topleft)
             self.screen.blit(item_msg,item_msg_rect.topleft)
             if keys[pygame.K_SPACE]:
                 if self.collectable_item.name == 'key':
-                    self.item_group.remove(self.collectable_item)
                     self.has_key = True
+                self.item_group.remove(self.collectable_item)
                 self.action=False
                 self.collect_item = False
 
@@ -303,11 +308,11 @@ class Game:
             need_key = self.font.render('The door seems to require a key...',\
                                 True, (190, 0, 0))
             need_key_rect = need_key.get_rect()
-            need_key_rect.center = (self.widht/4,self.height/4)
+            need_key_rect.center = (WIDTH/4,HEIGHT/4)
             continue_msg = self.font.render('Press space to continue',\
                                 True, (190, 0, 0))
             continue_msg_rect = continue_msg.get_rect()
-            continue_msg_rect.center = (self.widht/4,self.height/4+100)
+            continue_msg_rect.center = (WIDTH/4,HEIGHT/4+100)
             self.screen.blit(self.menu,(100,100))
             self.screen.blit(need_key,need_key_rect.topleft)
             self.screen.blit(continue_msg,continue_msg_rect.topleft)
@@ -320,7 +325,7 @@ class Game:
             level_clear = self.font.render('Press space to open door',\
                                 True, (190, 0, 0))
             level_clear_rect = level_clear.get_rect()
-            level_clear_rect.center = (self.widht/4,self.height/4)
+            level_clear_rect.center = (WIDTH/4,HEIGHT/4)
             self.screen.blit(self.menu,(100,100))
             self.screen.blit(level_clear,level_clear_rect.topleft)
             if keys[pygame.K_SPACE]:
@@ -333,11 +338,11 @@ class Game:
             win_msg = self.font.render('YOU WIN !', True,\
                                 (255, 0, 255))
             win_msg_rect = win_msg.get_rect()
-            win_msg_rect.center = (self.widht/4,self.height/4)
+            win_msg_rect.center = (WIDTH/4,HEIGHT/4)
             cd_msg = self.font.render(f'exit in {int(cd)}',\
                                 True, (255, 0, 255))
             cd_msg_rect = cd_msg.get_rect()
-            cd_msg_rect.center = (self.widht/4,self.height/4+100)
+            cd_msg_rect.center = (WIDTH/4,HEIGHT/4+100)
             self.screen.blit(self.menu,(100,100))
             self.screen.blit(win_msg,win_msg_rect.topleft)
             self.screen.blit(cd_msg,cd_msg_rect.topleft)
