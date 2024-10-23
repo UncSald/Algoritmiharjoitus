@@ -21,9 +21,8 @@
     vaan vain osa niistä.
 
 ## Puutteet ja parannusehdotukset
-    Työn toimivuutta saisi parannettua lisäämällä erilaisia virheenhallintaa parantavia elementtejä.
-    On myös mahdollista, että on kohtia koodissa, joiden nykyinen toteutus ei ole täysin optimaalinen.
+    On mahdollista, että on kohtia koodissa, joiden nykyinen toteutus ei ole täysin optimaalinen.
     
 ## Lähteet
-    [Procedurally generated dungeons -article](https://vazgriz.com/119/procedurally-generated-dungeons/)
-    [Bowyer-Watson -algorithm wikipedia](https://en.wikipedia.org/wiki/Bowyer%E2%80%93Watson_algorithm)
+-    [Procedurally generated dungeons -article](https://vazgriz.com/119/procedurally-generated-dungeons/)  
+-    [Bowyer-Watson -algorithm Wikipedia](https://en.wikipedia.org/wiki/Bowyer%E2%80%93Watson_algorithm)
