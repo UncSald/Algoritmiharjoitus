@@ -3,12 +3,15 @@ import pygame
 import pygame.gfxdraw
 from src.bowyer_watson import BowyerWatson
 from src.room_generation import generate_rooms, start_end
-from src.list_matrix import list_to_matrix
+from src.list_matrix import list_to_matrix, closest_walls
 from src.kruskal import kruskal
 from src.a_star import build_path
 from src.player import Player
 from src.create_objects import create_objects
 from src.sprites import Item
+
+
+
 
 class Game:
     """Class for holding data for a dungeon exploring game.
@@ -18,8 +21,8 @@ class Game:
         """Class constructor for Game.
 
         Args:
-            width (int): Game screen width, used for screen size.
-            height (int): Game screen height, used for screen size
+            width (int): Game self.screen width, used for self.screen size.
+            height (int): Game self.screen height, used for self.screen size
         """
 
         pygame.init()
@@ -27,9 +30,23 @@ class Game:
         self.widht = width
         self.height = height
         self.tile_size = 32
-        
+
+        self.screen = pygame.display.set_mode((self.widht/2,self.height/2))
+        self.background = pygame.Surface((self.widht,self.height))
+        self.background.fill((20,49,30))
+        self.menu = pygame.surface.Surface((self.widht/2-200,self.height/2-200))
+        self.menu.fill((200,255,255,0))
+
         self.items = {}
         self.items['key'] = pygame.image.load('src/assets/key.png')
+        self.walls = pygame.sprite.Group()
+        self.floor = pygame.sprite.Group()
+        self.doors = pygame.sprite.Group()
+        self.player_group = pygame.sprite.Group()
+        self.item_group = pygame.sprite.Group()
+        self.player1 = Player(self.tile_size/2,self.tile_size/2,\
+                              (self.widht/4,self.height/4))
+        self.player1.add(self.player_group)
 
         self.has_key = False
         self.collect_item = False
@@ -38,7 +55,7 @@ class Game:
 
         self.final_level = 2
         self.level_num = 0
-    
+
     def run(self):
         """Run method is used to start the game.
         Many pygame objects are defined in the run function.
@@ -46,19 +63,9 @@ class Game:
         itself.
         """
 
-        screen = pygame.display.set_mode((self.widht/2,self.height/2))
-        background = pygame.Surface((self.widht,self.height))
-        background.fill((20,49,30))
-        menu = pygame.surface.Surface((self.widht/2-200,self.height/2-200))
-        menu.fill((200,255,255,0))
         font = pygame.font.SysFont('Arial', 25, bold=True)
         clock = pygame.time.Clock()
-        self.walls = pygame.sprite.Group()
-        self.floor = pygame.sprite.Group()
-        self.doors = pygame.sprite.Group()
-        self.player_group = pygame.sprite.Group()
-        self.item_group = pygame.sprite.Group()
-        
+
         self.create_level()
 
         cooldown = 5
@@ -72,52 +79,42 @@ class Game:
                     sys.exit()
 
             keys = pygame.key.get_pressed()
-            
+
             if self.action is not True:
                 if self.door_cooldown is True:
                     cooldown -= 1/60
                     if cooldown <= 0:
                         self.door_cooldown = False
                         cooldown = 5
-
-                screen.blit(background, (0,0))
-                
-                for sprite in self.walls.sprites():
-                    screen.blit(sprite.image,(sprite.x,sprite.y))
-                    sprite.update(self.player1)
-                for sprite in self.floor.sprites():
-                    screen.blit(sprite.image,(sprite.x, sprite.y))
-                    sprite.update(self.player1)
-                for sprite in self.doors.sprites():
-                    screen.blit(sprite.image,(sprite.x, sprite.y))
-                    sprite.update(self.player1)
-                for item in self.item_group.sprites():
-                    screen.blit(item.image,(item.x,item.y))
-                    item.update(self.player1)
-                for sprite in self.player_group.sprites():
-                    screen.blit(sprite.image,(sprite.x, sprite.y))
-
+                self.draw()
                 if self.player1.clear is not True:
                     self.player_update()
                 else:
                     self.action = True
-                
+
+
+
+
             elif self.action is True and self.collect_item is True:
-                    screen.blit(menu,(100,100))
-                    screen.blit(font.render('Press space to collect item', True, (255, 0, 255)),(200,250))
-                    screen.blit(font.render(f'You have found a {self.collectable_item.name}', True, (255, 0, 255)),(200,200))
-                    if keys[pygame.K_SPACE]:
-                        if self.collectable_item.name == 'key':
-                            self.item_group.remove(self.collectable_item)
-                            self.has_key = True
-                        self.action=False
-                        self.collect_item = False
-            
+                self.screen.blit(self.menu,(100,100))
+                self.screen.blit(font.render('Press space to collect item', True,\
+                                        (255, 0, 255)),(200,250))
+                self.screen.blit(font.render(f'You have found a {self.collectable_item.name}',\
+                                         True, (255, 0, 255)),(200,200))
+                if keys[pygame.K_SPACE]:
+                    if self.collectable_item.name == 'key':
+                        self.item_group.remove(self.collectable_item)
+                        self.has_key = True
+                    self.action=False
+                    self.collect_item = False
+
             elif self.has_key is True and self.door_cooldown is False:
                 if self.level_num == self.final_level:
-                    screen.blit(menu,(100,100))
-                    screen.blit(font.render('YOU WIN !', True, (255, 0, 255)),(300,200))
-                    screen.blit(font.render(f'exit in {int(count_to_exit)}', True, (255, 0, 255)),(310,300))
+                    self.screen.blit(self.menu,(100,100))
+                    self.screen.blit(font.render('YOU WIN !', True,\
+                                            (255, 0, 255)),(300,200))
+                    self.screen.blit(font.render(f'exit in {int(count_to_exit)}',\
+                                            True, (255, 0, 255)),(310,300))
                     count_to_exit -= 1/60
                     if count_to_exit <= 1:
                         print("Congratulations!")
@@ -125,17 +122,20 @@ class Game:
                         sys.exit()
 
                 else:
-                    screen.blit(menu,(100,100))
-                    screen.blit(font.render('Press space to open door', True, (190, 0, 0)),(200,200))
-                    
+                    self.screen.blit(self.menu,(100,100))
+                    self.screen.blit(font.render('Press space to open door',\
+                                            True, (190, 0, 0)),(200,200))
+
                     if keys[pygame.K_SPACE]:
                         self.has_key = False
                         self.create_level()
 
             elif self.door_cooldown is False:
-                screen.blit(menu,(100,100))
-                screen.blit(font.render('The door seems to require a key...', True, (190, 0, 0)),(180,200))
-                screen.blit(font.render('Press space to continue', True, (190, 0, 0)),(200,250))
+                self.screen.blit(self.menu,(100,100))
+                self.screen.blit(font.render('The door seems to require a key...',\
+                                        True, (190, 0, 0)),(180,200))
+                self.screen.blit(font.render('Press space to continue',\
+                                        True, (190, 0, 0)),(200,250))
                 if keys[pygame.K_SPACE]:
                     self.player1.clear = False
                     self.action = False
@@ -145,7 +145,8 @@ class Game:
                     self.player1.clear = False
                     self.action = False
 
-            screen.blit(font.render(f'B{self.level_num}f', True, (250, 0, 100)),(10,10))
+            self.screen.blit(font.render(f'B{self.level_num}f',\
+                                    True, (250, 0, 100)),(10,10))
 
             clock.tick(60)
             pygame.display.flip()
@@ -163,35 +164,32 @@ class Game:
 
         self.walls.empty()
         self.floor.empty()
-        self.player_group.empty()
         self.doors.empty()
         self.item_group.empty()
 
-        rooms_gened = generate_rooms(20 ,self.widht, self.height, self.tile_size)
-        rooms, centers = rooms_gened
+        rooms, centers = generate_rooms(20 ,self.widht, self.height, self.tile_size)
 
         rp_alg = BowyerWatson(centers, self.widht, self.height)
         rp_alg.run()
 
         start_point, end_point, self.key_location = start_end(centers, rp_alg._all_edges)
 
-        self.player1 = Player(self.tile_size/2,self.tile_size/2,\
-                              (self.widht/4,self.height/4))
-        self.player1.add(self.player_group)
-
         temporary_map = list_to_matrix(rooms,self.widht, self.height,\
                             start_point, end_point, self.tile_size)
 
         mst = kruskal(rp_alg._all_edges, start_point)
 
-        MAP = build_path(temporary_map,mst,self.tile_size)
+        final_map = closest_walls(build_path(temporary_map,mst,self.tile_size))
 
-        create_objects(MAP, self.tile_size, self.floor, self.walls, self.doors)
+        create_objects(final_map, self.tile_size, self.floor, self.walls, self.doors)
+
         self.create_items()
 
         self.player1.changes_x = start_point[0]-self.widht/4
         self.player1.changes_y = start_point[1]-self.height/4
-        
+        print(self.player1.changes_x,self.player1.changes_y)
+        print(start_point,self.widht/4,self.height/4)
+
         self.action = False
         self.level_num += 1
 
@@ -202,31 +200,34 @@ class Game:
         Player collisions act as triggers in the game in certain situations.
         """
 
-        for sprite in self.walls:    
+        for sprite in self.walls:
             if pygame.sprite.collide_rect(self.player1, sprite):
                 if self.player1.rect.bottom >= sprite.rect.top and\
                       self.player1.rect.bottom < sprite.rect.bottom:
-                    self.player1.changes_y -= self.player1.y_velocity
+                    self.player1.changes_y -= self.player1.velocity
+
                 if self.player1.rect.top <= sprite.rect.bottom and\
                       self.player1.rect.top > sprite.rect.top:
-                    self.player1.changes_y += self.player1.y_velocity
+                    self.player1.changes_y += self.player1.velocity
+
                 if self.player1.rect.left <= sprite.rect.right and\
                       self.player1.rect.left > sprite.rect.left:
-                    self.player1.changes_x += self.player1.x_velocity
+                    self.player1.changes_x += self.player1.velocity
+
                 if self.player1.rect.right >= sprite.rect.left and\
                       self.player1.rect.right < sprite.rect.right:
-                    self.player1.changes_x -= self.player1.x_velocity
+                    self.player1.changes_x -= self.player1.velocity
 
         for door in self.doors:
-            if pygame.sprite.collide_rect(self.player1,door) and self.door_cooldown is False:
+            if pygame.sprite.collide_rect(self.player1,door)\
+                and self.door_cooldown is False:
                 self.player1.clear = True
-        
+
         for item in self.item_group:
             if pygame.sprite.collide_rect(self.player1,item):
                 self.collectable_item = item
                 self.collect_item = True
                 self.action = True
-    
 
 
 
@@ -240,32 +241,32 @@ class Game:
         self.player_collision()
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a] and keys[pygame.K_w]:
-            self.player1.changes_x -= self.player1.x_velocity/1.6
-            self.player1.changes_y -= self.player1.y_velocity/1.6
+            self.player1.changes_x -= self.player1.velocity/1.6
+            self.player1.changes_y -= self.player1.velocity/1.6
             self.player1.image = self.player1.image_left
         elif keys[pygame.K_a] and keys[pygame.K_s]:
-            self.player1.changes_x -= self.player1.x_velocity/1.6
-            self.player1.changes_y += self.player1.y_velocity/1.6
+            self.player1.changes_x -= self.player1.velocity/1.6
+            self.player1.changes_y += self.player1.velocity/1.6
             self.player1.image = self.player1.image_left
         elif keys[pygame.K_d] and keys[pygame.K_w]:
-            self.player1.changes_x += self.player1.x_velocity/1.6
-            self.player1.changes_y -= self.player1.y_velocity/1.6
+            self.player1.changes_x += self.player1.velocity/1.6
+            self.player1.changes_y -= self.player1.velocity/1.6
             self.player1.image = self.player1.image_right
         elif keys[pygame.K_d] and keys[pygame.K_s]:
-            self.player1.changes_x += self.player1.x_velocity/1.6
-            self.player1.changes_y += self.player1.y_velocity/1.6
+            self.player1.changes_x += self.player1.velocity/1.6
+            self.player1.changes_y += self.player1.velocity/1.6
             self.player1.image = self.player1.image_right
         elif keys[pygame.K_a]:
-            self.player1.changes_x -= self.player1.x_velocity
+            self.player1.changes_x -= self.player1.velocity
             self.player1.image = self.player1.image_left
         elif keys[pygame.K_d]:
-            self.player1.changes_x += self.player1.x_velocity
+            self.player1.changes_x += self.player1.velocity
             self.player1.image = self.player1.image_right
         elif keys[pygame.K_w]:
-            self.player1.changes_y -= self.player1.y_velocity
+            self.player1.changes_y -= self.player1.velocity
             self.player1.image = self.player1.image_up
         elif keys[pygame.K_s]:
-            self.player1.changes_y += self.player1.y_velocity
+            self.player1.changes_y += self.player1.velocity
             self.player1.image = self.player1.image_down
 
 
@@ -275,7 +276,28 @@ class Game:
         """Creates items from given item dictionary.
         """
 
-        for item in self.items.keys():
+        for item in self.items:
             if item == 'key':
-                key = Item(self.tile_size,(self.key_location),self.items['key'], 'key')
+                key = Item(self.tile_size,\
+                           (self.key_location[0]-self.key_location[0]%self.tile_size,\
+                            self.key_location[1]-self.key_location[1]%self.tile_size),\
+                           self.items['key'], 'key')
                 self.item_group.add(key)
+
+    def draw(self):
+        self.screen.blit(self.background, (0,0))
+
+        for sprite in self.walls.sprites():
+            self.screen.blit(sprite.image,(sprite.x,sprite.y))
+            sprite.update(self.player1)
+        for sprite in self.floor.sprites():
+            self.screen.blit(sprite.image,(sprite.x, sprite.y))
+            sprite.update(self.player1)
+        for sprite in self.doors.sprites():
+            self.screen.blit(sprite.image,(sprite.x, sprite.y))
+            sprite.update(self.player1)
+        for item in self.item_group.sprites():
+            self.screen.blit(item.image,(item.x,item.y))
+            item.update(self.player1)
+        for sprite in self.player_group.sprites():
+            self.screen.blit(sprite.image,(sprite.x, sprite.y))
