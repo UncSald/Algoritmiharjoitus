@@ -5,7 +5,7 @@ class TestTriangle(unittest.TestCase):
 
     def test_create_triangle1(self):
         triangle = Triangle((100,100), (101,101), (100,101))
-        result = triangle._edges
+        result = triangle.edges
         expected = [((100,100), (101,101)), ((100,100), (100,101)), ((101,101), (100,101))]
         self.assertEqual(expected, result)
     
