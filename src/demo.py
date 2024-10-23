@@ -1,8 +1,9 @@
 import sys
 import pygame
 import pygame.gfxdraw
-from src.bowyerWatson import BowyerWatson
-from src.roomGeneration import generate_rooms
+from src.bowyer_watson import BowyerWatson
+from src.room_generation import generate_rooms
+
 
 
 
@@ -80,11 +81,8 @@ def demo():
                 for triangle in bowyer_watson3._triangulation:
                         triangle.draw(screen,'red',0)
             countdown1 -= 1/60
-        
-
 
         timer += 1/60
 
         clock.tick(60)
         pygame.display.flip()
-        
