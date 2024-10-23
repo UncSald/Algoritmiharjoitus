@@ -128,6 +128,8 @@ class Game:
 
                     if keys[pygame.K_SPACE]:
                         self.has_key = False
+                        self.player1.clear = False
+                        self.action = False
                         self.create_level()
 
             elif self.door_cooldown is False:
@@ -187,10 +189,7 @@ class Game:
 
         self.player1.changes_x = start_point[0]-self.widht/4
         self.player1.changes_y = start_point[1]-self.height/4
-        print(self.player1.changes_x,self.player1.changes_y)
-        print(start_point,self.widht/4,self.height/4)
 
-        self.action = False
         self.level_num += 1
 
 
@@ -285,6 +284,9 @@ class Game:
                 self.item_group.add(key)
 
     def draw(self):
+        """Method draws the sprites contained in each group
+        on to the screen.
+        """
         self.screen.blit(self.background, (0,0))
 
         for sprite in self.walls.sprites():
