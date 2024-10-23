@@ -21,8 +21,7 @@ class Player(pygame.sprite.Sprite):
         self.image = self.image_up
         self.rect = self.image.get_rect(topleft=render_point)
         self.x, self.y = render_point
-        self.x_velocity = width/8
-        self.y_velocity = height/8
+        self.velocity = width/8
         self.changes_x = 0
         self.changes_y = 0
         self.clear = False
