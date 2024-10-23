@@ -47,6 +47,8 @@ class BowyerWatson:
             if self.width<point[0] or 0>point[0] or self.height<point[1] or 0>point[1]:
                 self._points.remove(point)
                 print(f"{point} is not inside the drawing area.")
+                if len(self._points) < 3:
+                    raise ValueError ("Triangles cannot be drawn with less than 3 points.")
                 continue
             unusable_triangles = set()
             for triangle in self._triangulation:
