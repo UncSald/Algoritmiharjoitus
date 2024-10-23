@@ -48,7 +48,7 @@ class TestBowyerWatson(unittest.TestCase):
     
     def test_error2(self):
         width, height = 500, -500
-        expression = [(-1,3)]
+        expression = []
         for i in range(100):
             point = (randint(0,499),randint(0,499))
             expression.append(point)
@@ -59,7 +59,18 @@ class TestBowyerWatson(unittest.TestCase):
         except ValueError:
             assert True
 
-
+    def test_error3(self):
+        width, height = 500, 500
+        expression = []
+        for i in range(2):
+            point = (randint(0,499),randint(0,499))
+            expression.append(point)
+        try:
+            bw = BowyerWatson(expression, width, height)
+            bw.run()
+            assert False
+        except ValueError:
+            assert True
 
 if __name__ == "__main__":
     unittest.main()
