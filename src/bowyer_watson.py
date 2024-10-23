@@ -17,6 +17,8 @@ class BowyerWatson:
         """
         if width<=0 or height<=0:
             raise ValueError ("Draw area cannot be 0 or negative.")
+        if len(points) < 3:
+            raise ValueError ("Triangles cannot be drawn with less than 3 points.")
         self.width = width
         self.height = height
         self._points = points
