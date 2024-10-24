@@ -360,7 +360,7 @@ class Game:
         possible_locations = []
         for y, col in enumerate(self.final_map):
             for x, value in enumerate(col):
-                if value == 1:
+                if value == 1 and (x*TILE,y*TILE) != self.key_location:
                     possible_locations.append((x*TILE,y*TILE))
         for i in enumerate(self.items):
             slice = randint(3,10)
