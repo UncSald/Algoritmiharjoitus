@@ -35,6 +35,7 @@ class Game:
         self.menu = pygame.surface.Surface((WIDTH/2-200,HEIGHT/2-200))
         self.menu.fill((200,255,255,0))
 
+        self.final_map :list[list]
         self.items = {}
         for key in ITEM:
             self.items[f'{key}'] = pygame.image.load(f'src/assets/{key}.png')
@@ -145,9 +146,9 @@ class Game:
 
         mst = kruskal(rp_alg._all_edges, start_point)
 
-        final_map = closest_walls(build_path(temporary_map,mst,TILE))
+        self.final_map = closest_walls(build_path(temporary_map,mst,TILE))
 
-        create_objects(final_map, TILE, self.floor, self.walls, self.doors)
+        create_objects(self.final_map, TILE, self.floor, self.walls, self.doors)
 
         self.create_items()
 
