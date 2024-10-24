@@ -10,6 +10,7 @@ from src.player import Player
 from src.create_objects import create_objects
 from src.sprites import Item
 from src.game_settings import *
+from random import randint
 
 
 
@@ -39,6 +40,7 @@ class Game:
         self.items = {}
         for key in ITEM:
             self.items[f'{key}'] = pygame.image.load(f'src/assets/{key}.png')
+        self.item_locations = []
         self.walls = pygame.sprite.Group()
         self.floor = pygame.sprite.Group()
         self.doors = pygame.sprite.Group()
@@ -150,6 +152,8 @@ class Game:
 
         create_objects(self.final_map, TILE, self.floor, self.walls, self.doors)
 
+        self.possible_items()
+
         self.create_items()
 
         self.player1.changes_x = start_point[0]-WIDTH/4
@@ -240,7 +244,7 @@ class Game:
         """Creates items from given item dictionary.
         """
 
-        for item in self.items:
+        for index, item in enumerate(self.items):
             if item == 'key':
                 key = Item(TILE,\
                            (self.key_location[0]-self.key_location[0]%TILE,\
@@ -249,10 +253,10 @@ class Game:
                 self.item_group.add(key)
             else:
                 item_name = Item(TILE,\
-                           (12*TILE,\
-                            12*TILE),\
+                           self.item_locations[index],\
                            self.items[item], item)
                 self.item_group.add(item_name)
+                print(item_name.x,item_name.y)
 
     def draw(self):
         """Method draws the sprites contained in each group
@@ -352,5 +356,18 @@ class Game:
                 pygame.quit()
                 sys.exit()
 
-    def possible_items(self, matrix, start, goal):
-        pass
+    def possible_items(self):
+        possible_locations = []
+        for y, col in enumerate(self.final_map):
+            for x, value in enumerate(col):
+                if value == 1:
+                    possible_locations.append((x*TILE,y*TILE))
+        for i in enumerate(self.items):
+            slice = randint(3,10)
+            pick = randint(1,slice-1)
+            area_end = (len(possible_locations))//slice
+            area_start = area_end*pick
+            index = randint(area_start,len(possible_locations)-1)
+            item_location = possible_locations[index]
+            possible_locations.remove(item_location)
+            self.item_locations.append(item_location)
