@@ -13,10 +13,8 @@ def main():
         demo()
 
     elif decision == 'game':
-        width = 1500
-        height = 1000
 
-        new_game = src.game.Game(width,height)
+        new_game = src.game.Game()
 
         new_game.run()
     else:

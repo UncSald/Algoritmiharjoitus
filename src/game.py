@@ -19,7 +19,7 @@ class Game:
     """Class for holding data for a dungeon exploring game.
     """
 
-    def __init__(self,width,height):
+    def __init__(self):
         """Class constructor for Game.
 
         Args:
