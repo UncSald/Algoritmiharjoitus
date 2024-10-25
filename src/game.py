@@ -31,6 +31,15 @@ class Game:
         self.background.fill((20,49,30))
         self.menu = pygame.image.load('src/assets/menu.png')
         self.menu = pygame.transform.scale(self.menu,(WIDTH/2*.8,HEIGHT/2*.8))
+        self.menu_rect = self.menu.get_rect()
+        self.menu_rect.center = (WIDTH/4,HEIGHT/4)
+        self.inventory_sprite = pygame.image.load('src/assets/inventory_slot.png')
+        self.inventory_sprite = pygame.transform.scale(
+            self.inventory_sprite,(
+                    (self.menu.get_height()-HEIGHT*.8*.025)/4,\
+                    (self.menu.get_height()-HEIGHT*.8*.025)/4
+                    )
+                    )
 
         self.final_map :list[list]
         self.items = {}
@@ -50,11 +59,13 @@ class Game:
         self.collect_item = False
         self.door_cooldown = False
         self.action = False
+        self.inventory = False
 
         self.final_level = 2
         self.level_num = 0
 
-        self.font = pygame.font.SysFont('Impact', 35, bold=False)
+        self.font = pygame.font.SysFont('Impact', TILE)
+        self.menu_font = pygame.font.SysFont('Impact', TILE//3)
 
     def run(self):
         """Run method is used to start the game.
@@ -63,11 +74,8 @@ class Game:
         itself.
         """
 
-
         clock = pygame.time.Clock()
-
         self.create_level()
-
         cooldown = 5
         count_to_exit = 6
 
@@ -77,10 +85,15 @@ class Game:
                     print("bye bye")
                     pygame.quit()
                     sys.exit()
-
             keys = pygame.key.get_pressed()
 
             if self.action is not True:
+                if keys[pygame.K_i]:
+                    self.menu = pygame.transform.scale(self.menu,(HEIGHT/2*.8,HEIGHT/2*.8))
+                    self.menu_rect = self.menu.get_rect()
+                    self.menu_rect.center = (WIDTH/4,HEIGHT/4)
+                    self.inventory = True
+                    self.action = True
                 if self.door_cooldown is True:
                     cooldown -= 1/60
                     if cooldown <= 0:
@@ -91,6 +104,8 @@ class Game:
                     self.player_update()
                 else:
                     self.action = True
+            elif self.action and self.inventory:
+                self.handle_inventory(keys)
 
             elif self.action is True and self.collect_item is True:
                 self.handle_menu('item',keys)
@@ -252,7 +267,7 @@ class Game:
                            self.item_locations[index],\
                            self.items[item], item)
                 self.item_group.add(item_name)
-                print(item_name.x,item_name.y)
+                self.player1.items.append(item_name)
 
     def draw(self):
         """Method draws the sprites contained in each group
@@ -295,13 +310,14 @@ class Game:
                                     (0, 0, 0))
             item_continue_rect = item_continue.get_rect()
             item_continue_rect.center = (WIDTH/4,HEIGHT/4+100)
-            self.screen.blit(self.menu,(WIDTH/2*.1,HEIGHT/2*.1))
+            self.screen.blit(self.menu,self.menu_rect)
             self.screen.blit(item_continue,item_continue_rect.topleft)
             self.screen.blit(item_msg,item_msg_rect.topleft)
             if keys[pygame.K_SPACE]:
                 if self.collectable_item.name == 'key':
                     self.has_key = True
                 self.item_group.remove(self.collectable_item)
+                self.player1.items.append(self.collectable_item)
                 self.action=False
                 self.collect_item = False
 
@@ -314,7 +330,7 @@ class Game:
                                 True, (0, 0, 0))
             continue_msg_rect = continue_msg.get_rect()
             continue_msg_rect.center = (WIDTH/4,HEIGHT/4+100)
-            self.screen.blit(self.menu,(WIDTH/2*.1,HEIGHT/2*.1))
+            self.screen.blit(self.menu,self.menu_rect)
             self.screen.blit(need_key,need_key_rect.topleft)
             self.screen.blit(continue_msg,continue_msg_rect.topleft)
             if keys[pygame.K_SPACE]:
@@ -327,7 +343,7 @@ class Game:
                                 True, (0, 0, 0))
             level_clear_rect = level_clear.get_rect()
             level_clear_rect.center = (WIDTH/4,HEIGHT/4)
-            self.screen.blit(self.menu,(WIDTH/2*.1,HEIGHT/2*.1))
+            self.screen.blit(self.menu,self.menu_rect)
             self.screen.blit(level_clear,level_clear_rect.topleft)
             if keys[pygame.K_SPACE]:
                 self.has_key = False
@@ -344,7 +360,7 @@ class Game:
                                 True, (0, 0, 0))
             cd_msg_rect = cd_msg.get_rect()
             cd_msg_rect.center = (WIDTH/4,HEIGHT/4+100)
-            self.screen.blit(self.menu,(WIDTH/2*.1,HEIGHT/2*.1))
+            self.screen.blit(self.menu,self.menu_rect)
             self.screen.blit(win_msg,win_msg_rect.topleft)
             self.screen.blit(cd_msg,cd_msg_rect.topleft)
             if cd <= 1:
@@ -355,6 +371,7 @@ class Game:
     def possible_items(self):
         """Selects possible locations for items on the map.
         """
+        self.item_locations.clear()
         possible_locations = []
         for y, col in enumerate(self.final_map):
             for x, value in enumerate(col):
@@ -369,3 +386,32 @@ class Game:
             item_location = possible_locations[index]
             possible_locations.remove(item_location)
             self.item_locations.append(item_location)
+
+    def handle_inventory(self, keys):
+        if keys[pygame.K_ESCAPE]:
+            self.inventory = False
+            self.action = False
+            self.menu = pygame.transform.scale(self.menu,(WIDTH/2*.8,HEIGHT/2*.8))
+            self.menu_rect = self.menu.get_rect()
+            self.menu_rect.center = (WIDTH/4,HEIGHT/4)
+        offset = HEIGHT/2*.8*.025
+        self.screen.blit(self.menu,self.menu_rect)
+        y_mod = 0
+        for i in range(16):
+            if i%4 == 0:
+                y_mod = i/4
+            x_pos = offset+i%4*self.inventory_sprite.get_height()+(WIDTH/4-self.menu.get_width()/2)
+            y_pos = offset+y_mod*self.inventory_sprite.get_height()+(HEIGHT/4-self.menu.get_height()/2)
+            self.screen.blit(self.inventory_sprite,(x_pos,y_pos))
+            if i < len(self.player1.items):
+                item = self.player1.items[i]
+                item_image = pygame.transform.scale(item.image,\
+                                                        (HEIGHT/8*.8,HEIGHT/8*.8))
+                item_rect = item_image.get_rect()
+                item_rect.center = (x_pos+self.inventory_sprite.get_height()/2,y_pos+self.inventory_sprite.get_height()/2)
+                self.screen.blit(item_image,(x_pos,y_pos))
+                item_name = self.menu_font.render(f'{item.name}', True,\
+                                    (0, 0, 0))
+                item_name_rect = item_name.get_rect()
+                item_name_rect.center = (x_pos+self.inventory_sprite.get_height()/2,y_pos+self.inventory_sprite.get_height()*.8)
+                self.screen.blit(item_name,item_name_rect)
