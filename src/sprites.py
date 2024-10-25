@@ -115,7 +115,7 @@ class Item(pygame.sprite.Sprite):
     Args:
         pygame (sprite.Sprite): Super class
     """
-    def __init__(self,tile_size,render_point :tuple[int,int], image, name):
+    def __init__(self,tile_size:int,render_point :tuple[int,int], image, name:str):
         """Class constructor for Item sprite.
 
         Args:
