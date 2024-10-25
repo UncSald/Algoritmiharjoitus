@@ -254,7 +254,9 @@ class Game:
     def create_items(self):
         """Creates items from given item dictionary.
         """
-
+        players_items = []
+        for players_item in self.player1.items:
+            players_items.append(players_item.name)
         for index, item in enumerate(self.items):
             if item == 'key':
                 key = Item(TILE,\
@@ -263,11 +265,12 @@ class Game:
                            self.items[item], item)
                 self.item_group.add(key)
             else:
-                item_name = Item(TILE,\
-                           self.item_locations[index],\
-                           self.items[item], item)
-                self.item_group.add(item_name)
-                self.player1.items.append(item_name)
+                if item not in players_items:
+                    new_item = Item(TILE,\
+                            self.item_locations[index],\
+                            self.items[item], item)
+                    self.item_group.add(new_item)
+
 
     def draw(self):
         """Method draws the sprites contained in each group
@@ -405,18 +408,22 @@ class Game:
         for i in range(16):
             if i%4 == 0:
                 y_mod = i/4
-            x_pos = offset+i%4*self.inventory_sprite.get_height()+(WIDTH/4-self.menu.get_width()/2)
-            y_pos = offset+y_mod*self.inventory_sprite.get_height()+(HEIGHT/4-self.menu.get_height()/2)
+            x_pos = offset+i%4*self.inventory_sprite.get_height()\
+                +(WIDTH/4-self.menu.get_width()/2)
+            y_pos = offset+y_mod*self.inventory_sprite.get_height()\
+                +(HEIGHT/4-self.menu.get_height()/2)
             self.screen.blit(self.inventory_sprite,(x_pos,y_pos))
             if i < len(self.player1.items):
                 item = self.player1.items[i]
                 item_image = pygame.transform.scale(item.image,\
                                                         (HEIGHT/8*.8,HEIGHT/8*.8))
                 item_rect = item_image.get_rect()
-                item_rect.center = (x_pos+self.inventory_sprite.get_height()/2,y_pos+self.inventory_sprite.get_height()/2)
+                item_rect.center = (x_pos+self.inventory_sprite.get_height()/2,\
+                                    y_pos+self.inventory_sprite.get_height()/2)
                 self.screen.blit(item_image,(x_pos,y_pos))
                 item_name = self.menu_font.render(f'{item.name}', True,\
                                     (0, 0, 0))
                 item_name_rect = item_name.get_rect()
-                item_name_rect.center = (x_pos+self.inventory_sprite.get_height()/2,y_pos+self.inventory_sprite.get_height()*.8)
+                item_name_rect.center = (x_pos+self.inventory_sprite.get_height()/2\
+                                         ,y_pos+self.inventory_sprite.get_height()*.8)
                 self.screen.blit(item_name,item_name_rect)
