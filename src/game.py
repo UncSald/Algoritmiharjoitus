@@ -114,7 +114,6 @@ class Game:
                 if self.level_num == self.final_level:
                     count_to_exit -= 1/60
                     self.handle_menu('game clear',keys,count_to_exit)
-
                 else:
                     self.handle_menu('level clear', keys)
 
@@ -349,6 +348,9 @@ class Game:
             self.screen.blit(self.menu,self.menu_rect)
             self.screen.blit(level_clear,level_clear_rect.topleft)
             if keys[pygame.K_SPACE]:
+                for item in self.player1.items:
+                    if item.name == 'key':
+                        self.player1.items.remove(item)
                 self.has_key = False
                 self.player1.clear = False
                 self.action = False
