@@ -1,4 +1,4 @@
-from src.sprites import Floor, Wall, Door
+from src.sprites import GameTile
 
 
 
@@ -16,16 +16,19 @@ def create_objects(matrix :list[list[int]], tile_size :int, floor, walls, doors)
     """
     for row in range(len(matrix)):
         for column in range(len(matrix[0])):
-
             if matrix[row][column] == 1 or matrix[row][column] == 2:
-                new_tile = Floor(tile_size,(column*tile_size, row*tile_size))
+                new_tile = GameTile(tile_size,(column*tile_size, row*tile_size),\
+                                    matrix[row][column])
                 new_tile.add(floor)
             elif matrix[row][column] == 3:
-                new_tile = Door(tile_size,(column*tile_size, row*tile_size),3)
+                new_tile = GameTile(tile_size,(column*tile_size, row*tile_size),\
+                                    matrix[row][column])
                 new_tile.add(floor)
             elif matrix[row][column] == 4:
-                new_tile = Door(tile_size,(column*tile_size, row*tile_size),4)
+                new_tile = GameTile(tile_size,(column*tile_size, row*tile_size),\
+                                    matrix[row][column])
                 new_tile.add(doors)
             else:
-                new_tile = Wall(tile_size,(column*tile_size, row*tile_size),matrix[row][column])
+                new_tile = GameTile(tile_size,(column*tile_size, row*tile_size),\
+                                    matrix[row][column])
                 new_tile.add(walls)
