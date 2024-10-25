@@ -387,7 +387,12 @@ class Game:
             possible_locations.remove(item_location)
             self.item_locations.append(item_location)
 
-    def handle_inventory(self, keys):
+    def handle_inventory(self, keys:pygame.key.ScancodeWrapper):
+        """Handles drawing correct inventory on the screen.
+
+        Args:
+            keys (pygame.key.ScancodeWrapper): List of keys pressed in wrapper.
+        """
         if keys[pygame.K_ESCAPE]:
             self.inventory = False
             self.action = False
