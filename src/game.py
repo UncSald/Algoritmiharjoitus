@@ -21,10 +21,6 @@ class Game:
 
     def __init__(self):
         """Class constructor for Game.
-
-        Args:
-            width (int): Game self.screen width, used for self.screen size.
-            height (int): Game self.screen height, used for self.screen size
         """
 
         pygame.init()
@@ -33,8 +29,8 @@ class Game:
         self.screen = pygame.display.set_mode((WIDTH/2,HEIGHT/2))
         self.background = pygame.Surface((WIDTH,HEIGHT))
         self.background.fill((20,49,30))
-        self.menu = pygame.surface.Surface((WIDTH/2-200,HEIGHT/2-200))
-        self.menu.fill((200,255,255,0))
+        self.menu = pygame.image.load('src/assets/menu.png')
+        self.menu = pygame.transform.scale(self.menu,(WIDTH/2*.8,HEIGHT/2*.8))
 
         self.final_map :list[list]
         self.items = {}
@@ -58,7 +54,7 @@ class Game:
         self.final_level = 2
         self.level_num = 0
 
-        self.font = pygame.font.SysFont('Arial', 25, bold=True)
+        self.font = pygame.font.SysFont('Impact', 35, bold=False)
 
     def run(self):
         """Run method is used to start the game.
@@ -292,14 +288,14 @@ class Game:
         """
         if situation == 'item':
             item_msg = self.font.render(f'You have found a {self.collectable_item.name}',\
-                                     True, (255, 0, 255))
+                                     True, (0, 0, 0))
             item_msg_rect = item_msg.get_rect()
             item_msg_rect.center = (WIDTH/4,HEIGHT/4)
             item_continue = self.font.render('Press space to collect item', True,\
-                                    (255, 0, 255))
+                                    (0, 0, 0))
             item_continue_rect = item_continue.get_rect()
             item_continue_rect.center = (WIDTH/4,HEIGHT/4+100)
-            self.screen.blit(self.menu,(100,100))
+            self.screen.blit(self.menu,(WIDTH/2*.1,HEIGHT/2*.1))
             self.screen.blit(item_continue,item_continue_rect.topleft)
             self.screen.blit(item_msg,item_msg_rect.topleft)
             if keys[pygame.K_SPACE]:
@@ -311,14 +307,14 @@ class Game:
 
         elif situation == 'no keys':
             need_key = self.font.render('The door seems to require a key...',\
-                                True, (190, 0, 0))
+                                True, (0, 0, 0))
             need_key_rect = need_key.get_rect()
             need_key_rect.center = (WIDTH/4,HEIGHT/4)
             continue_msg = self.font.render('Press space to continue',\
-                                True, (190, 0, 0))
+                                True, (0, 0, 0))
             continue_msg_rect = continue_msg.get_rect()
             continue_msg_rect.center = (WIDTH/4,HEIGHT/4+100)
-            self.screen.blit(self.menu,(100,100))
+            self.screen.blit(self.menu,(WIDTH/2*.1,HEIGHT/2*.1))
             self.screen.blit(need_key,need_key_rect.topleft)
             self.screen.blit(continue_msg,continue_msg_rect.topleft)
             if keys[pygame.K_SPACE]:
@@ -328,10 +324,10 @@ class Game:
 
         elif situation == 'level clear':
             level_clear = self.font.render('Press space to open door',\
-                                True, (190, 0, 0))
+                                True, (0, 0, 0))
             level_clear_rect = level_clear.get_rect()
             level_clear_rect.center = (WIDTH/4,HEIGHT/4)
-            self.screen.blit(self.menu,(100,100))
+            self.screen.blit(self.menu,(WIDTH/2*.1,HEIGHT/2*.1))
             self.screen.blit(level_clear,level_clear_rect.topleft)
             if keys[pygame.K_SPACE]:
                 self.has_key = False
@@ -341,14 +337,14 @@ class Game:
 
         elif situation == 'game clear':
             win_msg = self.font.render('YOU WIN !', True,\
-                                (255, 0, 255))
+                                (0, 0, 0))
             win_msg_rect = win_msg.get_rect()
             win_msg_rect.center = (WIDTH/4,HEIGHT/4)
             cd_msg = self.font.render(f'exit in {int(cd)}',\
-                                True, (255, 0, 255))
+                                True, (0, 0, 0))
             cd_msg_rect = cd_msg.get_rect()
             cd_msg_rect.center = (WIDTH/4,HEIGHT/4+100)
-            self.screen.blit(self.menu,(100,100))
+            self.screen.blit(self.menu,(WIDTH/2*.1,HEIGHT/2*.1))
             self.screen.blit(win_msg,win_msg_rect.topleft)
             self.screen.blit(cd_msg,cd_msg_rect.topleft)
             if cd <= 1:
@@ -357,6 +353,8 @@ class Game:
                 sys.exit()
 
     def possible_items(self):
+        """Selects possible locations for items on the map.
+        """
         possible_locations = []
         for y, col in enumerate(self.final_map):
             for x, value in enumerate(col):
