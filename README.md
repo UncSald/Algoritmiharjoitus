@@ -4,17 +4,23 @@ TIRA -labran harjoitustyö
 
 Aiheenani on luolaston generointi, ja tavoitteeni on pystyä generoimaan top-down -peliin käyttökelpoisia karttoja.
 
-Testaaminen onnistuu näin:
+## Doumentaatio
+- [Määrittelydokumentti](https://github.com/UncSald/Algoritmiharjoitus/blob/main/Dokumentaatio/M%C3%A4%C3%A4rittelydokumentti.pdf)
+    
+- [Testausdokumentti](https://github.com/UncSald/Algoritmiharjoitus/blob/main/Dokumentaatio/Testausdokumentti.md)
+    
+- [Toteutusdokumentti](https://github.com/UncSald/Algoritmiharjoitus/blob/main/Dokumentaatio/Toteutusdokumentti.md)
+    
+- [Käyttöohje](https://github.com/UncSald/Algoritmiharjoitus/blob/main/Dokumentaatio/Kayttoohje.md)
 
-1. Kopioi repositorio komennolla ``` git clone https://github.com/UncSald/Algoritmiharjoitus.git ```
+- [Viikkoraportti 1](https://github.com/UncSald/Algoritmiharjoitus/blob/main/Dokumentaatio/Viikkoraportit/Viikkoraportti_1.pdf)
 
-2. Siirry repositorioon komennolla ```cd Algoritmiharjoitus```
+- [Viikkoraportti 2](https://github.com/UncSald/Algoritmiharjoitus/blob/main/Dokumentaatio/Viikkoraportit/Viikkoraportti_2.pdf)
+    
+- [Viikkoraportti 3](https://github.com/UncSald/Algoritmiharjoitus/blob/main/Dokumentaatio/Viikkoraportit/Viikkoraportti_3.pdf)
 
-3. Aja komento ```poetry shell``` jonka jälkeen aja komento ```poetry install```. Tämä asentaa tarvitsemasi riippuvaisuudet.
+- [Viikkoraportti 4](https://github.com/UncSald/Algoritmiharjoitus/blob/main/Dokumentaatio/Viikkoraportit/Viikkoraportti_4.pdf)
 
-4. Tämän jälkeen aja komento ```python main.py```.
-Valitse terminaalissa tahdotko pelata peliä, vai ajaa demon triangulaatiosta ja sen toteutumisesta.
+- [Viikkoraportti 5](https://github.com/UncSald/Algoritmiharjoitus/blob/main/Dokumentaatio/Viikkoraportit/Viikkoraportti_5.pdf)
 
-    - Pelissä liikkuminen tapahtuu WASD -näppäimillä. Yritä löytää avain ja edetä seuraavalle tasolle.
-
-6. Voit myös ajaa komennon ```poetry run tests```. Joka ajaa projektiin luodut testit.
+- [Viikkoraportti 6](https://github.com/UncSald/Algoritmiharjoitus/blob/main/Dokumentaatio/Viikkoraportit/Viikkoraportti_6.pdf)
