@@ -14,21 +14,21 @@ def create_objects(matrix :list[list[int]], tile_size :int, floor, walls, doors)
         walls (pygame.sprite.Group): Group where wall sprites will be added.
         doors (pygame.sprite.Group): Group where door sprites will be added.
     """
-    for row in range(len(matrix)):
-        for column in range(len(matrix[0])):
-            if matrix[row][column] == 1 or matrix[row][column] == 2:
+    for row, col in enumerate(matrix):
+        for column, value in enumerate(col):
+            if value in (1,2):
                 new_tile = GameTile(tile_size,(column*tile_size, row*tile_size),\
-                                    matrix[row][column])
+                                    value)
                 new_tile.add(floor)
-            elif matrix[row][column] == 3:
+            elif value == 3:
                 new_tile = GameTile(tile_size,(column*tile_size, row*tile_size),\
-                                    matrix[row][column])
+                                    value)
                 new_tile.add(floor)
-            elif matrix[row][column] == 4:
+            elif value == 4:
                 new_tile = GameTile(tile_size,(column*tile_size, row*tile_size),\
-                                    matrix[row][column])
+                                    value)
                 new_tile.add(doors)
             else:
                 new_tile = GameTile(tile_size,(column*tile_size, row*tile_size),\
-                                    matrix[row][column])
+                                    value)
                 new_tile.add(walls)
