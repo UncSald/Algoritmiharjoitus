@@ -47,6 +47,8 @@ class Game:
         self.items = {}
         for key in ITEM:
             self.items[f'{key}'] = pygame.image.load(f'src/assets/{key}.png')
+        self.key_location :tuple[int,int]
+        self.collect_item :Item
         self.item_locations = []
         self.walls = pygame.sprite.Group()
         self.floor = pygame.sprite.Group()
@@ -109,7 +111,7 @@ class Game:
 
             elif self.door_cooldown is False:
                 self.handle_menu('no keys',keys)
-            
+
             elif keys[K_SPACE]:
                 self.player1.clear = False
                 self.action = False
@@ -119,6 +121,8 @@ class Game:
 
             clock.tick(60)
             pygame.display.flip()
+
+
 
     def default_gameplay(self, keys:pygame.key.ScancodeWrapper):
         """Generates the default gameplay experience.
@@ -139,6 +143,8 @@ class Game:
             self.player_update()
         else:
             self.action = True
+
+
 
     def create_level(self):
         """Creates a level using multiple modules, such as:
@@ -399,6 +405,8 @@ class Game:
             item_location = possible_locations[index]
             possible_locations.remove(item_location)
             self.item_locations.append(item_location)
+
+
 
     def handle_inventory(self, keys:pygame.key.ScancodeWrapper):
         """Handles drawing correct inventory on the screen.
