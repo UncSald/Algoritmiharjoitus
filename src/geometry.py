@@ -26,7 +26,7 @@ class Triangle:
         self.edges = [self._a_edge,
                         self._b_edge,
                         self._c_edge]
-        self._points = [a,b,c]
+        self.points = [a,b,c]
 
         self.a_edge_len = self.edge_length(self._a_edge)
         self.b_edge_len = self.edge_length(self._b_edge)
@@ -41,7 +41,7 @@ class Triangle:
         self.c_angle = self.triangle_angle(self.b_edge_len,
                                            self.c_edge_len,
                                            self.a_edge_len)
-        
+
         self.circumcenter = (((self._a_point[0]*sin(2*self.a_angle))+\
                             (self._b_point[0]*sin(2*self.b_angle))+\
                             (self._c_point[0]*sin(2*self.c_angle)))/\
@@ -53,7 +53,7 @@ class Triangle:
                             )
 
         self.radius = self.count_radius()
-    
+
     def edge_length(self,edge):
         """Calculates the exact lenght between points in the edge.
 
@@ -66,7 +66,6 @@ class Triangle:
         return sqrt(abs(edge[0][0]-edge[1][0])**2\
                 + (abs(edge[0][1]-edge[1][1]))**2)
 
-    
     def triangle_angle(self,a,b,c):
         """Using the lenghts of the triangles edges, calculates the angles of the triangle.
 
@@ -85,8 +84,9 @@ class Triangle:
             elif statement < -1:
                 statement = -1
             return acos(statement)
-        except ZeroDivisionError: print(self._points)
-    
+        except ZeroDivisionError:
+            print(self.points)
+
     def count_radius(self):
         """Method counts the radius of the circumcircle.
 
@@ -99,7 +99,7 @@ class Triangle:
                 (self.c_edge_len+self.a_edge_len-self.b_edge_len)*\
                 (self.a_edge_len+self.b_edge_len-self.c_edge_len),1)
                 )
-    
+
     def check_point(self, point):
         """Check if a point is inside the circumcircle of the triangle.
 
@@ -166,35 +166,35 @@ class Rectangle:
         Returns:
             bool: True if collides, False if there is no collision.
         """
-        leftClip = other.left <= self.left <= other.right
-        rightClip = other.left <= self.right <= other.right
-        upClip = other.up <= self.up <= other.down
-        downClip = other.up <= self.down <= other.down
+        left_clip = other.left <= self.left <= other.right
+        right_clip = other.left <= self.right <= other.right
+        up_clip = other.up <= self.up <= other.down
+        down_clip = other.up <= self.down <= other.down
 
-        lleftClip = self.left <= other.left <= self.right
-        lrightClip = self.left <= other.right <= self.right
-        lupClip = self.up <= other.up <= self.down
-        ldownClip = self.up <= other.down <= self.down
+        lleft_clip = self.left <= other.left <= self.right
+        lright_clip = self.left <= other.right <= self.right
+        lup_clip = self.up <= other.up <= self.down
+        ldown_clip = self.up <= other.down <= self.down
 
-        if upClip and downClip and lrightClip and lleftClip:
+        if up_clip and down_clip and lright_clip and lleft_clip:
             return True
-        if lupClip and ldownClip and rightClip and leftClip:
+        if lup_clip and ldown_clip and right_clip and left_clip:
             return True
-        if leftClip and upClip:
+        if left_clip and up_clip:
             return True
-        if leftClip and downClip:
+        if left_clip and down_clip:
             return True
-        if rightClip and upClip:
+        if right_clip and up_clip:
             return True
-        if rightClip and downClip:
+        if right_clip and down_clip:
             return True
-        if lleftClip and lupClip:
+        if lleft_clip and lup_clip:
             return True
-        if lleftClip and ldownClip:
+        if lleft_clip and ldown_clip:
             return True
-        if lrightClip and lupClip:
+        if lright_clip and lup_clip:
             return True
-        if lrightClip and ldownClip:
+        if lright_clip and ldown_clip:
             return True
         return False
 
