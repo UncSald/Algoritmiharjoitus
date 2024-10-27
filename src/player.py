@@ -30,3 +30,48 @@ class Player(pygame.sprite.Sprite):
         self.clear = False
         self.items = []
         self.held_items = []
+
+    def add_item(self, item):
+        """Method adds item to player inventory.
+
+        Args:
+            item (Item): Item type item to be added
+        """
+        self.items.append(item)
+
+    def remove_item(self, item):
+        """Method removes item from player inventory.
+
+        Args:
+            item (Item): Item type item to be added.
+        """
+        self.items.remove(item)
+
+    def item_count(self):
+        """Returns count of items in inventory.
+
+        Returns:
+            int: Count of items in inventory.
+        """
+        return len(self.items)
+
+    def get_item(self, index :int):
+        """Returns the item in a certain index of inventory.
+
+        Args:
+            index (int): Index of item to be retrieved.
+
+        Returns:
+            Item: Item type object.
+        """
+        return self.items[index]
+
+    def record_changes(self, x:float, y:float):
+        """Updates changes to player changes.
+
+        Args:
+            x (float): Changes to be made on x axis.
+            y (float): Changes to be made on y axis.
+        """
+        self.changes_x = x
+        self.changes_y = y
