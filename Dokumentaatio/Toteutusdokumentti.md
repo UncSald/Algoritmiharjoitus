@@ -22,6 +22,8 @@
 
 ## Puutteet ja parannusehdotukset
     On mahdollista, että on kohtia koodissa, joiden nykyinen toteutus ei ole täysin optimaalinen.
+    Parannusta itse peliin on helppo keksiä. Pelikokemusta parantaisi esimerkiksi, jonkinlaiset viholliset,
+    joita vastaan taisella.
     
 ## Lähteet
 -    [Procedurally generated dungeons -article](https://vazgriz.com/119/procedurally-generated-dungeons/)  
