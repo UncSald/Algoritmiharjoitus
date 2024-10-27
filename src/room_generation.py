@@ -14,11 +14,14 @@ def generate_rooms(count :int, width :int, height :int, tile_size :int):
         tile_size (int): Size of a single tile in the matrix where rooms will be inserted.
 
     Raises:
-        ValueError: Error in the situation a tile size, area size, and count don't match. Mismatch can create an eternal loop.
-        ValueError: Error in the situation a tile size, area size, and count don't match. Mismatch can create an eternal loop.
+        ValueError: Error in the situation a tile size, area size,
+        and count don't match. Mismatch can create an eternal loop.
+        ValueError: Error in the situation a tile size, area size,
+        and count don't match. Mismatch can create an eternal loop.
 
     Returns:
-        tuple[set,set]: Two sets, the first contains rectangles, and the second contains the center points of each rectangle.
+        tuple[set,set]: Two sets, the first contains rectangles,
+        and the second contains the center points of each rectangle.
     """
     rect_set = set()
     point_set = set()
@@ -37,10 +40,10 @@ def generate_rooms(count :int, width :int, height :int, tile_size :int):
         max_height = int((height-y_point)//tile_size)-1
         if max_width < 4 or max_height < 4:
             continue
-        if max_width > 7:
-            max_width = 7
-        if max_height > 7:
-            max_height = 7
+
+        max_width = min(max_width,7)
+
+        max_height = min(max_height,7)
         rect_width = int(randint(3, max_width)*tile_size)
         rect_height = int(randint(3, max_height)*tile_size)
         new_rect = Rectangle((x_point,y_point), rect_width, rect_height)
@@ -57,7 +60,8 @@ def generate_rooms(count :int, width :int, height :int, tile_size :int):
 
 # FUNCTION TO DEFINE A START POINT AND END POINT IN THE MAP
 def start_end(points :set, edges:set):
-    """Define three random points from a list of edges. These points cannot have a direct connection with eachother.
+    """Define three random points from a list of edges.
+    These points cannot have a direct connection with eachother.
 
     Args:
         points (set): A set of points.
@@ -74,5 +78,5 @@ def start_end(points :set, edges:set):
             for scnd_edge in edges:
                 key = scnd_edge[0]
                 if (start,key) not in edges and (key,start) not in edges and\
-                      (key,end) not in edges and (end,key) not in edges and key!=end and key!=start:
+                      (key,end) not in edges and (end,key) not in edges:
                     return start, end, key
