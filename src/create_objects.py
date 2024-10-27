@@ -1,7 +1,7 @@
+"""Contains create_objects function which generates GameTile objects,
+and places them in appropriate sprite groups.
+"""
 from src.sprites import GameTile
-
-
-
 
 def create_objects(matrix :list[list[int]], tile_size :int, floor, walls, doors):
     """Creates objects according to their location in the matrix.
