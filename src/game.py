@@ -82,6 +82,7 @@ class Game:
         count_to_exit = 6
 
         while True:
+            # pylint: disable=duplicate-code
             for event in pygame.event.get():
                 # pylint: disable=no-member
                 if event.type == pygame.QUIT:
@@ -91,6 +92,7 @@ class Game:
                     pygame.quit()
                     # pylint: enable=no-member
                     sys.exit()
+            # pylint: enable=duplicate-code
             keys = pygame.key.get_pressed()
 
             if self.action is not True:
@@ -424,7 +426,7 @@ class Game:
                     possible_locations.append((x*TILE,y*TILE))
         for _ in enumerate(self.items):
             slot = randint(3,10)
-            pick = randint(1,slice-1)
+            pick = randint(1,slot-1)
             area_end = (len(possible_locations))//slot
             area_start = area_end*pick
             index = randint(area_start,len(possible_locations)-1)

@@ -1,8 +1,10 @@
+"""Contains the main function for the project.
+"""
+
 import src.game
 from src.demo import Demo
 
-"""Contains the main function for the project.
-"""
+
 
 def main():
     """Main function for the project.
