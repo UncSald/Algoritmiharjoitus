@@ -9,7 +9,7 @@ class TestBowyerWatson(unittest.TestCase):
         expression = [(100,200), (300,400), (300,100)]
         bw = BowyerWatson(expression, width, height)
         bw.run()
-        result = len(bw._triangulation)
+        result = len(bw.triangulation)
         expected = 1
         self.assertEqual(result, expected)
     
@@ -18,7 +18,7 @@ class TestBowyerWatson(unittest.TestCase):
         expression = [(100,200), (300,400), (300,100), (250,300), (100,400)]
         bw = BowyerWatson(expression, width, height)
         bw.run()
-        result = len(bw._triangulation)
+        result = len(bw.triangulation)
         expected = 4
         self.assertEqual(result, expected)
 
@@ -30,7 +30,7 @@ class TestBowyerWatson(unittest.TestCase):
             expression.append(point)
         bw = BowyerWatson(expression, width, height)
         bw.run()
-        result = len(bw._triangulation)/100
+        result = len(bw.triangulation)/100
         expected = 19.65
         self.assertAlmostEqual(result, expected, 0)
     
@@ -42,7 +42,7 @@ class TestBowyerWatson(unittest.TestCase):
             expression.append(point)
         bw = BowyerWatson(expression, width, height)
         bw.run()
-        result = len(bw._points)
+        result = len(bw.points)
         expected = 100
         self.assertEqual(result, expected, 0)
     
