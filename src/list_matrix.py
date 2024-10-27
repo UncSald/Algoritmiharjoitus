@@ -1,7 +1,8 @@
+"""Module contains matrix manipulation tools.
+Others for creating a new matrix, others for manipulating the data
+inside a re-existing matrix.
+"""
 from src.geometry import Rectangle
-
-
-
 
 def list_to_matrix(rooms :list, width :int,height :int,\
                     start :tuple[int,int], end:tuple[int,int], tile_size :int):
@@ -19,10 +20,10 @@ def list_to_matrix(rooms :list, width :int,height :int,\
         list[list[int]]: Created matrix is returned.
     """
     matrix = []
-    for i in range((height-height%tile_size)//tile_size):
+    for _ in range((height-height%tile_size)//tile_size):
         matrix.append([])
     for row in matrix:
-        for i in range((width-width%tile_size)//tile_size):
+        for _ in range((width-width%tile_size)//tile_size):
             row.append(0)
     for room in rooms:
         for point in rect_to_coord(room, tile_size):
