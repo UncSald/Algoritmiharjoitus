@@ -1,3 +1,26 @@
+"""This module contains the functions needed for drawing
+a path between two points in a matrix.
+Functions are used in the following order:
+
+Weighted_graph, which creates a weighted graph of all
+possible movements in the matrix.
+
+Weighted_graph calls new_edge, which allocates proper weights on
+the edges, and adds them to the graph.
+
+A_star takes in the weighted graph and finds a path through the graph.
+It returns a dict of nodes and their 'cheapest' next options.
+A_star uses the heuristic function, which simply returns the distance
+between the current location and the goal.
+
+Shortest_path generates a list of the actual shortest path leading
+from start to goal. Practically it cleans the dict a_star creates.
+
+The function build path runs all the functions mentioned above
+to create a matrix containing as many paths as needed.
+The weighted graph is redefined each time a_star has been run,
+so a_star can use the paths created before.
+"""
 from queue import PriorityQueue
 from src.list_matrix import point_to_coord
 
