@@ -24,7 +24,7 @@
             - Kolmion ympärysympyrän keskuspisteen sijainnin laskeminen
             - Kolmion sivujen pituuksien oikea laskeminen
             - Kolmion kulmien koon oikea laskeminen
-            - Kolmion ympärysympyrän äteen pituuden oikea laskeminen
+            - Kolmion ympärysympyrän säteen pituuden oikea laskeminen
             - Uuden pisteen sijainnin tarkistus suhteessa kolmion ympärysympyrään:  
                 onko piste ympärysympyrän sisällä vai ei.  
     
@@ -53,6 +53,7 @@
         joten testit tarkastavat, että kolmioita on
         suunnilleen oikea määrä.
         Esim. 1000 pisteestä algoritmi muodostaa n. 1965 kolmiota +-10 kolmiota.
+        Testeissä tarkastetaan myös algoritmin toiminnan kannalta tärkeät virheilmoitukset.
     
     5. A* -algoritmi
         A* -algoritmin testaukseen kuuluu kaikkien tiedostossa olevien funktioiden testaus.  
