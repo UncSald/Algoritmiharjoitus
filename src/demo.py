@@ -26,27 +26,26 @@ class Demo():
         pygame.init()
         self.width = width
         self.height = height
-
-        self.room_and_centers1 = generate_rooms(20,width,height,32)
-        self.bowyer_watson1 = BowyerWatson(self.room_and_centers1[1],width,height)
-        self.bowyer_watson1.run()
-
-        self.room_and_centers2 = generate_rooms(200,width,height,tile_size)
-        self.bowyer_watson2 = BowyerWatson(self.room_and_centers2[1],width,height)
-        self.bowyer_watson2.run()
-
-        self.room_and_centers3 = generate_rooms(2000,width,height,tile_size)
-        self.bowyer_watson3 = BowyerWatson(self.room_and_centers3[1],width,height)
-        self.bowyer_watson3.run()
+        self.tile_size = tile_size
         self.screen = pygame.display.set_mode((self.width,self.height))
+        self.timer = 0
 
     def run(self):
         """Run method calls drawing functions.
         """
+        room_and_centers1 = generate_rooms(20,self.width,self.height,32)
+        bowyer_watson1 = BowyerWatson(room_and_centers1[1],self.width,self.height)
+        bowyer_watson1.run()
+        room_and_centers2 = generate_rooms(200,self.width,self.height,self.tile_size)
+        bowyer_watson2 = BowyerWatson(room_and_centers2[1],self.width,self.height)
+        bowyer_watson2.run()
+        room_and_centers3 = generate_rooms(2000,self.width,self.height,self.tile_size)
+        bowyer_watson3 = BowyerWatson(room_and_centers3[1],self.width,self.height)
+        bowyer_watson3.run()
         background = pygame.Surface((self.width,self.height))
         background.fill('black')
         clock = pygame.time.Clock()
-        self.timer = 0
+
 
         while True:
             for event in pygame.event.get():
@@ -56,43 +55,43 @@ class Demo():
                     sys.exit()
             self.screen.blit(background,(0,0))
             if self.timer < 15:
-                self.draw_demo1()
+                self.draw_demo1(room_and_centers1,bowyer_watson1)
             elif self.timer < 30:
-                self.draw_demo2()
+                self.draw_demo2(room_and_centers2,bowyer_watson2)
             else:
-                self.draw_demo3()
+                self.draw_demo3(room_and_centers3,bowyer_watson3)
             self.timer += 1/60
             clock.tick(60)
             pygame.display.flip()
 
-    def draw_demo1(self):
+    def draw_demo1(self,room_and_centers1,bowyer_watson1):
         """Draw first demo on the screen.
         """
         if self.timer < 15:
-            for room in self.room_and_centers1[0]:
+            for room in room_and_centers1[0]:
                 room.draw(self.screen,'blue')
             if self.timer >= 5:
-                for triangle in self.bowyer_watson1.triangulation:
+                for triangle in bowyer_watson1.triangulation:
                     if self.timer >= 10:
                         triangle.draw(self.screen,'red', 1)
                     else:
                         triangle.draw(self.screen,'red',0)
 
-    def draw_demo2(self):
+    def draw_demo2(self,room_and_centers2,bowyer_watson2):
         """Draw second demo on the screen.
         """
-        for room in self.room_and_centers2[0]:
+        for room in room_and_centers2[0]:
             room.draw(self.screen,'blue')
 
         if self.timer>=20:
-            for triangle in self.bowyer_watson2.triangulation:
+            for triangle in bowyer_watson2.triangulation:
                 triangle.draw(self.screen,'red',0)
 
-    def draw_demo3(self):
+    def draw_demo3(self,room_and_centers3,bowyer_watson3):
         """Draw third demo on the screen.
         """
-        for room in self.room_and_centers3[0]:
+        for room in room_and_centers3[0]:
             room.draw(self.screen,'blue')
         if self.timer >= 35:
-            for triangle in self.bowyer_watson3.triangulation:
+            for triangle in bowyer_watson3.triangulation:
                 triangle.draw(self.screen,'red',0)
