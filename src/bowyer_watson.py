@@ -1,7 +1,19 @@
+"""Module containing the bowyer-watson -algorithm -class.
+The class creates a proper, delaunay triangulaion in a given area,
+on a given set of points.
+
+    Raises:
+        ValueError: If the drawing area given is negative or smaller than zero,
+        raises error in constructor.S
+        ValueError: If there aren't enough points to create tringulation,
+        raises error in construcor.
+        ValueError: If there aren't enough points to create tringulation,
+        raises error in triangulate function.
+
+    Returns:
+        set: Returns a set of qualifying edges used in triangulation.
+"""
 from src.geometry import Triangle
-
-
-
 
 class BowyerWatson:
     """Main algorithm for the project.
@@ -14,6 +26,11 @@ class BowyerWatson:
             points (set): Set containing points which will be added to triangulation.
             width (int): Width of the area containing all points.
             height (int): Height of the area containing all points.
+
+        Raises:
+            ValueError: If the given area to draw in is negative,
+            it will be impossible to draw on it.
+            ValueError: If there aren't enough points to create tringulation, raises error.
         """
         if width<=0 or height<=0:
             raise ValueError ("Draw area cannot be 0 or negative.")
@@ -42,6 +59,9 @@ class BowyerWatson:
 
     def triangulate(self):
         """Creates a correct delaunay triangulation by adding each point to the set one by one.
+
+        Raises:
+            ValueError: If there aren't enough points to create tringulation, raises error.
         """
         for point in self.points:
             if self.width<point[0] or 0>point[0] or self.height<point[1] or 0>point[1]:
@@ -51,14 +71,14 @@ class BowyerWatson:
                     raise ValueError ("Too many bad points.\
                                       Triangles cannot be drawn with less than 3 points.")
                 continue
-            qualifying_edges = self.qualifying_edges(point)
+            qualifying_edges = self._qualifying_edges(point)
 
             for edge in qualifying_edges:
                 if point not in edge:
                     new_triangle = Triangle(edge[0], edge[1], point)
                     self.triangulation.add(new_triangle)
 
-    def qualifying_edges(self,point:tuple[int,int]):
+    def _qualifying_edges(self,point:tuple[int,int]):
         """Define the edges in the triangulation which
         can be used for the new triangles.
 
