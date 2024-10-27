@@ -1,11 +1,11 @@
+"""Module contains the Game class.
+Game class brings together multiple modules to generate a game.
+The game is drawn by using the pygame library.
+"""
 import sys
 from random import randint
 import pygame
 import pygame.gfxdraw
-from pygame.constants import (
-    QUIT, K_ESCAPE, K_SPACE,
-     K_a, K_s, K_d, K_i, K_w
-)
 from src.bowyer_watson import BowyerWatson
 from src.room_generation import generate_rooms, start_end
 from src.list_matrix import list_to_matrix, closest_walls
@@ -26,8 +26,9 @@ class Game:
     def __init__(self):
         """Class constructor for Game.
         """
-
+        # pylint: disable=no-member
         pygame.init()
+        # pylint: enable=no-member
         self.screen = pygame.display.set_mode((WIDTH/2,HEIGHT/2))
         self.background = pygame.Surface((WIDTH,HEIGHT))
         self.background.fill((20,49,30))
@@ -48,7 +49,7 @@ class Game:
         for key in ITEM:
             self.items[f'{key}'] = pygame.image.load(f'src/assets/{key}.png')
         self.key_location :tuple[int,int]
-        self.collect_item :Item
+        self.collectable_item :Item
         self.item_locations = []
         self.walls = pygame.sprite.Group()
         self.floor = pygame.sprite.Group()
@@ -82,9 +83,13 @@ class Game:
 
         while True:
             for event in pygame.event.get():
-                if event.type == QUIT:
+                # pylint: disable=no-member
+                if event.type == pygame.QUIT:
+                # pylint: enable=no-member
                     print("bye bye")
+                    # pylint: disable=no-member
                     pygame.quit()
+                    # pylint: enable=no-member
                     sys.exit()
             keys = pygame.key.get_pressed()
 
@@ -94,7 +99,7 @@ class Game:
                     if cooldown <= 0:
                         self.door_cooldown = False
                         cooldown = 5
-                self.default_gameplay(self,keys)
+                self.default_gameplay(keys)
 
             elif self.action and self.inventory:
                 self.handle_inventory(keys)
@@ -111,8 +116,9 @@ class Game:
 
             elif self.door_cooldown is False:
                 self.handle_menu('no keys',keys)
-
-            elif keys[K_SPACE]:
+            # pylint: disable=no-member
+            elif self.action and keys[pygame.K_SPACE]:
+            # pylint: enable=no-member
                 self.player1.clear = False
                 self.action = False
 
@@ -131,7 +137,9 @@ class Game:
         Args:
             keys (pygame.key.ScancodeWrapper): Keys pressed.
         """
-        if keys[K_i]:
+        # pylint: disable=no-member
+        if keys[pygame.K_i]:
+        # pylint: enable=no-member
             self.menu = pygame.transform.scale(self.menu,\
                                                (HEIGHT/2*.8,HEIGHT/2*.8))
             self.menu_rect = self.menu.get_rect()
@@ -228,37 +236,48 @@ class Game:
         Handles map movement to create illusion of player moving.
         """
 
-        self.player1.changes_x = 0
-        self.player1.changes_y = 0
+        self.player1.record_changes(0,0)
         self.player_collision()
         keys = pygame.key.get_pressed()
-        if keys[K_a] and keys[K_w]:
-            self.player1.changes_x -= self.player1.velocity/1.6
-            self.player1.changes_y -= self.player1.velocity/1.6
+        # pylint: disable=no-member
+        if keys[pygame.K_a] and keys[pygame.K_w]:
+        # pylint: enable=no-member
+            self.player1.record_changes(-self.player1.velocity/1.6,-self.player1.velocity/1.6)
             self.player1.image = self.player1.image_left
-        elif keys[K_a] and keys[K_s]:
-            self.player1.changes_x -= self.player1.velocity/1.6
-            self.player1.changes_y += self.player1.velocity/1.6
+        # pylint: disable=no-member
+        elif keys[pygame.K_a] and keys[pygame.K_s]:
+        # pylint: enable=no-member
+            self.player1.record_changes(-self.player1.velocity/1.6,self.player1.velocity/1.6)
             self.player1.image = self.player1.image_left
-        elif keys[K_d] and keys[K_w]:
-            self.player1.changes_x += self.player1.velocity/1.6
-            self.player1.changes_y -= self.player1.velocity/1.6
+        # pylint: disable=no-member
+        elif keys[pygame.K_d] and keys[pygame.K_w]:
+        # pylint: enable=no-member
+            self.player1.record_changes(self.player1.velocity/1.6,-self.player1.velocity/1.6)
             self.player1.image = self.player1.image_right
-        elif keys[K_d] and keys[K_s]:
-            self.player1.changes_x += self.player1.velocity/1.6
-            self.player1.changes_y += self.player1.velocity/1.6
+        # pylint: disable=no-member
+        elif keys[pygame.K_d] and keys[pygame.K_s]:
+        # pylint: enable=no-member
+            self.player1.record_changes(self.player1.velocity/1.6,self.player1.velocity/1.6)
             self.player1.image = self.player1.image_right
-        elif keys[K_a]:
-            self.player1.changes_x -= self.player1.velocity
+        # pylint: disable=no-member
+        elif keys[pygame.K_a]:
+        # pylint: enable=no-member
+            self.player1.record_changes(-self.player1.velocity,0)
             self.player1.image = self.player1.image_left
-        elif keys[K_d]:
-            self.player1.changes_x += self.player1.velocity
+        # pylint: disable=no-member
+        elif keys[pygame.K_d]:
+        # pylint: enable=no-member
+            self.player1.record_changes(self.player1.velocity,0)
             self.player1.image = self.player1.image_right
-        elif keys[K_w]:
-            self.player1.changes_y -= self.player1.velocity
+        # pylint: disable=no-member
+        elif keys[pygame.K_w]:
+        # pylint: enable=no-member
+            self.player1.record_changes(0,-self.player1.velocity)
             self.player1.image = self.player1.image_up
-        elif keys[K_s]:
-            self.player1.changes_y += self.player1.velocity
+        # pylint: disable=no-member
+        elif keys[pygame.K_s]:
+        # pylint: enable=no-member
+            self.player1.record_changes(0,self.player1.velocity)
             self.player1.image = self.player1.image_down
 
 
@@ -318,74 +337,81 @@ class Game:
             cd (int, optional): Countdown for exiting game. Defaults to 0.
         """
         if situation == 'item':
-            item_msg = self.font.render(f'You have found a {self.collectable_item.name}',\
+            message = self.font.render(f'You have found a {self.collectable_item.name}',\
                                      True, (0, 0, 0))
-            item_msg_rect = item_msg.get_rect()
-            item_msg_rect.center = (WIDTH/4,HEIGHT/4)
-            item_continue = self.font.render('Press space to collect item', True,\
+            message_rect = message.get_rect()
+            message_rect.center = (WIDTH/4,HEIGHT/4)
+            message2 = self.font.render('Press space to collect item', True,\
                                     (0, 0, 0))
-            item_continue_rect = item_continue.get_rect()
-            item_continue_rect.center = (WIDTH/4,HEIGHT/4+100)
-            self.screen.blit(self.menu,self.menu_rect)
-            self.screen.blit(item_continue,item_continue_rect.topleft)
-            self.screen.blit(item_msg,item_msg_rect.topleft)
-            if keys[K_SPACE]:
+            message2_rect = message2.get_rect()
+            message2_rect.center = (WIDTH/4,HEIGHT/4+100)
+            # pylint: disable=no-member
+            if keys[pygame.K_SPACE]:
+            # pylint: enable=no-member
                 if self.collectable_item.name == 'key':
                     self.has_key = True
                 self.item_group.remove(self.collectable_item)
-                self.player1.items.append(self.collectable_item)
+                self.player1.add_item(self.collectable_item)
                 self.action=False
                 self.collect_item = False
 
         elif situation == 'no keys':
-            need_key = self.font.render('The door seems to require a key...',\
+            message = self.font.render('The door seems to require a key...',\
                                 True, (0, 0, 0))
-            need_key_rect = need_key.get_rect()
-            need_key_rect.center = (WIDTH/4,HEIGHT/4)
-            continue_msg = self.font.render('Press space to continue',\
+            message_rect = message.get_rect()
+            message_rect.center = (WIDTH/4,HEIGHT/4)
+            message2 = self.font.render('Press space to continue',\
                                 True, (0, 0, 0))
-            continue_msg_rect = continue_msg.get_rect()
-            continue_msg_rect.center = (WIDTH/4,HEIGHT/4+100)
-            self.screen.blit(self.menu,self.menu_rect)
-            self.screen.blit(need_key,need_key_rect.topleft)
-            self.screen.blit(continue_msg,continue_msg_rect.topleft)
-            if keys[K_SPACE]:
+            message2_rect = message2.get_rect()
+            message2_rect.center = (WIDTH/4,HEIGHT/4+100)
+            # pylint: disable=no-member
+            if keys[pygame.K_SPACE]:
+            # pylint: enable=no-member
                 self.player1.clear = False
                 self.action = False
                 self.door_cooldown = True
 
         elif situation == 'level clear':
-            level_clear = self.font.render('Press space to open door',\
+            message = self.font.render('Press space to open door',\
                                 True, (0, 0, 0))
-            level_clear_rect = level_clear.get_rect()
-            level_clear_rect.center = (WIDTH/4,HEIGHT/4)
-            self.screen.blit(self.menu,self.menu_rect)
-            self.screen.blit(level_clear,level_clear_rect.topleft)
-            if keys[K_SPACE]:
+            message_rect = message.get_rect()
+            message_rect.center = (WIDTH/4,HEIGHT/4)
+            message2 = self.font.render('',\
+                                True, (0, 0, 0))
+            message2_rect = message2.get_rect()
+            message2_rect.center = (WIDTH/4,HEIGHT/4+30)
+            # pylint: disable=no-member
+            if keys[pygame.K_SPACE]:
+            # pylint: enable=no-member
                 for item in self.player1.items:
                     if item.name == 'key':
-                        self.player1.items.remove(item)
+                        self.player1.remove_item(item)
                 self.has_key = False
                 self.player1.clear = False
                 self.action = False
                 self.create_level()
 
         elif situation == 'game clear':
-            win_msg = self.font.render('YOU WIN !', True,\
+            message = self.font.render('YOU WIN !', True,\
                                 (0, 0, 0))
-            win_msg_rect = win_msg.get_rect()
-            win_msg_rect.center = (WIDTH/4,HEIGHT/4)
-            cd_msg = self.font.render(f'exit in {int(cd)}',\
+            message_rect = message.get_rect()
+            message_rect.center = (WIDTH/4,HEIGHT/4)
+            message2 = self.font.render(f'exit in {int(cd)}',\
                                 True, (0, 0, 0))
-            cd_msg_rect = cd_msg.get_rect()
-            cd_msg_rect.center = (WIDTH/4,HEIGHT/4+100)
+            message2_rect = message2.get_rect()
+            message2_rect.center = (WIDTH/4,HEIGHT/4+100)
             self.screen.blit(self.menu,self.menu_rect)
-            self.screen.blit(win_msg,win_msg_rect.topleft)
-            self.screen.blit(cd_msg,cd_msg_rect.topleft)
+            self.screen.blit(message,message_rect.topleft)
+            self.screen.blit(message2,message2_rect.topleft)
             if cd <= 1:
                 print("Congratulations!")
+                # pylint: disable=no-member
                 pygame.quit()
+                # pylint: enable=no-member
                 sys.exit()
+        self.screen.blit(self.menu,self.menu_rect)
+        self.screen.blit(message,message_rect.topleft)
+        self.screen.blit(message2,message2_rect.topleft)
 
     def possible_items(self):
         """Selects possible locations for items on the map.
@@ -396,10 +422,10 @@ class Game:
             for x, value in enumerate(col):
                 if value == 1 and (x*TILE,y*TILE) != self.key_location:
                     possible_locations.append((x*TILE,y*TILE))
-        for i in enumerate(self.items):
-            slice = randint(3,10)
+        for _ in enumerate(self.items):
+            slot = randint(3,10)
             pick = randint(1,slice-1)
-            area_end = (len(possible_locations))//slice
+            area_end = (len(possible_locations))//slot
             area_start = area_end*pick
             index = randint(area_start,len(possible_locations)-1)
             item_location = possible_locations[index]
@@ -414,8 +440,10 @@ class Game:
         Args:
             keys (pygame.key.ScancodeWrapper): List of keys pressed in wrapper.
         """
-        menu_font = pygame.font.SysFont('Impact', TILE//3)
-        if keys[K_ESCAPE]:
+        menu_font = pygame.font.SysFont('Impact', TILE//2.5)
+        # pylint: disable=no-member
+        if keys[pygame.K_ESCAPE]:
+        # pylint: enable=no-member
             self.inventory = False
             self.action = False
             self.menu = pygame.transform.scale(self.menu,(WIDTH/2*.8,HEIGHT/2*.8))
@@ -432,15 +460,15 @@ class Game:
             y_pos = offset+y_mod*self.inventory_sprite.get_height()\
                 +(HEIGHT/4-self.menu.get_height()/2)
             self.screen.blit(self.inventory_sprite,(x_pos,y_pos))
-            if i < len(self.player1.items):
-                item = self.player1.items[i]
+            if i < self.player1.item_count():
+                item = self.player1.get_item(i)
                 item_image = pygame.transform.scale(item.image,\
                                                         (HEIGHT/8*.8,HEIGHT/8*.8))
                 item_rect = item_image.get_rect()
                 item_rect.center = (x_pos+self.inventory_sprite.get_height()/2,\
                                     y_pos+self.inventory_sprite.get_height()/2)
                 self.screen.blit(item_image,(x_pos,y_pos))
-                item_name = menu_font.render(f'{item.name}', True,\
+                item_name = menu_font.render(f'{item}', True,\
                                     (0, 0, 0))
                 item_name_rect = item_name.get_rect()
                 item_name_rect.center = (x_pos+self.inventory_sprite.get_height()/2\
