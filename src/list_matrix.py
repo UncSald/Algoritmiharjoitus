@@ -81,49 +81,59 @@ def rect_to_coord(rect :Rectangle, tile_size :int):
     return coords
 
 def closest_walls(matrix:list):
-    for y,col in enumerate(matrix):
+    """Changes walls next to a room or corridor to different wall.
+    This is to have different sprite images for different walls.
+
+    Args:
+        matrix (list): Matrix to be changed.
+
+    Returns:
+        matrix (list): New matrix with changed values.
+    """
+    new_matrix = matrix.copy()
+    for y,col in enumerate(new_matrix):
         for x,item in enumerate(col):
             if item in (0,9):
                 if y==0 and x==0:
-                    if matrix[y+1][x] in (1,2)\
-                        or matrix[y][x+1] in (1,2)\
-                        or matrix[y+1][x+1] in (1,2):
-                        matrix[y][x]=5
-                elif y==len(matrix)-1 and x==len(col)-1:
-                    if matrix[y-1][x] in (1,2)\
-                    or matrix[y][x-1] in (1,2):
-                        matrix[y][x]=5
+                    if new_matrix[y+1][x] in (1,2)\
+                        or new_matrix[y][x+1] in (1,2)\
+                        or new_matrix[y+1][x+1] in (1,2):
+                        new_matrix[y][x]=5
+                elif y==len(new_matrix)-1 and x==len(col)-1:
+                    if new_matrix[y-1][x] in (1,2)\
+                    or new_matrix[y][x-1] in (1,2):
+                        new_matrix[y][x]=5
                 elif y==0 and x==len(col)-1:
-                    if matrix[y+1][x] in (1,2)\
-                    or matrix[y][x-1] in (1,2):
-                        matrix[y][x]=5
+                    if new_matrix[y+1][x] in (1,2)\
+                    or new_matrix[y][x-1] in (1,2):
+                        new_matrix[y][x]=5
                 elif x==0 and y==len(matrix)-1:
                     if matrix[y-1][x] in (1,2)\
                     or matrix[y][x+1] in (1,2):
                         matrix[y][x]=5
                 elif y==0:
-                    if matrix[y][x-1] in (1,2)\
-                        or matrix[y][x+1] in (1,2)\
-                        or matrix[y+1][x] in (1,2):
-                        matrix[y][x]=5
+                    if new_matrix[y][x-1] in (1,2)\
+                        or new_matrix[y][x+1] in (1,2)\
+                        or new_matrix[y+1][x] in (1,2):
+                        new_matrix[y][x]=5
                 elif x==0:
-                    if matrix[y-1][x] in (1,2)\
-                        or matrix[y][x+1] in (1,2)\
-                        or matrix[y+1][x] in (1,2):
-                        matrix[y][x]=5
-                elif y==len(matrix)-1:
-                    if matrix[y-1][x] in (1,2)\
-                        or matrix[y][x-1] in (1,2):
-                        matrix[y][x]=5
+                    if new_matrix[y-1][x] in (1,2)\
+                        or new_matrix[y][x+1] in (1,2)\
+                        or new_matrix[y+1][x] in (1,2):
+                        new_matrix[y][x]=5
+                elif y==len(new_matrix)-1:
+                    if new_matrix[y-1][x] in (1,2)\
+                        or new_matrix[y][x-1] in (1,2):
+                        new_matrix[y][x]=5
                 elif x==len(col)-1:
-                    if matrix[y-1][x] in (1,2)\
-                        or matrix[y][x-1] in (1,2)\
-                        or matrix[y+1][x] in (1,2):
-                        matrix[y][x]=5
+                    if new_matrix[y-1][x] in (1,2)\
+                        or new_matrix[y][x-1] in (1,2)\
+                        or new_matrix[y+1][x] in (1,2):
+                        new_matrix[y][x]=5
                 else:
-                    if matrix[y-1][x] in (1,2)\
-                        or matrix[y][x-1] in (1,2)\
-                        or matrix[y][x+1] in (1,2)\
-                        or matrix[y+1][x] in (1,2):
-                        matrix[y][x]=5
-    return matrix
+                    if new_matrix[y-1][x] in (1,2)\
+                        or new_matrix[y][x-1] in (1,2)\
+                        or new_matrix[y][x+1] in (1,2)\
+                        or new_matrix[y+1][x] in (1,2):
+                        new_matrix[y][x]=5
+    return new_matrix
