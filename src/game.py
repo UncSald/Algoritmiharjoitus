@@ -1,6 +1,11 @@
 import sys
+from random import randint
 import pygame
 import pygame.gfxdraw
+from pygame.constants import (
+    QUIT, K_ESCAPE, K_SPACE,
+     K_a, K_s, K_d, K_i, K_w
+)
 from src.bowyer_watson import BowyerWatson
 from src.room_generation import generate_rooms, start_end
 from src.list_matrix import list_to_matrix, closest_walls
@@ -9,8 +14,7 @@ from src.a_star import build_path
 from src.player import Player
 from src.create_objects import create_objects
 from src.sprites import Item
-from src.game_settings import *
-from random import randint
+from src.game_settings import WIDTH,HEIGHT,TILE,ITEM
 
 
 
@@ -24,8 +28,6 @@ class Game:
         """
 
         pygame.init()
-        self.running = True
-
         self.screen = pygame.display.set_mode((WIDTH/2,HEIGHT/2))
         self.background = pygame.Surface((WIDTH,HEIGHT))
         self.background.fill((20,49,30))
@@ -40,7 +42,7 @@ class Game:
                     (self.menu.get_height()-HEIGHT*.8*.025)/4
                     )
                     )
-
+        self.font = pygame.font.SysFont('Impact', TILE)
         self.final_map :list[list]
         self.items = {}
         for key in ITEM:
@@ -60,12 +62,8 @@ class Game:
         self.door_cooldown = False
         self.action = False
         self.inventory = False
-
-        self.final_level = 2
         self.level_num = 0
 
-        self.font = pygame.font.SysFont('Impact', TILE)
-        self.menu_font = pygame.font.SysFont('Impact', TILE//3)
 
     def run(self):
         """Run method is used to start the game.
@@ -76,53 +74,45 @@ class Game:
 
         clock = pygame.time.Clock()
         self.create_level()
+        final_level = 2
         cooldown = 5
         count_to_exit = 6
 
         while True:
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
+                if event.type == QUIT:
                     print("bye bye")
                     pygame.quit()
                     sys.exit()
             keys = pygame.key.get_pressed()
 
             if self.action is not True:
-                if keys[pygame.K_i]:
-                    self.menu = pygame.transform.scale(self.menu,(HEIGHT/2*.8,HEIGHT/2*.8))
-                    self.menu_rect = self.menu.get_rect()
-                    self.menu_rect.center = (WIDTH/4,HEIGHT/4)
-                    self.inventory = True
-                    self.action = True
                 if self.door_cooldown is True:
                     cooldown -= 1/60
                     if cooldown <= 0:
                         self.door_cooldown = False
                         cooldown = 5
-                self.draw()
-                if self.player1.clear is not True:
-                    self.player_update()
-                else:
-                    self.action = True
+                self.default_gameplay(self,keys)
+
             elif self.action and self.inventory:
                 self.handle_inventory(keys)
 
             elif self.action is True and self.collect_item is True:
                 self.handle_menu('item',keys)
 
-            elif self.has_key is True and self.door_cooldown is False:
-                if self.level_num == self.final_level:
-                    count_to_exit -= 1/60
-                    self.handle_menu('game clear',keys,count_to_exit)
-                else:
-                    self.handle_menu('level clear', keys)
+            elif self.has_key and not self.door_cooldown and self.level_num == final_level:
+                count_to_exit -= 1/60
+                self.handle_menu('game clear',keys,count_to_exit)
+
+            elif self.has_key and not self.door_cooldown:
+                self.handle_menu('level clear', keys)
 
             elif self.door_cooldown is False:
                 self.handle_menu('no keys',keys)
-            else:
-                if keys[pygame.K_SPACE]:
-                    self.player1.clear = False
-                    self.action = False
+            
+            elif keys[K_SPACE]:
+                self.player1.clear = False
+                self.action = False
 
             self.screen.blit(self.font.render(f'B{self.level_num}f',\
                                     True, (250, 0, 100)),(10,10))
@@ -130,8 +120,25 @@ class Game:
             clock.tick(60)
             pygame.display.flip()
 
+    def default_gameplay(self, keys:pygame.key.ScancodeWrapper):
+        """Generates the default gameplay experience.
+        Gameplay without menus.
 
-
+        Args:
+            keys (pygame.key.ScancodeWrapper): Keys pressed.
+        """
+        if keys[K_i]:
+            self.menu = pygame.transform.scale(self.menu,\
+                                               (HEIGHT/2*.8,HEIGHT/2*.8))
+            self.menu_rect = self.menu.get_rect()
+            self.menu_rect.center = (WIDTH/4,HEIGHT/4)
+            self.inventory = True
+            self.action = True
+        self.draw()
+        if self.player1.clear is not True:
+            self.player_update()
+        else:
+            self.action = True
 
     def create_level(self):
         """Creates a level using multiple modules, such as:
@@ -151,12 +158,13 @@ class Game:
         rp_alg = BowyerWatson(centers, WIDTH, HEIGHT)
         rp_alg.run()
 
-        start_point, end_point, self.key_location = start_end(centers, rp_alg._all_edges)
+        start_point, end_point, self.key_location = start_end(centers,\
+                                                              rp_alg.all_edges)
 
         temporary_map = list_to_matrix(rooms,WIDTH, HEIGHT,\
                             start_point, end_point, TILE)
 
-        mst = kruskal(rp_alg._all_edges, start_point)
+        mst = kruskal(rp_alg.all_edges, start_point)
 
         self.final_map = closest_walls(build_path(temporary_map,mst,TILE))
 
@@ -218,32 +226,32 @@ class Game:
         self.player1.changes_y = 0
         self.player_collision()
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_a] and keys[pygame.K_w]:
+        if keys[K_a] and keys[K_w]:
             self.player1.changes_x -= self.player1.velocity/1.6
             self.player1.changes_y -= self.player1.velocity/1.6
             self.player1.image = self.player1.image_left
-        elif keys[pygame.K_a] and keys[pygame.K_s]:
+        elif keys[K_a] and keys[K_s]:
             self.player1.changes_x -= self.player1.velocity/1.6
             self.player1.changes_y += self.player1.velocity/1.6
             self.player1.image = self.player1.image_left
-        elif keys[pygame.K_d] and keys[pygame.K_w]:
+        elif keys[K_d] and keys[K_w]:
             self.player1.changes_x += self.player1.velocity/1.6
             self.player1.changes_y -= self.player1.velocity/1.6
             self.player1.image = self.player1.image_right
-        elif keys[pygame.K_d] and keys[pygame.K_s]:
+        elif keys[K_d] and keys[K_s]:
             self.player1.changes_x += self.player1.velocity/1.6
             self.player1.changes_y += self.player1.velocity/1.6
             self.player1.image = self.player1.image_right
-        elif keys[pygame.K_a]:
+        elif keys[K_a]:
             self.player1.changes_x -= self.player1.velocity
             self.player1.image = self.player1.image_left
-        elif keys[pygame.K_d]:
+        elif keys[K_d]:
             self.player1.changes_x += self.player1.velocity
             self.player1.image = self.player1.image_right
-        elif keys[pygame.K_w]:
+        elif keys[K_w]:
             self.player1.changes_y -= self.player1.velocity
             self.player1.image = self.player1.image_up
-        elif keys[pygame.K_s]:
+        elif keys[K_s]:
             self.player1.changes_y += self.player1.velocity
             self.player1.image = self.player1.image_down
 
@@ -315,7 +323,7 @@ class Game:
             self.screen.blit(self.menu,self.menu_rect)
             self.screen.blit(item_continue,item_continue_rect.topleft)
             self.screen.blit(item_msg,item_msg_rect.topleft)
-            if keys[pygame.K_SPACE]:
+            if keys[K_SPACE]:
                 if self.collectable_item.name == 'key':
                     self.has_key = True
                 self.item_group.remove(self.collectable_item)
@@ -335,7 +343,7 @@ class Game:
             self.screen.blit(self.menu,self.menu_rect)
             self.screen.blit(need_key,need_key_rect.topleft)
             self.screen.blit(continue_msg,continue_msg_rect.topleft)
-            if keys[pygame.K_SPACE]:
+            if keys[K_SPACE]:
                 self.player1.clear = False
                 self.action = False
                 self.door_cooldown = True
@@ -347,7 +355,7 @@ class Game:
             level_clear_rect.center = (WIDTH/4,HEIGHT/4)
             self.screen.blit(self.menu,self.menu_rect)
             self.screen.blit(level_clear,level_clear_rect.topleft)
-            if keys[pygame.K_SPACE]:
+            if keys[K_SPACE]:
                 for item in self.player1.items:
                     if item.name == 'key':
                         self.player1.items.remove(item)
@@ -398,7 +406,8 @@ class Game:
         Args:
             keys (pygame.key.ScancodeWrapper): List of keys pressed in wrapper.
         """
-        if keys[pygame.K_ESCAPE]:
+        menu_font = pygame.font.SysFont('Impact', TILE//3)
+        if keys[K_ESCAPE]:
             self.inventory = False
             self.action = False
             self.menu = pygame.transform.scale(self.menu,(WIDTH/2*.8,HEIGHT/2*.8))
@@ -423,7 +432,7 @@ class Game:
                 item_rect.center = (x_pos+self.inventory_sprite.get_height()/2,\
                                     y_pos+self.inventory_sprite.get_height()/2)
                 self.screen.blit(item_image,(x_pos,y_pos))
-                item_name = self.menu_font.render(f'{item.name}', True,\
+                item_name = menu_font.render(f'{item.name}', True,\
                                     (0, 0, 0))
                 item_name_rect = item_name.get_rect()
                 item_name_rect.center = (x_pos+self.inventory_sprite.get_height()/2\
