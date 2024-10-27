@@ -1,3 +1,6 @@
+"""Module contains the player class which is used
+to hold information of a player in the game.
+"""
 import pygame
 
 class Player(pygame.sprite.Sprite):
