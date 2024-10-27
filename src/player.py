@@ -4,6 +4,11 @@ to hold information of a player in the game.
 import pygame
 
 class Player(pygame.sprite.Sprite):
+    """Player class contains important player information.
+
+    Args:
+        pygame (sprite.Sprite): Super class
+    """
     def __init__(self, width :int, height :int,\
                  render_point :tuple[int,int]):
         """Class constructor generates a new player.
