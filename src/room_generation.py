@@ -1,11 +1,26 @@
+"""Contains generate_rooms function, and start_end function.
+These functions are used to generate objects to random locations
+on a given plane.
+
+    Raises:
+        ValueError: Raises error if the tile size, room count,
+        and given area don't match. In cases where room count is less, the
+        area reserved for new rectangles must be larger.
+        ValueError: Raises error if the tile size, room count,
+        and given area don't match. When room count is high enough, the average
+        room size goes down, and we can leave less space for new rooms.
+
+    Returns:
+        tuple[set,set]: A set containing rectangle objects, and a set containing 
+        the rectangles' center points.
+"""
+
 from random import randint
 from src.geometry import Rectangle
 
-
-
-
 def generate_rooms(count :int, width :int, height :int, tile_size :int):
-    """_summary_
+    """Generates a set of Rectangle class objects whih do not overlap
+    on the given plane.
 
     Args:
         count (int): Number of rooms to be generated.
@@ -40,9 +55,7 @@ def generate_rooms(count :int, width :int, height :int, tile_size :int):
         max_height = int((height-y_point)//tile_size)-1
         if max_width < 4 or max_height < 4:
             continue
-
         max_width = min(max_width,7)
-
         max_height = min(max_height,7)
         rect_width = int(randint(3, max_width)*tile_size)
         rect_height = int(randint(3, max_height)*tile_size)
@@ -78,5 +91,5 @@ def start_end(points :set, edges:set):
             for scnd_edge in edges:
                 key = scnd_edge[0]
                 if (start,key) not in edges and (key,start) not in edges and\
-                      (key,end) not in edges and (end,key) not in edges:
+                      (key,end) not in edges and (end,key) not in edges and key not in (start,end):
                     return start, end, key
