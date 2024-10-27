@@ -93,7 +93,7 @@ class Triangle:
                 statement = -1
             return acos(statement)
         except ZeroDivisionError:
-            print(self.points)
+            return 0
 
     def count_radius(self):
         """Method counts the radius of the circumcircle.
