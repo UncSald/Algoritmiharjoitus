@@ -1,12 +1,12 @@
+"""Contains the Demo class which displays how the bowyer_watson -algorithm
+creates a delaunay triangulation on a given set of points.
+"""
+
 import sys
 import pygame
 import pygame.gfxdraw
-from pygame.constants import QUIT
 from src.bowyer_watson import BowyerWatson
 from src.room_generation import generate_rooms
-
-
-
 
 class Demo():
     """
@@ -23,7 +23,9 @@ class Demo():
             height (int): Height of screen to draw on.
             tile_size (int): Tile size used for room size.
         """
+        # pylint: disable=no-member
         pygame.init()
+        # pylint: enable=no-member
         self.width = width
         self.height = height
         self.tile_size = tile_size
@@ -49,9 +51,13 @@ class Demo():
 
         while True:
             for event in pygame.event.get():
-                if event.type == QUIT:
+                # pylint: disable=no-member
+                if event.type == pygame.QUIT:
+                # pylint: enable=no-member
                     print("bye bye")
+                    # pylint: disable=no-member
                     pygame.quit()
+                    # pylint: enable=no-member
                     sys.exit()
             self.screen.blit(background,(0,0))
             if self.timer < 15:
