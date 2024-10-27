@@ -205,19 +205,19 @@ class Game:
         for sprite in self.walls:
             if pygame.sprite.collide_rect(self.player1, sprite):
                 if self.player1.rect.bottom >= sprite.rect.top and\
-                      self.player1.rect.bottom < sprite.rect.bottom:
+                    self.player1.rect.bottom < sprite.rect.bottom:
                     self.player1.changes_y -= self.player1.velocity
 
                 if self.player1.rect.top <= sprite.rect.bottom and\
-                      self.player1.rect.top > sprite.rect.top:
+                    self.player1.rect.top > sprite.rect.top:
                     self.player1.changes_y += self.player1.velocity
 
                 if self.player1.rect.left <= sprite.rect.right and\
-                      self.player1.rect.left > sprite.rect.left:
+                    self.player1.rect.left > sprite.rect.left:
                     self.player1.changes_x += self.player1.velocity
 
                 if self.player1.rect.right >= sprite.rect.left and\
-                      self.player1.rect.right < sprite.rect.right:
+                    self.player1.rect.right < sprite.rect.right:
                     self.player1.changes_x -= self.player1.velocity
 
         for door in self.doors:
@@ -238,48 +238,37 @@ class Game:
         Handles map movement to create illusion of player moving.
         """
 
-        self.player1.record_changes(0,0)
+        self.player1.changes_x = 0
+        self.player1.changes_y = 0
         self.player_collision()
         keys = pygame.key.get_pressed()
-        # pylint: disable=no-member
         if keys[pygame.K_a] and keys[pygame.K_w]:
-        # pylint: enable=no-member
-            self.player1.record_changes(-self.player1.velocity/1.6,-self.player1.velocity/1.6)
+            self.player1.changes_x -= self.player1.velocity/1.6
+            self.player1.changes_y -= self.player1.velocity/1.6
             self.player1.image = self.player1.image_left
-        # pylint: disable=no-member
         elif keys[pygame.K_a] and keys[pygame.K_s]:
-        # pylint: enable=no-member
-            self.player1.record_changes(-self.player1.velocity/1.6,self.player1.velocity/1.6)
+            self.player1.changes_x -= self.player1.velocity/1.6
+            self.player1.changes_y += self.player1.velocity/1.6
             self.player1.image = self.player1.image_left
-        # pylint: disable=no-member
         elif keys[pygame.K_d] and keys[pygame.K_w]:
-        # pylint: enable=no-member
-            self.player1.record_changes(self.player1.velocity/1.6,-self.player1.velocity/1.6)
+            self.player1.changes_x += self.player1.velocity/1.6
+            self.player1.changes_y -= self.player1.velocity/1.6
             self.player1.image = self.player1.image_right
-        # pylint: disable=no-member
         elif keys[pygame.K_d] and keys[pygame.K_s]:
-        # pylint: enable=no-member
-            self.player1.record_changes(self.player1.velocity/1.6,self.player1.velocity/1.6)
+            self.player1.changes_x += self.player1.velocity/1.6
+            self.player1.changes_y += self.player1.velocity/1.6
             self.player1.image = self.player1.image_right
-        # pylint: disable=no-member
         elif keys[pygame.K_a]:
-        # pylint: enable=no-member
-            self.player1.record_changes(-self.player1.velocity,0)
+            self.player1.changes_x -= self.player1.velocity
             self.player1.image = self.player1.image_left
-        # pylint: disable=no-member
         elif keys[pygame.K_d]:
-        # pylint: enable=no-member
-            self.player1.record_changes(self.player1.velocity,0)
+            self.player1.changes_x += self.player1.velocity
             self.player1.image = self.player1.image_right
-        # pylint: disable=no-member
         elif keys[pygame.K_w]:
-        # pylint: enable=no-member
-            self.player1.record_changes(0,-self.player1.velocity)
+            self.player1.changes_y -= self.player1.velocity
             self.player1.image = self.player1.image_up
-        # pylint: disable=no-member
         elif keys[pygame.K_s]:
-        # pylint: enable=no-member
-            self.player1.record_changes(0,self.player1.velocity)
+            self.player1.changes_y += self.player1.velocity
             self.player1.image = self.player1.image_down
 
 
@@ -442,7 +431,7 @@ class Game:
         Args:
             keys (pygame.key.ScancodeWrapper): List of keys pressed in wrapper.
         """
-        menu_font = pygame.font.SysFont('Impact', TILE//2.5)
+        menu_font = pygame.font.SysFont('Impact', TILE//3)
         # pylint: disable=no-member
         if keys[pygame.K_ESCAPE]:
         # pylint: enable=no-member
