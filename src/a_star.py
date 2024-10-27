@@ -25,8 +25,7 @@ def build_path(matrix :list[list[int]], edges:set, tile_size:int):
         start = (sy,sx)
         ex,ey = point_to_coord(end,tile_size)
         end = (ey,ex)
-        graph = weighted_graph(new_matrix)
-        path = shortest_path(a_star(graph, start, end), start, end)
+        path = shortest_path(a_star(weighted_graph(new_matrix), start, end), start, end)
         for point in path:
             row,col = point
             if new_matrix[row][col] != 3 and new_matrix[row][col] != 4:
@@ -86,13 +85,13 @@ def a_star(graph:dict, start_point:tuple[int,int], end_point:tuple[int,int]):
         if location == end_point:
             break
 
-        for next in graph[location]:
-            cost = cost_so_far[location] + next[1]
-            if next[0] not in cost_so_far or cost < cost_so_far[next[0]]:
-                cost_so_far[next[0]] = cost
-                priority = cost + heuristics(next[0], end_point)
-                passed.put((priority,next[0]))
-                previous[next[0]] = location
+        for next_node in graph[location]:
+            cost = cost_so_far[location] + next_node[1]
+            if next_node[0] not in cost_so_far or cost < cost_so_far[next_node[0]]:
+                cost_so_far[next_node[0]] = cost
+                priority = cost + heuristics(next_node[0], end_point)
+                passed.put((priority,next_node[0]))
+                previous[next_node[0]] = location
     return previous
 
 
@@ -131,47 +130,47 @@ def weighted_graph(matrix:list[list[int]]):
         for column in enumerate(matrix[row[0]]):
             new_node = (row[0],column[0])
             nodes.append(new_node)
-    map = {node : [] for node in nodes}
+    new_graph = {node : [] for node in nodes}
     for node in nodes:
         if node == (0,0):
-            new_edge(node, (0,1), map,matrix)
-            new_edge(node, (1,0), map,matrix)
+            new_edge(node, (0,1), new_graph,matrix)
+            new_edge(node, (1,0), new_graph,matrix)
         elif node == (len(matrix)-1,len(matrix[0])-1):
-            new_edge(node, (len(matrix)-2,len(matrix[0])-1),map,matrix)
-            new_edge(node, (len(matrix)-1,len(matrix[0])-2),map,matrix)
+            new_edge(node, (len(matrix)-2,len(matrix[0])-1),new_graph,matrix)
+            new_edge(node, (len(matrix)-1,len(matrix[0])-2),new_graph,matrix)
         elif node == (0,len(matrix[0])-1):
-            new_edge(node,(0,len(matrix[0])-2),map,matrix)
-            new_edge(node,(1,node[1]),map,matrix)
+            new_edge(node,(0,len(matrix[0])-2),new_graph,matrix)
+            new_edge(node,(1,node[1]),new_graph,matrix)
         elif node == (len(matrix)-1,0):
-            new_edge(node,(len(matrix)-2,0),map,matrix)
-            new_edge(node,(len(matrix)-1,1),map,matrix)
+            new_edge(node,(len(matrix)-2,0),new_graph,matrix)
+            new_edge(node,(len(matrix)-1,1),new_graph,matrix)
         elif node[0] == 0:
-            new_edge(node,(0,node[1]-1),map,matrix)
-            new_edge(node,(1,node[1]),map,matrix)
-            new_edge(node, (0,node[1]+1),map,matrix)
+            new_edge(node,(0,node[1]-1),new_graph,matrix)
+            new_edge(node,(1,node[1]),new_graph,matrix)
+            new_edge(node, (0,node[1]+1),new_graph,matrix)
         elif node[1] == 0:
-            new_edge(node,(node[0]-1,0),map,matrix)
-            new_edge(node,(node[0],1),map,matrix)
-            new_edge(node, (node[0]+1,0),map,matrix)
+            new_edge(node,(node[0]-1,0),new_graph,matrix)
+            new_edge(node,(node[0],1),new_graph,matrix)
+            new_edge(node, (node[0]+1,0),new_graph,matrix)
         elif node[0] == len(matrix)-1:
-            new_edge(node,(len(matrix)-1,node[1]-1),map,matrix)
-            new_edge(node,(len(matrix)-2,node[1]),map,matrix)
-            new_edge(node,(len(matrix)-1,node[1]+1),map,matrix)
+            new_edge(node,(len(matrix)-1,node[1]-1),new_graph,matrix)
+            new_edge(node,(len(matrix)-2,node[1]),new_graph,matrix)
+            new_edge(node,(len(matrix)-1,node[1]+1),new_graph,matrix)
         elif node[1] == len(matrix[0])-1:
-            new_edge(node,(node[0]-1,len(matrix[0])-1),map,matrix)
-            new_edge(node,(node[0],len(matrix[0])-2),map,matrix)
-            new_edge(node, (node[0]+1,len(matrix[0])-1),map,matrix)
+            new_edge(node,(node[0]-1,len(matrix[0])-1),new_graph,matrix)
+            new_edge(node,(node[0],len(matrix[0])-2),new_graph,matrix)
+            new_edge(node, (node[0]+1,len(matrix[0])-1),new_graph,matrix)
         else:
-            new_edge(node,(node[0],node[1]-1),map,matrix)
-            new_edge(node,(node[0],node[1]+1),map,matrix)
-            new_edge(node,(node[0]-1,node[1]),map,matrix)
-            new_edge(node,(node[0]+1,node[1]),map,matrix)
-    return map
+            new_edge(node,(node[0],node[1]-1),new_graph,matrix)
+            new_edge(node,(node[0],node[1]+1),new_graph,matrix)
+            new_edge(node,(node[0]-1,node[1]),new_graph,matrix)
+            new_edge(node,(node[0]+1,node[1]),new_graph,matrix)
+    return new_graph
 
 
 
 
-def new_edge(node_a:tuple[int,int], node_b:tuple[int,int], map:dict, matrix):
+def new_edge(node_a:tuple[int,int], node_b:tuple[int,int], new_graph:dict, matrix):
     """Function used by weighted_graph to
     generate correct weights to the graph.
 
@@ -179,19 +178,19 @@ def new_edge(node_a:tuple[int,int], node_b:tuple[int,int], map:dict, matrix):
         node_a (tuple[int,int]): Starting node from which we move to end node.
         node_b (tuple[int,int]): End node which defines the weight
         together with starting node.
-        map (dict): Weighted graph where node weights are added.
+        new_graph (dict): Weighted graph where node weights are added.
         matrix (list[list[int]]): Matrix holding information about node values.
     """
 
     if matrix[node_b[0]][node_b[1]]==2:
-        map[node_a].append((node_b, 1))
+        new_graph[node_a].append((node_b, 1))
     elif matrix[node_a[0]][node_a[1]]==1 and matrix[node_b[0]][node_b[1]]==1:
-        map[node_a].append((node_b, 4))
+        new_graph[node_a].append((node_b, 4))
     elif matrix[node_a[0]][node_a[1]]==9 and matrix[node_b[0]][node_b[1]]==9:
-        map[node_a].append((node_b, 6))
+        new_graph[node_a].append((node_b, 6))
     elif matrix[node_b[0]][node_b[1]]==9:
-        map[node_a].append((node_b, 5))
+        new_graph[node_a].append((node_b, 5))
     elif matrix[node_b[0]][node_b[1]]==1:
-        map[node_a].append((node_b, 3))
+        new_graph[node_a].append((node_b, 3))
     else:
-        map[node_a].append((node_b, 2))
+        new_graph[node_a].append((node_b, 2))
