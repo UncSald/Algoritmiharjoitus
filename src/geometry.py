@@ -1,9 +1,20 @@
+"""Module contains two classes:
+Triangle, and Rectangle.
+Triangle class contains information of a triangle such as:
+    - points a, b, and c
+    - edges between points
+    - angle sizes
+    - circumcircle radius and location.
+Rectangle contains information on a rectangle such as:
+    - rectangle points
+    - rectangle center point
+    - rectangle edges
+    - the lenght of rectangle sides
+"""
+
+from math import sqrt, acos, sin
 import pygame
 import pygame.gfxdraw
-from math import sqrt, acos, sin
-
-
-
 
 class Triangle:
     """Triangle data type which is used to correctly create a delaunay triangulation.
@@ -17,20 +28,17 @@ class Triangle:
             c (tuple[int,int]): Triangle corner c
         """
 
-        self._a_edge = (a,b)
-        self._b_edge = (a,c)
-        self._c_edge = (b,c)
         self._a_point = a
         self._b_point = b
         self._c_point = c
-        self.edges = [self._a_edge,
-                        self._b_edge,
-                        self._c_edge]
+        self.edges = [(a,b),
+                      (a,c),
+                      (b,c)]
         self.points = [a,b,c]
 
-        self.a_edge_len = self.edge_length(self._a_edge)
-        self.b_edge_len = self.edge_length(self._b_edge)
-        self.c_edge_len = self.edge_length(self._c_edge)
+        self.a_edge_len = self.edge_length(self.edges[0])
+        self.b_edge_len = self.edge_length(self.edges[1])
+        self.c_edge_len = self.edge_length(self.edges[2])
 
         self.a_angle = self.triangle_angle(self.a_edge_len,
                                            self.b_edge_len,
@@ -109,15 +117,15 @@ class Triangle:
         Returns:
             bool: True if in circumcircle, False if not.
         """
-        xLocation = abs(max(self.circumcenter[0],point[0])-\
+        x_location = abs(max(self.circumcenter[0],point[0])-\
                         min(self.circumcenter[0],point[0]))**2
-        yLocation = abs(max(self.circumcenter[1],point[1])-\
+        y_location = abs(max(self.circumcenter[1],point[1])-\
                         min(self.circumcenter[1],point[1]))**2
-        d = sqrt(xLocation + yLocation)
+        d = sqrt(x_location + y_location)
         return round(d,4)<=round(self.radius,4)
 
 
-    def draw(self, screen, color, val):
+    def draw(self, screen, color, val=0):
         """Method which draws triangle on pygame display.
 
         Args:
