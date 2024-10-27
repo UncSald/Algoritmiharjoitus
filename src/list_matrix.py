@@ -32,14 +32,10 @@ def list_to_matrix(rooms :list, width :int,height :int,\
     matrix[sy][sx] = 3
     ex, ey = point_to_coord(end,tile_size)
     matrix[ey][ex] = 4
-    y = 0
-    for row in matrix:
-        x = 0
-        for column in row:
-            if y == 0 or x == 0 or x == len(row)-1 or y == len(matrix)-1:
-                matrix[y][x] = 9
-            x+=1
-        y+=1
+    for y,row in enumerate(matrix):
+        for x in enumerate(row):
+            if y == 0 or x[0] == 0 or x [0]== len(row)-1 or y == len(matrix)-1:
+                matrix[y][x[0]] = 9
     return matrix
 
 
@@ -86,47 +82,47 @@ def rect_to_coord(rect :Rectangle, tile_size :int):
 def closest_walls(matrix:list):
     for y,col in enumerate(matrix):
         for x,item in enumerate(col):
-            if item==0 or item==9:
+            if item in (0,9):
                 if y==0 and x==0:
-                    if matrix[y+1][x]==2 or matrix[y][x+1]==2\
-                        or matrix[y+1][x]==1 or matrix[y][x+1]==1\
-                        or matrix[y+1][x+1]==1 or matrix[y+1][x+1]==2:
+                    if matrix[y+1][x] in (1,2)\
+                        or matrix[y][x+1] in (1,2)\
+                        or matrix[y+1][x+1] in (1,2):
                         matrix[y][x]=5
                 elif y==len(matrix)-1 and x==len(col)-1:
-                    if matrix[y-1][x]==2 or matrix[y][x-1]==2\
-                    or matrix[y-1][x]==1 or matrix[y][x-1]==1:
+                    if matrix[y-1][x] in (1,2)\
+                    or matrix[y][x-1] in (1,2):
                         matrix[y][x]=5
                 elif y==0 and x==len(col)-1:
-                    if matrix[y+1][x]==2 or matrix[y][x-1]==2\
-                    or matrix[y+1][x]==1 or matrix[y][x-1]==1:
+                    if matrix[y+1][x] in (1,2)\
+                    or matrix[y][x-1] in (1,2):
                         matrix[y][x]=5
                 elif x==0 and y==len(matrix)-1:
-                    if matrix[y-1][x]==2 or matrix[y][x+1]==2\
-                    or matrix[y-1][x]==1 or matrix[y][x+1]==1:
+                    if matrix[y-1][x] in (1,2)\
+                    or matrix[y][x+1] in (1,2):
                         matrix[y][x]=5
                 elif y==0:
-                    if matrix[y][x-1]==1 or matrix[y][x-1]==2\
-                        or matrix[y][x+1]==1 or matrix[y][x+1]==2\
-                        or matrix[y+1][x]==1 or matrix[y+1][x]==2: 
+                    if matrix[y][x-1] in (1,2)\
+                        or matrix[y][x+1] in (1,2)\
+                        or matrix[y+1][x] in (1,2):
                         matrix[y][x]=5
                 elif x==0:
-                    if matrix[y-1][x]==1 or matrix[y-1][x]==2\
-                        or matrix[y][x+1]==1 or matrix[y][x+1]==2\
-                        or matrix[y+1][x]==1 or matrix[y+1][x]==2: 
+                    if matrix[y-1][x] in (1,2)\
+                        or matrix[y][x+1] in (1,2)\
+                        or matrix[y+1][x] in (1,2):
                         matrix[y][x]=5
                 elif y==len(matrix)-1:
-                    if matrix[y-1][x]==1 or matrix[y-1][x]==2\
-                        or matrix[y][x-1]==1 or matrix[y][x-1]==2: 
+                    if matrix[y-1][x] in (1,2)\
+                        or matrix[y][x-1] in (1,2):
                         matrix[y][x]=5
                 elif x==len(col)-1:
-                    if matrix[y-1][x]==1 or matrix[y-1][x]==2\
-                        or matrix[y][x-1]==1 or matrix[y][x-1]==2\
-                        or matrix[y+1][x]==1 or matrix[y+1][x]==2: 
+                    if matrix[y-1][x] in (1,2)\
+                        or matrix[y][x-1] in (1,2)\
+                        or matrix[y+1][x] in (1,2):
                         matrix[y][x]=5
                 else:
-                    if matrix[y-1][x]==1 or matrix[y-1][x]==2\
-                        or matrix[y][x-1]==1 or matrix[y][x-1]==2\
-                        or matrix[y][x+1]==1 or matrix[y][x+1]==2\
-                        or matrix[y+1][x]==1 or matrix[y+1][x]==2: 
+                    if matrix[y-1][x] in (1,2)\
+                        or matrix[y][x-1] in (1,2)\
+                        or matrix[y][x+1] in (1,2)\
+                        or matrix[y+1][x] in (1,2):
                         matrix[y][x]=5
     return matrix
