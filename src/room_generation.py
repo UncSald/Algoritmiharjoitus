@@ -93,3 +93,4 @@ def start_end(points :set, edges:set):
                 if (start,key) not in edges and (key,start) not in edges and\
                       (key,end) not in edges and (end,key) not in edges and key not in (start,end):
                     return start, end, key
+    return None
