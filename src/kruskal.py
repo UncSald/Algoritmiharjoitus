@@ -1,3 +1,9 @@
+"""Module holds the kruskal function which generates a minimum
+spanning tree from a set of edges between points.
+The find function is a recursive function that checks if two points
+already have a link. If they don't they can be connected.
+"""
+
 def kruskal(edge_list :set, start_point :tuple[int,int]):
     """Kruskal algorithm creates a minimum spanning tree.
 
@@ -29,7 +35,7 @@ def kruskal(edge_list :set, start_point :tuple[int,int]):
             a = find(linked,point_a)
             b = find(linked,point_b)
             if a == b:
-                return
+                continue
             if size[a] > size[b]:
                 a, b = b, a
             linked[a] = b
