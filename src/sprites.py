@@ -17,7 +17,7 @@ class GameTile(pygame.sprite.Sprite):
             tile_size (int): Tile size of the game.
         """
         pygame.sprite.Sprite.__init__(self)
-        if val==1 or val==2:
+        if val in (1,2):
             self.image = pygame.image.load('src/assets/floor_2.png')
         elif val==3:
             self.image = pygame.image.load('src/assets/prev_door.png')
