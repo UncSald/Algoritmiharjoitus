@@ -28,3 +28,6 @@
 ## Lähteet
 -    [Procedurally generated dungeons -article](https://vazgriz.com/119/procedurally-generated-dungeons/)  
 -    [Bowyer-Watson -algorithm Wikipedia](https://en.wikipedia.org/wiki/Bowyer%E2%80%93Watson_algorithm)
+
+## Tekoälyn käyttö
+    Projektissa ei ole käytetty tekoälyä laisinkaan.
