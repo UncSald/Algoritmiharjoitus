@@ -4,7 +4,7 @@ TIRA -labran harjoitustyö
 
 Aiheenani on luolaston generointi, ja tavoitteeni on pystyä generoimaan top-down -peliin käyttökelpoisia karttoja.
 
-## Doumentaatio
+## Dokumentaatio
 - [Määrittelydokumentti](https://github.com/UncSald/Algoritmiharjoitus/blob/main/Dokumentaatio/M%C3%A4%C3%A4rittelydokumentti.pdf)
     
 - [Testausdokumentti](https://github.com/UncSald/Algoritmiharjoitus/blob/main/Dokumentaatio/Testausdokumentti.md)
