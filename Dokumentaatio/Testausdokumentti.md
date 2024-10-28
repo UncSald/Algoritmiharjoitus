@@ -70,3 +70,6 @@
         Testit testaavat, että tämä tunnistus menee todella oikein  
         ja huonot syötteet aiheuttavat virheen.  
         Testit tarkastavat myös, että luotuja huoneita on oikea määrä.
+
+## Testikattavuus
+    Projektin testikattavuus on 85%. Tärkeimmät funktiot on testattu.
